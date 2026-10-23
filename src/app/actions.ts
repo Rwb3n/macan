@@ -1,14 +1,44 @@
 "use server"
 
+import { headers } from "next/headers"
+import { revalidatePath } from "next/cache"
 import { db } from "@/db"
-import { submitClaim, submitQuote, type Result } from "@/requests"
+import { isAdmin } from "@/admin"
+import { mailer } from "@/mailer"
+import { submitClaim, type Result } from "@/requests"
+import { confirmLead, reviewLead, submitLead, type Submitted } from "@/leads"
+import { redirect } from "next/navigation"
 
 export type FormState = Result | null
+export type LeadState = Submitted | null
 
-export async function quoteAction(_prev: FormState, form: FormData): Promise<FormState> {
-  return submitQuote(db(), Object.fromEntries(form))
+async function baseUrl(): Promise<string> {
+  const h = await headers()
+  const host = h.get("x-forwarded-host") ?? h.get("host")
+  if (!host) throw new Error("No host header")
+  return `${h.get("x-forwarded-proto") ?? "http"}://${host}`
+}
+
+export async function leadAction(_prev: LeadState, form: FormData): Promise<LeadState> {
+  return submitLead({ db: db(), mailer: mailer(), now: () => new Date(), baseUrl: await baseUrl() }, Object.fromEntries(form))
+}
+
+export async function confirmAction(form: FormData): Promise<void> {
+  const token = String(form.get("token") ?? "")
+  if (!confirmLead({ db: db(), now: () => new Date() }, token)) throw new Error("Unknown confirmation link")
+  redirect(`/leads/confirm/${encodeURIComponent(token)}?done=1`)
 }
 
 export async function claimAction(_prev: FormState, form: FormData): Promise<FormState> {
   return submitClaim(db(), Object.fromEntries(form))
+}
+
+// Operator only. Server actions can be called directly, so the password is checked here, not only by the proxy.
+export async function reviewAction(form: FormData): Promise<void> {
+  if (!isAdmin((await headers()).get("authorization"))) throw new Error("Not authorised")
+  const id = Number(form.get("id"))
+  const decision = form.get("decision")
+  if (!Number.isInteger(id) || (decision !== "approved" && decision !== "rejected")) throw new Error("Bad review")
+  reviewLead({ db: db(), now: () => new Date() }, id, decision)
+  revalidatePath("/admin/leads")
 }

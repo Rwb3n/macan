@@ -20,10 +20,23 @@ npm run check              # typecheck + tests
 - `src/directory.ts`: search queries. `src/requests.ts`: quote and claim submissions (validated with Zod). `src/claim.ts`: claim proof (email on the firm's registrable domain).
 - `src/app/`: pages. Server components read the database directly; forms use server actions.
 
+## Leads and qualification (docs/brief.md §5a)
+
+- A buyer's request becomes a **lead**, graded at once on four checks (`src/qualify.ts`):
+  - **real:** has a planning purpose;
+  - **serious:** email confirmed;
+  - **timely:** the deadline fits the survey's season;
+  - **complete:** a firm could price it.
+- **The buyer sees the result straight away,** for example "fieldwork can't start until May 2027".
+- **Confirmation needs a button press** on the emailed link. A scanner opening the link doesn't count.
+- **The operator approves qualified leads** at `/admin/leads`. Access is HTTP Basic against `ADMIN_PASSWORD` in `.env.local`, checked in the proxy and again inside the action.
+- **Mail outside production** is written to `OUTBOX_DIR` (default `data/outbox/`). In production, with no mail provider, it refuses to send.
+
 ## Not built yet
 
+- Offering approved leads to firms as briefs, and unlocking them (M1).
 - Claim confirmation link and firm editing (claims are stored; confirmation is manual).
-- Sending quote requests to firms (stored; forwarded by hand).
 - Pausing enquiries, choosing jobs and areas (described on /for-firms as the design).
+- A real mail provider.
 - Privacy notice, Article 14 notice to listed firms, removal requests, retention.
 - Hosting.

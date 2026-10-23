@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it } from "vitest"
 import { openDb, type Db } from "./db"
-import { firms, firmRegions, firmSurveys, quoteRequests, claimRequests } from "./db/schema"
+import { firms, firmRegions, firmSurveys, claimRequests } from "./db/schema"
 import { findFirms, firmBySlug, surveyCounts } from "./directory"
-import { submitClaim, submitQuote } from "./requests"
+import { submitClaim } from "./requests"
 
 let db: Db
 
@@ -35,24 +35,6 @@ describe("findFirms", () => {
   })
   it("counts firms per survey", () => {
     expect(surveyCounts(db).get("bat-survey")).toBe(2)
-  })
-})
-
-describe("submitQuote", () => {
-  const valid = { survey: "bat-survey", region: "north-west", postcode: "ox1", details: "Loft conversion, council asked for a bat survey by June.", name: "Sam", email: "sam@example.com" }
-  it("stores a valid request with the postcode upper-cased", () => {
-    expect(submitQuote(db, valid)).toEqual({ ok: true })
-    expect(db.select().from(quoteRequests).get()?.postcode).toBe("OX1")
-  })
-  it("links the firm when one is named", () => {
-    submitQuote(db, { ...valid, firm: "bats-north" })
-    expect(db.select().from(quoteRequests).get()?.firmId).not.toBeNull()
-  })
-  it("rejects bad input field by field", () => {
-    const r = submitQuote(db, { ...valid, survey: "nope", postcode: "12345", email: "x" })
-    expect(r.ok).toBe(false)
-    if (!r.ok) expect(Object.keys(r.errors).sort()).toEqual(["email", "postcode", "survey"])
-    expect(db.select().from(quoteRequests).all()).toHaveLength(0)
   })
 })
 

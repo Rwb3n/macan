@@ -29,13 +29,23 @@ CREATE TABLE IF NOT EXISTS firm_regions (
   PRIMARY KEY (firm_id, region)
 );
 CREATE INDEX IF NOT EXISTS firm_regions_region ON firm_regions(region);
-CREATE TABLE IF NOT EXISTS quote_requests (
+DROP TABLE IF EXISTS quote_requests;
+CREATE TABLE IF NOT EXISTS leads (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  survey TEXT NOT NULL, region TEXT NOT NULL, postcode TEXT NOT NULL, details TEXT NOT NULL,
-  name TEXT NOT NULL, email TEXT NOT NULL,
+  survey TEXT NOT NULL, region TEXT NOT NULL, postcode TEXT NOT NULL,
+  project_type TEXT NOT NULL, planning_stage TEXT NOT NULL, council_ref TEXT, deadline TEXT,
+  details TEXT NOT NULL, answer TEXT NOT NULL DEFAULT '',
+  name TEXT NOT NULL, email TEXT NOT NULL, phone TEXT,
   firm_id INTEGER REFERENCES firms(id) ON DELETE SET NULL,
+  token_hash TEXT NOT NULL UNIQUE,
+  confirmed_at INTEGER,
+  grade TEXT NOT NULL,
+  qualification TEXT NOT NULL,
+  review TEXT NOT NULL DEFAULT 'new',
+  reviewed_at INTEGER,
   created_at INTEGER NOT NULL
 );
+CREATE INDEX IF NOT EXISTS leads_grade ON leads(grade, review);
 CREATE TABLE IF NOT EXISTS claim_requests (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   firm_id INTEGER NOT NULL REFERENCES firms(id) ON DELETE CASCADE,

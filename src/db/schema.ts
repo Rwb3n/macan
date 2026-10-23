@@ -1,4 +1,5 @@
 import { sqliteTable, text, integer, primaryKey, index } from "drizzle-orm/sqlite-core"
+import type { Qualification } from "../qualify"
 
 const createdAt = () => integer("created_at", { mode: "timestamp" }).notNull().$defaultFn(() => new Date())
 
@@ -31,18 +32,32 @@ export const firmRegions = sqliteTable("firm_regions", {
   region: text("region").notNull(),
 }, (t) => [primaryKey({ columns: [t.firmId, t.region] }), index("firm_regions_region").on(t.region)])
 
-// A buyer's request for quotes. Holds personal data: kept only as long as the retention rule allows.
-export const quoteRequests = sqliteTable("quote_requests", {
+// A buyer's lead: one site, one survey. Holds personal data (name, email, phone): kept only as long as the retention rule allows.
+export const leads = sqliteTable("leads", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   survey: text("survey").notNull(),
   region: text("region").notNull(),
   postcode: text("postcode").notNull(),
+  projectType: text("project_type").notNull(),
+  planningStage: text("planning_stage").notNull(),
+  councilRef: text("council_ref"),
+  deadline: text("deadline"),
   details: text("details").notNull(),
+  answer: text("answer").notNull().default(""),
   name: text("name").notNull(),
   email: text("email").notNull(),
+  phone: text("phone"),
   firmId: integer("firm_id").references(() => firms.id, { onDelete: "set null" }),
+  // sha256 of the emailed confirmation token; the token itself is never stored.
+  tokenHash: text("token_hash").notNull().unique(),
+  confirmedAt: integer("confirmed_at", { mode: "timestamp" }),
+  grade: text("grade").notNull(),
+  qualification: text("qualification", { mode: "json" }).$type<Qualification>().notNull(),
+  // new → approved / rejected by the operator.
+  review: text("review").notNull().default("new"),
+  reviewedAt: integer("reviewed_at", { mode: "timestamp" }),
   createdAt: createdAt(),
-})
+}, (t) => [index("leads_grade").on(t.grade, t.review)])
 
 export const claimRequests = sqliteTable("claim_requests", {
   id: integer("id").primaryKey({ autoIncrement: true }),
