@@ -26,3 +26,6 @@ export type BusinessObject = Element & { states: string[]; initial: string; tran
 export type Process = Element & { realises: string; steps: { actor: string; step: string; status: Status }[]; status: Status }
 
 export type Decision = Element & { said: string; date: string }
+
+// What a party uses today instead of us, per use case (research C1).
+export type Alternative = Element & { kind: "firm" | "marketplace" | "directory" | "broker"; serves: string[]; offer: string }

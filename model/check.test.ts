@@ -7,13 +7,14 @@ import { aims, flows, parties, system } from "./context"
 import { stages, useCases, requirementExplainedBy } from "./usecases"
 import { LEAD_CHECKS, LEAD_GRADES, LEAD_REVIEWS, objects, processes } from "./objects"
 import { html, markdown } from "./render"
+import { alternatives } from "./alternatives"
 import { readFileSync } from "node:fs"
 
 const partyIds = new Set([...parties.map((p) => p.id), system.id])
 const ids = (xs: { id: string }[]) => xs.map((x) => x.id)
 
 describe("map: every element is sourced", () => {
-  const all = [system, ...parties, ...flows, ...aims, ...useCases, ...stages, ...objects, ...processes]
+  const all = [system, ...parties, ...flows, ...aims, ...useCases, ...stages, ...objects, ...processes, ...alternatives]
   it.each(all.map((e) => [e.id, e]))("%s has a source", (_id, e) => expect(e.source.trim()).not.toBe(""))
   it("ids are unique within each level", () => {
     for (const level of [parties, flows, useCases, stages, objects, processes]) {
@@ -60,6 +61,10 @@ describe("map: levels balance (modelkit §5)", () => {
       expect([p.id, known.has(p.realises)]).toEqual([p.id, true])
       for (const s of p.steps) expect([p.id, s.actor, partyIds.has(s.actor)]).toEqual([p.id, s.actor, true])
     }
+  })
+  it("alternatives serve known use cases", () => {
+    const known = new Set(ids(useCases))
+    expect(alternatives.flatMap((a) => a.serves.filter((u) => !known.has(u)).map((u) => `${a.id}:${u}`))).toEqual([])
   })
   it("a process is built only if all its steps are", () => {
     for (const p of processes.filter((p) => p.status === "built")) {
