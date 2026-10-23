@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #1c2321;
+  --color-muted: #5b6662;
+  --color-line: #dfe4e1;
+  --color-paper: #fbfbf8;
+  --color-moss: #2f5d46;
+  --color-moss-dark: #234737;
+  --color-leaf: #e6efe9;
+  --color-amber: #9a6b12;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+a {
+  text-underline-offset: 3px;
+}
