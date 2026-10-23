@@ -30,7 +30,7 @@ npm run check              # typecheck + tests
 - **The buyer sees the result straight away,** for example "fieldwork can't start until May 2027".
 - **Confirmation needs a button press** on the emailed link. A scanner opening the link doesn't count.
 - **The operator approves qualified leads** at `/admin/leads`. Access is HTTP Basic against `ADMIN_PASSWORD` in `.env.local`, checked in the proxy and again inside the action.
-- **Mail outside production** is written to `OUTBOX_DIR` (default `data/outbox/`). In production, with no mail provider, it refuses to send.
+- **Mail outside production** goes to `OUTBOX_DIR` (default `data/outbox/`), and so does a local `next start` run with `LOCAL_DEMO=1`. A real production deploy has no mail provider and refuses to send.
 
 ## Not built yet
 
@@ -38,5 +38,9 @@ npm run check              # typecheck + tests
 - Claim confirmation link and firm editing (claims are stored; confirmation is manual).
 - Pausing enquiries, choosing jobs and areas (described on /for-firms as the design).
 - A real mail provider.
+
+## Before it goes public
+- `BASE_URL` set: production refuses to build email links from request headers.
+- A mail provider, with `LOCAL_DEMO` unset.
+- A rate limit on lead submission (one script could send confirmation emails to any address).
 - Privacy notice, Article 14 notice to listed firms, removal requests, retention.
-- Hosting.

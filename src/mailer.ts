@@ -4,10 +4,10 @@ import { join } from "node:path"
 export type Mail = { to: string; subject: string; text: string }
 export type Mailer = { send(mail: Mail): Promise<void> }
 
-// Outside production, mail goes to data/outbox/ (one file per message) so a demo can show it.
-// Production has no mailer yet and refuses to send rather than pretend (fail loudly).
+// No mail provider yet. Outside production, and in a local production build run with LOCAL_DEMO=1, mail goes to
+// OUTBOX_DIR (default data/outbox/) so a demo can show it. A real production deploy refuses to send (fail loudly).
 export function mailer(): Mailer {
-  if (process.env.NODE_ENV === "production" && !process.env.OUTBOX_DIR) {
+  if (process.env.NODE_ENV === "production" && !process.env.LOCAL_DEMO) {
     return { send: async () => { throw new Error("No mail provider is configured for production.") } }
   }
   return outbox(process.env.OUTBOX_DIR ?? "data/outbox")

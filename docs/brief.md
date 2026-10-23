@@ -159,7 +159,11 @@ The things the business tracks. Software comes later, from these.
 | **Claim** | submitted → confirmed / rejected | Proof: email on the firm's own domain |
 | **Notice** (to a listed firm) | due → sent → acknowledged / objected | Article 14 duty for data not collected from them |
 
-**Built today:** Listing (no states), Request (stored), Claim (stored). Brief and Notice don't exist.
+**Built today:**
+- **Listing:** no states yet.
+- **Lead:** received → confirmed → graded → approved or rejected (24329bf). Offering it to firms is not built.
+- **Claim:** stored only.
+- **Brief, Notice:** not built.
 
 ## 7. Processes (level 3 candidates, BPMN later)
 
