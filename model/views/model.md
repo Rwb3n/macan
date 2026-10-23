@@ -6,6 +6,12 @@
 
 - **models** (2026-10-23): We work from models: map first, territory follows, map updated. *"models are the map. we build the territory, and the maps are updated to reflect. it's a tight, closed, loop."*
 
+- **receipts** (2026-10-23): Claims need receipts; a map is not evidence. *"you have a bad habit of believing the the maps say i want cold hard receipts."*
+
+- **intel** (2026-10-23): Sell firms intelligence on where and when demand is coming (U6). *"4. okay, GOOD! LETS DO THAT TOO"*
+
+- **in-kind** (2026-10-23): Firms can pay in kind with spare survey capacity. *"5. GOOOD LETS DO THAT TOO"*
+
 ## Level 0: context
 
 System of interest: **The directory**: It is what we build and run.
@@ -24,6 +30,8 @@ flowchart LR
   directory -- "a qualified brief · value" --> firm
   firm -- "claim, corrections, availability · information" --> directory
   firm -- "fee per unlocked brief (M1) · money" --> directory
+  directory -- "where and when demand is coming (councils, surveys, season) · value" --> firm
+  firm -- "spare survey capacity (off-season days, advance slots) as payment in kind · services" --> directory
   public -- "firm facts · information" --> directory
   directory -- "notice that they are listed · information" --> firm
   council -. "survey required to validate the application · information" .-> buyer
@@ -33,6 +41,17 @@ flowchart LR
 
 Aims on the boundary: Earn money (M1); Grow and keep a correct list of firms; Stay lawful: listing notices, removal, retention.
 
+## Channels (how each party reaches us)
+
+| party | channel | kind | status | receipt |
+|---|---|---|---|---|
+| Buyers (homeowners, small developers) | Searches the survey the council asked for | search | part | S7: 'bat survey', 'flood risk assessment', 'environmental impact assessment' each 1K-10K UK searches/month (Keyword Planner, callsheet docs/screens/s7-env-buyer-demand/result.md) |
+| Buyers (homeowners, small developers) | Told by the council at validation that a survey is missing | moment | missing | C2 buyer quotes: 'Only to be told I needed a bat survey'; 'the planning officer doesn't recommend anyone, so I'm at the mercy of Google' (docs/research/c2-gaps/evidence/gap-buyer.md) |
+| Agents (architects, planning consultants) | Architects and planning consultants pick or recommend the firm *(guess)* | referral | missing | none yet |
+| Survey firms | We find and contact firms from Companies House and their sites | outbound | part | S9: ~230-410 survey sellers with a website in SIC 74901; 15 called-list firms checked live (vein, D:/data/vein/out/s8/ch-check.json) |
+| Survey firms | Professional bodies' directories (CIEEM, ANC) | body | outside | CIEEM Registered Practices Directory, firms pay £147-£368+VAT a year (C1 evidence/c1-partB.md) |
+| Survey firms | Firms pass overflow work to each other *(guess)* | community | missing | none yet |
+
 ## Level 1: use cases
 
 | id | party | use case | status |
@@ -41,6 +60,7 @@ Aims on the boundary: Earn money (M1); Grow and keep a correct list of firms; St
 | U2 | Buyers (homeowners, small developers) | Get the survey done in time for my application | part |
 | U3 | Agents (architects, planning consultants) | Get several surveys quoted for one site, quickly *(guess)* | missing |
 | U4 | Survey firms | Get the enquiries I want, and not the ones I don't | missing |
+| U6 | Survey firms | Know where and when demand is coming, so I can plan my season | missing |
 | U5 | Survey firms | Keep my listing right, or have it removed | part |
 
 ## Level 2: stages
@@ -117,6 +137,18 @@ stateDiagram-v2
   claimed --> removed: removal request
 ```
 
+### Slot (a firm's spare survey capacity, offered as payment in kind) (missing)
+
+```mermaid
+stateDiagram-v2
+  direction LR
+  [*] --> offered
+  offered --> allocated: matched to a lead
+  allocated --> used: survey done
+  offered --> expired: date passes
+  allocated --> expired: buyer drops out
+```
+
 ### Claim (part)
 
 ```mermaid
@@ -142,7 +174,7 @@ stateDiagram-v2
 
 | alternative | kind | serves | offer |
 |---|---|---|---|
-| Arbtech (national firm) | firm | U1, U2 | Fixed published prices (bat roost £399+VAT), UK coverage, planning money-back guarantee; in 14 of 23 searches |
+| Arbtech (national firm) | firm | U1, U2 | Fixed published prices (bat roost £399+VAT), UK coverage, planning money-back guarantee; in 14 of 23 searches Receipt: Arbtech Consulting Ltd (05678552) full accounts, year to 23 Sep 2024: turnover £10,841,715 (2023: £8,369,093), profit before tax £4,483,055, 113 staff, 'over 13,800' assessments and planning submissions; '60% acquired by private equity backed Celnor Group' (Companies House filing MzQ3MTUwNzU3MGFkaXF6a2N4) |
 | Arbtech's keyword sites (batsurveys.co.uk, ecologysurveys.uk, biodiversitynetgainplan.co.uk) | firm | U2 | Run by Arbtech Consulting Ltd (named in each privacy policy); #1 for 'bat survey near me'; 'from £' prices |
 | Signed Off (signed-off.co.uk) | directory | U1, U2, U5 | 'Which reports do I need?' checker (no postcode or council step), directory (75 ecologists), quotes from up to 3; free and paid featured listings; operator incorporated Nov 2024 |
 | The Planning Review | directory | U2 | Lists firms found on planning applications, with quotes; no checker; operator not named |

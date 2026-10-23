@@ -8,6 +8,12 @@ export const decisions: Decision[] = [
     said: "yeah fuck it M1. we'll take in leads and qualify them. we'll build a qualification system.", source: "Principal" },
   { id: "models", name: "We work from models: map first, territory follows, map updated", date: "2026-10-23",
     said: "models are the map. we build the territory, and the maps are updated to reflect. it's a tight, closed, loop.", source: "Principal" },
+  { id: "receipts", name: "Claims need receipts; a map is not evidence", date: "2026-10-23",
+    said: "you have a bad habit of believing the the maps say i want cold hard receipts.", source: "Principal" },
+  { id: "intel", name: "Sell firms intelligence on where and when demand is coming (U6)", date: "2026-10-23",
+    said: "4. okay, GOOD! LETS DO THAT TOO", source: "Principal" },
+  { id: "in-kind", name: "Firms can pay in kind with spare survey capacity", date: "2026-10-23",
+    said: "5. GOOOD LETS DO THAT TOO", source: "Principal" },
 ]
 
 // A lead's grade: the outcome of the four checks (brief §5a).
@@ -62,6 +68,17 @@ export const objects: BusinessObject[] = [
       { from: "paused", to: "claimed", by: "firm" },
       { from: "unclaimed", to: "removed", by: "removal request" },
       { from: "claimed", to: "removed", by: "removal request" },
+    ],
+  },
+  {
+    id: "slot", name: "Slot (a firm's spare survey capacity, offered as payment in kind)", status: "missing",
+    source: 'Principal, 2026-10-23: "5. GOOOD LETS DO THAT TOO"', note: "Like Dance Radar's camp spots: perishable capacity turned into currency",
+    initial: "offered", states: ["offered", "allocated", "used", "expired"],
+    transitions: [
+      { from: "offered", to: "allocated", by: "matched to a lead" },
+      { from: "allocated", to: "used", by: "survey done" },
+      { from: "offered", to: "expired", by: "date passes" },
+      { from: "allocated", to: "expired", by: "buyer drops out" },
     ],
   },
   {

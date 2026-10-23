@@ -8,6 +8,9 @@ export const useCases: UseCase[] = [
   { id: "U2", party: "buyer", name: "Get the survey done in time for my application", status: "part", flows: ["need-in", "survey", "payment"], source: BRIEF },
   { id: "U3", party: "agent", name: "Get several surveys quoted for one site, quickly", status: "missing", flows: ["agent-in"], source: BRIEF, guess: true },
   { id: "U4", party: "firm", name: "Get the enquiries I want, and not the ones I don't", status: "missing", flows: ["brief-out", "fee-in"], source: BRIEF },
+  { id: "U6", party: "firm", name: "Know where and when demand is coming, so I can plan my season", status: "missing", flows: ["intel-out", "capacity-in"],
+    source: 'Principal, 2026-10-23: "4. okay, GOOD! LETS DO THAT TOO" / "5. GOOOD LETS DO THAT TOO"',
+    note: "Dance Radar's Partner tier sells organisers planning analytics (dance-radar.eu/organizers); ours is councils, surveys and season by area" },
   { id: "U5", party: "firm", name: "Keep my listing right, or have it removed", status: "part", flows: ["firm-in", "notice-out", "facts-in"], source: BRIEF },
 ]
 

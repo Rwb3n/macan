@@ -5,6 +5,7 @@ import { stages, useCases } from "./usecases"
 import { LEAD_CHECKS, decisions, objects, processes } from "./objects"
 import type { BusinessObject, Status } from "./types"
 import { alternatives } from "./alternatives"
+import { channels } from "./channels"
 
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
 const mq = (s: string) => s.replace(/"/g, "'")
@@ -47,11 +48,12 @@ export function markdown(): string {
     "## Decisions", ...decisions.map((d) => `- **${d.id}** (${d.date}): ${d.name}. *"${d.said}"*`),
     "## Level 0: context", `System of interest: **${system.name}**: ${system.reason}`, fence(contextMermaid()),
     "Aims on the boundary: " + aims.map((a) => a.name).join("; ") + ".",
+    "## Channels (how each party reaches us)", table(["party", "channel", "kind", "status", "receipt"], channels.map((c) => [name(c.party), c.name + (c.guess ? " *(guess)*" : ""), c.kind, c.status, c.receipt ?? "none yet"])),
     "## Level 1: use cases", table(["id", "party", "use case", "status"], useCases.map((u) => [u.id, name(u.party), u.name + (u.guess ? " *(guess)*" : ""), u.status])),
     "## Level 2: stages", ...useCases.filter((u) => stages.some((s) => s.useCase === u.id)).flatMap((u) => [`### ${u.id} ${u.name}`,
       table(["stage", "outcome", "status"], stages.filter((s) => s.useCase === u.id).map((s) => [`${s.id} ${s.name}`, s.outcome, s.status]))]),
     "## Objects", ...objects.flatMap((o) => [`### ${o.name} (${o.status})`, fence(lifecycleMermaid(o))]),
-    "## Alternatives (what parties use instead of us)", table(["alternative", "kind", "serves", "offer"], alternatives.map((a) => [a.name + (a.guess ? " *(guess)*" : ""), a.kind, a.serves.join(", "), a.offer])),
+    "## Alternatives (what parties use instead of us)", table(["alternative", "kind", "serves", "offer"], alternatives.map((a) => [a.name + (a.guess ? " *(guess)*" : ""), a.kind, a.serves.join(", "), a.offer + (a.receipt ? ` Receipt: ${a.receipt}` : "")])),
     "## Level 3: processes", fence(processMermaid()),
   ].join("\n\n") + "\n"
 }
@@ -70,7 +72,7 @@ export function html(): string {
   <div class="kicker">The map · generated from model/</div>
   <h1>Survey Finder, from the outside in</h1>
   <p class="lede">Models are the map; the product is the territory. This page is generated from <code>macan/model/</code>; the test suite fails when the code and the map disagree.</p>
-  <nav class="ladder" aria-label="Levels"><a href="#decisions">Decisions</a><a href="#context">0 · Context</a><a href="#usecases">1 · Use cases</a><a href="#stages">2 · Stages</a><a href="#objects">Objects</a><a href="#alternatives">Alternatives</a><a href="#processes">3 · Processes</a></nav>
+  <nav class="ladder" aria-label="Levels"><a href="#decisions">Decisions</a><a href="#context">0 · Context</a><a href="#channels">Channels</a><a href="#usecases">1 · Use cases</a><a href="#stages">2 · Stages</a><a href="#objects">Objects</a><a href="#alternatives">Alternatives</a><a href="#processes">3 · Processes</a></nav>
 </header>
 <section id="decisions"><div class="lvl"><span class="tag">Decided</span><h2>Decisions</h2></div>
 ${decisions.map((d) => `<div class="decision"><p><b>${esc(d.name)}</b></p><p class="who">${esc(d.source)}, ${esc(d.date)}: "${esc(d.said)}"</p></div>`).join("")}
@@ -80,6 +82,11 @@ ${decisions.map((d) => `<div class="decision"><p><b>${esc(d.name)}</b></p><p cla
 <p>System of interest: <b>${esc(system.name)}</b> (${esc(system.inside.join(", "))}). ${esc(system.reason)} Solid arrows pass through us; dotted ones don't.</p>
 <div class="frame"><pre class="mermaid">${esc(contextMermaid())}</pre></div>
 <p class="lede">Aims on the boundary: ${aims.map((a) => esc(a.name)).join(" · ")}</p></section>
+<section id="channels"><div class="lvl"><span class="tag">Level 0</span><h2>Channels</h2></div>
+<p class="q">Where is each party when it needs us, and how do we reach it? Receipts, or marked guesses.</p>
+<div class="tablewrap"><table><thead><tr><th>Party</th><th>Channel</th><th>Kind</th><th>Status</th><th>Receipt</th></tr></thead><tbody>
+${channels.map((c) => `<tr><td>${esc(name(c.party))}</td><td>${esc(c.name)}${c.guess ? " <em>(guess)</em>" : ""}${c.note ? `<br><span class="muted">${esc(c.note)}</span>` : ""}</td><td class="id">${c.kind}</td><td>${pill(c.status)}</td><td class="muted">${esc(c.receipt ?? "none yet")}</td></tr>`).join("")}
+</tbody></table></div></section>
 <section id="usecases"><div class="lvl"><span class="tag">Level 1</span><h2>Business use cases</h2></div>
 <div class="tablewrap"><table><thead><tr><th>ID</th><th>Party</th><th>Comes to us to…</th><th>Status</th></tr></thead><tbody>
 ${useCases.map((u) => `<tr><td class="id">${u.id}</td><td>${esc(name(u.party))}</td><td>${esc(u.name)}${u.guess ? " <em>(guess)</em>" : ""}</td><td>${pill(u.status)}</td></tr>`).join("")}
@@ -91,7 +98,7 @@ ${objects.map((o) => `<h3>${esc(o.name)} ${pill(o.status)}</h3>${o.note ? `<p cl
 <section id="alternatives"><div class="lvl"><span class="tag">C1</span><h2>Alternatives</h2></div>
 <p class="q">What do buyers and firms use today instead of us?</p>
 <div class="tablewrap"><table><thead><tr><th>Alternative</th><th>Kind</th><th>Serves</th><th>Offer</th></tr></thead><tbody>
-${alternatives.map((a) => `<tr><td>${esc(a.name)}${a.guess ? " <em>(guess)</em>" : ""}</td><td>${a.kind}</td><td class="id">${a.serves.join(", ")}</td><td>${esc(a.offer)}</td></tr>`).join("")}
+${alternatives.map((a) => `<tr><td>${esc(a.name)}${a.guess ? " <em>(guess)</em>" : ""}</td><td>${a.kind}</td><td class="id">${a.serves.join(", ")}</td><td>${esc(a.offer)}${a.receipt ? `<br><span class="muted">Receipt: ${esc(a.receipt)}</span>` : ""}</td></tr>`).join("")}
 </tbody></table></div></section>
 <section id="processes"><div class="lvl"><span class="tag">Level 3</span><h2>Processes</h2></div>
 <div class="tablewrap"><table><thead><tr><th>#</th><th>Process</th><th>Realises</th><th>Steps</th><th>Status</th></tr></thead><tbody>

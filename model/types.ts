@@ -3,13 +3,18 @@
 export type Status = "built" | "part" | "missing" | "outside"
 export type Source = string // who said it or what evidence, word for word where a person said it
 
-type Element = { id: string; name: string; source: Source; guess?: boolean; note?: string }
+// receipt: verifiable evidence (a URL, a filing, a measured number). An element with neither receipt nor guess is a claim we owe a receipt for.
+type Element = { id: string; name: string; source: Source; guess?: boolean; receipt?: string; note?: string }
 
 // Level 0
 export type Party = Element & { kind: "party" }
 export type SystemOfInterest = Element & { reason: string; inside: string[] }
 export type FlowKind = "information" | "money" | "services" | "value"
 export type Flow = Element & { from: string; to: string; kind?: FlowKind; viaUs: boolean }
+
+// How a party reaches us, or we reach them.
+export type ChannelKind = "search" | "moment" | "referral" | "outbound" | "body" | "community"
+export type Channel = Element & { party: string; kind: ChannelKind; status: Status }
 
 // Level 1
 export type UseCase = Element & { party: string; status: Status; flows: string[] }

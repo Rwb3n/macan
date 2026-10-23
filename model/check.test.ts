@@ -8,13 +8,14 @@ import { stages, useCases, requirementExplainedBy } from "./usecases"
 import { LEAD_CHECKS, LEAD_GRADES, LEAD_REVIEWS, objects, processes } from "./objects"
 import { html, markdown } from "./render"
 import { alternatives } from "./alternatives"
+import { channels } from "./channels"
 import { readFileSync } from "node:fs"
 
 const partyIds = new Set([...parties.map((p) => p.id), system.id])
 const ids = (xs: { id: string }[]) => xs.map((x) => x.id)
 
 describe("map: every element is sourced", () => {
-  const all = [system, ...parties, ...flows, ...aims, ...useCases, ...stages, ...objects, ...processes, ...alternatives]
+  const all = [system, ...parties, ...flows, ...aims, ...useCases, ...stages, ...objects, ...processes, ...alternatives, ...channels]
   it.each(all.map((e) => [e.id, e]))("%s has a source", (_id, e) => expect(e.source.trim()).not.toBe(""))
   it("ids are unique within each level", () => {
     for (const level of [parties, flows, useCases, stages, objects, processes]) {
@@ -62,6 +63,16 @@ describe("map: levels balance (modelkit §5)", () => {
       for (const s of p.steps) expect([p.id, s.actor, partyIds.has(s.actor)]).toEqual([p.id, s.actor, true])
     }
   })
+  it("every channel belongs to a known party and carries a receipt or is marked a guess", () => {
+    for (const c of channels) {
+      expect([c.id, partyIds.has(c.party)]).toEqual([c.id, true])
+      expect([c.id, Boolean(c.receipt) || c.guess === true]).toEqual([c.id, true])
+    }
+  })
+  it("every party with a use case has a way to reach us", () => {
+    const reached = new Set(channels.map((c) => c.party))
+    expect([...new Set(useCases.map((u) => u.party))].filter((p) => !reached.has(p))).toEqual([])
+  })
   it("alternatives serve known use cases", () => {
     const known = new Set(ids(useCases))
     expect(alternatives.flatMap((a) => a.serves.filter((u) => !known.has(u)).map((u) => `${a.id}:${u}`))).toEqual([])
@@ -93,7 +104,7 @@ describe("territory agrees with the map", () => {
   })
 
   // Each object's table exists in code exactly when the map says it is at least partly built.
-  const TABLE: Record<string, string> = { lead: "leads", brief: "briefs", listing: "firms", claim: "claim_requests", notice: "notices" }
+  const TABLE: Record<string, string> = { lead: "leads", brief: "briefs", slot: "slots", listing: "firms", claim: "claim_requests", notice: "notices" }
   const tables = new Set(Object.values(schema).flatMap((t) => {
     try { return [getTableConfig(t as Parameters<typeof getTableConfig>[0]).name] } catch { return [] }
   }))

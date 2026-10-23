@@ -22,4 +22,5 @@ Status on each element (`built`, `part`, `missing`, `outside`) is part of the ma
 - **Business first.** No technology appears above level 3 (§1 of the modelkit proposal).
 - **Three to five things per view.** More means: group, then drill down.
 - **Name people by role.** No client or personal data in the model.
+- **Receipts, not maps** (principal, 2026-10-23: "i want cold hard receipts"). A claim about the world carries a `receipt`: a URL, a filing or a measured number. Otherwise it is marked `guess: true`. An inference is never stated as fact, in the model or in a reply.
 - **Decisions are the principal's,** quoted word for word with their date in `source`. Guesses are marked `guess: true`.
