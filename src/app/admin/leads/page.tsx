@@ -4,6 +4,7 @@ import { db } from "@/db"
 import { listLeads } from "@/leads"
 import { PLANNING_STAGES, PROJECT_TYPES } from "@/qualify"
 import { reviewAction } from "../../actions"
+import { LEAD_CHECKS } from "@model/objects"
 
 export const metadata: Metadata = { title: "Leads", robots: { index: false } }
 export const dynamic = "force-dynamic"
@@ -36,7 +37,7 @@ export default function LeadsPage() {
               <p className="mt-2 text-sm whitespace-pre-line">{l.details}</p>
               {l.answer ? <p className="mt-1 text-sm text-muted whitespace-pre-line">{l.answer}</p> : null}
               <ul className="mt-3 grid gap-1 sm:grid-cols-4 text-xs">
-                {(["real", "serious", "timely", "complete"] as const).map((k) => (
+                {LEAD_CHECKS.map((k) => (
                   <li key={k} className={q.checks[k].pass ? "text-moss" : "text-amber"} title={q.checks[k].note}>{q.checks[k].pass ? "✓" : "✗"} {k}{q.checks[k].note ? `: ${q.checks[k].note}` : ""}</li>
                 ))}
               </ul>

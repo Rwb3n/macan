@@ -13,6 +13,12 @@ npm run dev
 npm run check              # typecheck + tests
 ```
 
+## We work from models
+
+The map is `model/` (typed data); `src/` is the territory. Read `AGENTS.md` for the loop.
+- `npm test` fails when the code and the map disagree, or when the views are stale.
+- `npm run model:views` regenerates `model/views/` (Mermaid markdown and an HTML page).
+
 ## Shape
 
 - `src/catalog.ts`: survey types (with what / when / season), regions. The single source.

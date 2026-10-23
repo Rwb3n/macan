@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "db:seed": "tsx scripts/seed.ts",
-    "check": "npm run typecheck && npm test"
+    "check": "npm run typecheck && npm test",
+    "model:views": "tsx scripts/model-views.ts"
   },
   "dependencies": {
     "better-sqlite3": "^12.6.2",

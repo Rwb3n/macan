@@ -1,5 +1,7 @@
 # Product brief (draft, 2026-10-23)
 
+**The map is `model/`** (see `AGENTS.md`). This brief is the narrative and the reasons. Where the two differ, `model/` wins, and the brief is corrected.
+
 **Status: draft for the principal.** Nothing here is decided unless it cites the principal. Guesses are marked *(guess)* and every open question is listed in §8. The code (cb2de38) was built before this brief and will be changed to match it, not the other way round.
 
 Method: modelkit's ladder (`D:/PROJECTS/modelkit/docs/proposals/modelkit.md`), business first:

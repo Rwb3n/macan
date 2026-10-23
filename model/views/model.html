@@ -1,0 +1,159 @@
+<title>Survey Finder Models</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single reading column that walks down the modelling ladder, level 0 to level 3; wide diagrams scroll in their own frames. */
+:root {
+  --bg: #f6f7f4; --surface: #ffffff; --fg: #1b2420; --muted: #5c6b64; --line: #d9e0dc;
+  --moss: #2f5d46; --moss-soft: #e3eee7; --amber: #9a6512; --amber-soft: #f7eedd; --red: #a23b2a; --red-soft: #f6e3df;
+  --display: "Fraunces", Georgia, "Times New Roman", serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121815; --surface: #19211d; --fg: #e4ebe7; --muted: #9aaba3; --line: #2c3833;
+  --moss: #7fbf9c; --moss-soft: #1f3329; --amber: #e0ac55; --amber-soft: #33291a; --red: #e58a78; --red-soft: #3a221d; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #121815; --surface: #19211d; --fg: #e4ebe7; --muted: #9aaba3; --line: #2c3833;
+  --moss: #7fbf9c; --moss-soft: #1f3329; --amber: #e0ac55; --amber-soft: #33291a; --red: #e58a78; --red-soft: #3a221d; color-scheme: dark }
+
+body { background: var(--bg); color: var(--fg); font: 15px/1.6 var(--body); padding-inline: 16px; padding-block: 0 64px; }
+.wrap { max-width: 920px; margin: 0 auto; }
+header.top { padding-block: 40px 24px; border-bottom: 1px solid var(--line); }
+.kicker { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { font: 650 clamp(30px, 5vw, 44px)/1.1 var(--display); margin: 10px 0 12px; text-wrap: balance; }
+h2 { font: 600 24px/1.25 var(--display); margin: 0; text-wrap: balance; }
+h3 { font: 600 15px/1.3 var(--body); margin: 0 0 8px; }
+p { margin: 0; max-width: 68ch; }
+.lede { color: var(--muted); font-size: 16px; }
+nav.ladder { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+nav.ladder a { font: 500 13px/1 var(--mono); color: var(--fg); text-decoration: none; border: 1px solid var(--line); background: var(--surface); padding: 8px 10px; border-radius: 6px; }
+nav.ladder a:hover, nav.ladder a:focus-visible { border-color: var(--moss); outline: none; }
+section { padding-block: 40px 8px; display: grid; gap: 16px; }
+.lvl { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.lvl .tag { font: 500 12px/1 var(--mono); color: var(--moss); border: 1px solid var(--moss); border-radius: 4px; padding: 4px 6px; }
+.q { color: var(--muted); font-style: italic; }
+.frame { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px; overflow-x: auto; }
+.frame pre.mermaid { margin: 0; background: transparent; text-align: center; }
+.findings { display: grid; gap: 10px; }
+.finding { display: grid; grid-template-columns: 22px 1fr; gap: 8px; align-items: start; }
+.finding b { font-weight: 600; }
+.dot { width: 10px; height: 10px; border-radius: 50%; background: var(--amber); margin-top: 7px; }
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 500 12px/1.3 var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); background: var(--bg); }
+tr:last-child td { border-bottom: 0; }
+td.id { font-family: var(--mono); color: var(--muted); white-space: nowrap; }
+.pill { display: inline-block; font: 500 12px/1 var(--mono); padding: 4px 7px; border-radius: 999px; white-space: nowrap; }
+.built { background: var(--moss-soft); color: var(--moss); }
+.part { background: var(--amber-soft); color: var(--amber); }
+.missing { background: var(--red-soft); color: var(--red); }
+.outside { border: 1px dashed var(--line); color: var(--muted); }
+.stages { display: grid; grid-template-columns: repeat(5, minmax(150px, 1fr)); gap: 8px; overflow-x: auto; }
+.stage { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.stage .n { font: 500 12px/1 var(--mono); color: var(--muted); }
+.stage.out { background: transparent; border-style: dashed; }
+.stage p { font-size: 13px; color: var(--muted); }
+.decision { border: 1px solid var(--moss); background: var(--moss-soft); border-radius: 8px; padding: 16px; display: grid; gap: 6px; }
+.decision .who { font: 500 12px/1.4 var(--mono); color: var(--moss); }
+.checks { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; }
+.check { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px; display: grid; gap: 6px; }
+.check .k { font: 600 13px/1 var(--mono); color: var(--moss); }
+.check p { font-size: 13.5px; }
+.check .fail { font-size: 12.5px; color: var(--muted); }
+ol.open { margin: 0; padding-left: 20px; display: grid; gap: 6px; max-width: 70ch; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 13px; color: var(--muted); }
+footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+code { font-family: var(--mono); font-size: 13px; }
+@media (max-width: 640px) { .stages { grid-template-columns: repeat(5, 160px); } }
+
+.muted { color: var(--muted); font-size: 13px; }
+.decision + .decision { margin-top: 8px; }
+</style>
+<div class="wrap">
+<header class="top">
+  <div class="kicker">The map · generated from model/</div>
+  <h1>Survey Finder, from the outside in</h1>
+  <p class="lede">Models are the map; the product is the territory. This page is generated from <code>macan/model/</code>; the test suite fails when the code and the map disagree.</p>
+  <nav class="ladder" aria-label="Levels"><a href="#decisions">Decisions</a><a href="#context">0 · Context</a><a href="#usecases">1 · Use cases</a><a href="#stages">2 · Stages</a><a href="#objects">Objects</a><a href="#processes">3 · Processes</a></nav>
+</header>
+<section id="decisions"><div class="lvl"><span class="tag">Decided</span><h2>Decisions</h2></div>
+<div class="decision"><p><b>Firms pay per brief they unlock; every lead is qualified first</b></p><p class="who">Principal, 2026-10-23: "yeah fuck it M1. we'll take in leads and qualify them. we'll build a qualification system."</p></div><div class="decision"><p><b>We work from models: map first, territory follows, map updated</b></p><p class="who">Principal, 2026-10-23: "models are the map. we build the territory, and the maps are updated to reflect. it's a tight, closed, loop."</p></div>
+<h3>Qualification checks on every lead</h3><div class="checks"><div class="check"><span class="k">real</span></div><div class="check"><span class="k">serious</span></div><div class="check"><span class="k">timely</span></div><div class="check"><span class="k">complete</span></div></div></section>
+<section id="context"><div class="lvl"><span class="tag">Level 0</span><h2>Context</h2></div>
+<p class="q">Who does the business deal with, and what passes between them?</p>
+<p>System of interest: <b>The directory</b> (the service, the operator (the principal)). It is what we build and run. Solid arrows pass through us; dotted ones don't.</p>
+<div class="frame"><pre class="mermaid">flowchart LR
+  directory([&quot;THE DIRECTORY&quot;])
+  buyer[&quot;Buyers (homeowners, small developers)&quot;]
+  agent[&quot;Agents (architects, planning consultants) (guess)&quot;]
+  firm[&quot;Survey firms&quot;]
+  council[&quot;Councils (planning authorities)&quot;]
+  public[&quot;Public sources (Companies House, firms' sites)&quot;]
+  buyer -- &quot;site, survey needed, deadline · information&quot; --&gt; directory
+  directory -- &quot;which survey, when, who covers the area · information&quot; --&gt; buyer
+  agent -- &quot;repeat requests for clients · information&quot; --&gt; directory
+  directory -- &quot;a qualified brief · value&quot; --&gt; firm
+  firm -- &quot;claim, corrections, availability · information&quot; --&gt; directory
+  firm -- &quot;fee per unlocked brief (M1) · money&quot; --&gt; directory
+  public -- &quot;firm facts · information&quot; --&gt; directory
+  directory -- &quot;notice that they are listed · information&quot; --&gt; firm
+  council -. &quot;survey required to validate the application · information&quot; .-&gt; buyer
+  firm -. &quot;quote, survey, report · services&quot; .-&gt; buyer
+  buyer -. &quot;payment for the survey · money&quot; .-&gt; firm</pre></div>
+<p class="lede">Aims on the boundary: Earn money (M1) · Grow and keep a correct list of firms · Stay lawful: listing notices, removal, retention</p></section>
+<section id="usecases"><div class="lvl"><span class="tag">Level 1</span><h2>Business use cases</h2></div>
+<div class="tablewrap"><table><thead><tr><th>ID</th><th>Party</th><th>Comes to us to…</th><th>Status</th></tr></thead><tbody>
+<tr><td class="id">U1</td><td>Buyers (homeowners, small developers)</td><td>Find out which survey I need, and when it can be done</td><td><span class="pill built">built</span></td></tr><tr><td class="id">U2</td><td>Buyers (homeowners, small developers)</td><td>Get the survey done in time for my application</td><td><span class="pill part">part</span></td></tr><tr><td class="id">U3</td><td>Agents (architects, planning consultants)</td><td>Get several surveys quoted for one site, quickly <em>(guess)</em></td><td><span class="pill missing">missing</span></td></tr><tr><td class="id">U4</td><td>Survey firms</td><td>Get the enquiries I want, and not the ones I don't</td><td><span class="pill missing">missing</span></td></tr><tr><td class="id">U5</td><td>Survey firms</td><td>Keep my listing right, or have it removed</td><td><span class="pill part">part</span></td></tr>
+</tbody></table></div></section>
+<section id="stages"><div class="lvl"><span class="tag">Level 2</span><h2>Stages</h2></div>
+<h3>U2 · Buyers (homeowners, small developers): Get the survey done in time for my application</h3><div class="stages"><div class="stage"><span class="n">1</span><b>Learn what's needed</b><p>Knows the survey and its season</p><span class="pill built">built</span></div><div class="stage"><span class="n">2</span><b>Find who covers it</b><p>Has firms for the survey and region</p><span class="pill built">built</span></div><div class="stage"><span class="n">3</span><b>Ask once</b><p>Request described, confirmed and qualified</p><span class="pill part">part</span></div><div class="stage out"><span class="n">4</span><b>Choose and book</b><p>A firm is booked</p><span class="pill outside">outside</span></div><div class="stage out"><span class="n">5</span><b>Survey and report</b><p>Has the report for the council</p><span class="pill outside">outside</span></div></div><h3>U4 · Survey firms: Get the enquiries I want, and not the ones I don't</h3><div class="stages"><div class="stage"><span class="n">1</span><b>Be found</b><p>Listed, claimed or not</p><span class="pill built">built</span></div><div class="stage"><span class="n">2</span><b>Get a brief</b><p>Sees survey, area, deadline, site; contact hidden</p><span class="pill missing">missing</span></div><div class="stage"><span class="n">3</span><b>Decide</b><p>Unlocked (pays) or passed; paused when booked up</p><span class="pill missing">missing</span></div><div class="stage out"><span class="n">4</span><b>Quote</b><p>Buyer has the firm's quote</p><span class="pill outside">outside</span></div><div class="stage"><span class="n">5</span><b>Win or lose</b><p>We know the outcome</p><span class="pill missing">missing</span></div></div></section>
+<section id="objects"><div class="lvl"><span class="tag">Objects</span><h2>Things we track, and their lifecycles</h2></div>
+<h3>Lead <span class="pill part">part</span></h3><p class="lede">Built to approved; offering is missing</p><div class="frame"><pre class="mermaid">stateDiagram-v2
+  direction LR
+  [*] --&gt; received
+  received --&gt; awaiting_confirmation: graded at intake
+  received --&gt; needs_info: graded at intake
+  received --&gt; not_a_fit: graded at intake
+  awaiting_confirmation --&gt; qualified: buyer confirms
+  awaiting_confirmation --&gt; needs_info: buyer confirms
+  needs_info --&gt; qualified: buyer adds details
+  qualified --&gt; approved: operator
+  qualified --&gt; rejected: operator
+  needs_info --&gt; rejected: operator
+  not_a_fit --&gt; rejected: operator
+  awaiting_confirmation --&gt; rejected: operator
+  approved --&gt; offered: routing (missing)
+  offered --&gt; closed
+  offered --&gt; expired</pre></div><h3>Brief (one lead offered to one firm) <span class="pill missing">missing</span></h3><p class="lede">The unit M1 sells</p><div class="frame"><pre class="mermaid">stateDiagram-v2
+  direction LR
+  [*] --&gt; offered
+  offered --&gt; unlocked: firm pays (M1)
+  offered --&gt; declined: firm
+  offered --&gt; lapsed: time
+  unlocked --&gt; quoted: firm
+  quoted --&gt; won
+  quoted --&gt; lost</pre></div><h3>Listing (a firm) <span class="pill part">part</span></h3><p class="lede">No states in code yet</p><div class="frame"><pre class="mermaid">stateDiagram-v2
+  direction LR
+  [*] --&gt; unclaimed
+  unclaimed --&gt; claim_pending: firm claims
+  claim_pending --&gt; claimed: email link confirmed
+  claimed --&gt; paused: firm
+  paused --&gt; claimed: firm
+  unclaimed --&gt; removed: removal request
+  claimed --&gt; removed: removal request</pre></div><h3>Claim <span class="pill part">part</span></h3><p class="lede">Stored only</p><div class="frame"><pre class="mermaid">stateDiagram-v2
+  direction LR
+  [*] --&gt; submitted
+  submitted --&gt; confirmed: email link
+  submitted --&gt; rejected: operator</pre></div><h3>Notice (Article 14, to a listed firm) <span class="pill missing">missing</span></h3><div class="frame"><pre class="mermaid">stateDiagram-v2
+  direction LR
+  [*] --&gt; due
+  due --&gt; sent
+  sent --&gt; acknowledged
+  sent --&gt; objected</pre></div></section>
+<section id="processes"><div class="lvl"><span class="tag">Level 3</span><h2>Processes</h2></div>
+<div class="tablewrap"><table><thead><tr><th>#</th><th>Process</th><th>Realises</th><th>Steps</th><th>Status</th></tr></thead><tbody>
+<tr><td class="id">P1</td><td>Qualify a lead</td><td class="id">U2</td><td>Buyers (homeowners, small developers): Describe the site and the need <span class="pill built">built</span><br>The directory: Grade on real, serious, timely, complete <span class="pill built">built</span><br>Buyers (homeowners, small developers): Confirm by email (button press) <span class="pill built">built</span><br>The directory: Operator approves or rejects <span class="pill built">built</span></td><td><span class="pill built">built</span></td></tr><tr><td class="id">P2</td><td>Route a lead<br><span class="muted">Open: how many firms, how long to respond, what the buyer hears if nobody takes it</span></td><td class="id">U4</td><td>The directory: Match firms by survey, region, availability <span class="pill missing">missing</span><br>The directory: Offer briefs, contact hidden <span class="pill missing">missing</span><br>Survey firms: Unlock (pay) or pass <span class="pill missing">missing</span><br>The directory: Chase or lapse; tell the buyer <span class="pill missing">missing</span></td><td><span class="pill missing">missing</span></td></tr><tr><td class="id">P3</td><td>Claim a listing</td><td class="id">U5</td><td>Survey firms: Claim with an email on the firm's domain <span class="pill built">built</span><br>The directory: Email a confirmation link <span class="pill missing">missing</span><br>Survey firms: Edit the listing <span class="pill missing">missing</span></td><td><span class="pill part">part</span></td></tr><tr><td class="id">P4</td><td>Add firms<br><span class="muted">By hand: 10 firms</span></td><td class="id">U5</td><td>The directory: Take candidates from vein <span class="pill missing">missing</span><br>The directory: Check the site sells planning surveys <span class="pill part">part</span><br>The directory: Map surveys and regions <span class="pill part">part</span><br>The directory: Send the listing notice <span class="pill missing">missing</span></td><td><span class="pill part">part</span></td></tr><tr><td class="id">P5</td><td>Correct or remove a listing</td><td class="id">U5</td><td>Survey firms: Ask <span class="pill missing">missing</span><br>The directory: Apply and tombstone <span class="pill missing">missing</span></td><td><span class="pill missing">missing</span></td></tr>
+</tbody></table></div></section>
+<footer>Generated by <code>npm run model:views</code> from <code>macan/model/</code>. Edit the model, not this page.</footer>
+</div>

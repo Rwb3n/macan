@@ -7,6 +7,7 @@ import { firms, leads } from "./db/schema"
 import { REGION_SLUGS, SURVEY_SLUGS, surveyBySlug } from "./catalog"
 import { PLANNING_STAGES, PROJECT_TYPES, qualify, type Qualification } from "./qualify"
 import type { Mailer } from "./mailer"
+import { LEAD_REVIEWS } from "@model/objects"
 
 const blankToNull = (v: unknown) => (typeof v === "string" && v.trim() === "" ? null : v)
 
@@ -67,7 +68,9 @@ export function listLeads(db: Db) {
   return db.select().from(leads).orderBy(desc(leads.createdAt)).all()
 }
 
-export function reviewLead(deps: Pick<Deps, "db" | "now">, id: number, decision: "approved" | "rejected"): void {
+export type ReviewDecision = Exclude<(typeof LEAD_REVIEWS)[number], "new">
+
+export function reviewLead(deps: Pick<Deps, "db" | "now">, id: number, decision: ReviewDecision): void {
   const lead = deps.db.select().from(leads).where(eq(leads.id, id)).get()
   if (!lead) throw new Error(`Lead ${id} not found`)
   if (decision === "approved" && lead.grade !== "qualified") throw new Error(`Lead ${id} is ${lead.grade}; only qualified leads can be approved`)

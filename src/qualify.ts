@@ -1,4 +1,5 @@
 // Lead qualification (docs/brief.md §5a). Pure: no I/O, `today` passed in.
+import { LEAD_CHECKS, LEAD_GRADES } from "@model/objects"
 import { surveyBySlug } from "./catalog"
 
 export const PROJECT_TYPES = [
@@ -21,8 +22,10 @@ export const PLANNING_STAGES = [
 ] as const
 export type PlanningStage = (typeof PLANNING_STAGES)[number][0]
 
-export const GRADES = ["qualified", "awaiting-confirmation", "needs-info", "not-a-fit"] as const
-export type Grade = (typeof GRADES)[number]
+// Grades and checks are the map's (model/objects.ts); the code keeps no copy.
+export const GRADES = LEAD_GRADES
+export type Grade = (typeof LEAD_GRADES)[number]
+type CheckName = (typeof LEAD_CHECKS)[number]
 
 export type LeadFacts = {
   survey: string
@@ -38,7 +41,7 @@ export type LeadFacts = {
 export type Check = { pass: boolean; note?: string }
 export type Qualification = {
   grade: Grade
-  checks: { real: Check; serious: Check; timely: Check; complete: Check }
+  checks: Record<CheckName, Check>
   missing: string[]
 }
 
