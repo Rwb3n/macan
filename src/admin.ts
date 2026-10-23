@@ -1,3 +1,4 @@
+// Builds: PR1
 import { timingSafeEqual } from "node:crypto"
 
 // Operator access: HTTP Basic auth against ADMIN_PASSWORD. No password configured → no access (fail closed).

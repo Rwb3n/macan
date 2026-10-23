@@ -1,3 +1,5 @@
+<!-- Id R3 (written as M2). The text below is the record as committed; only links were updated when it moved to research/. -->
+
 # M2: result (read 2026-10-23, after the method was committed in 04ccd04)
 
 ## Headline
@@ -43,7 +45,7 @@
 | Air quality | 1,871 |
 | **Any** | **76,475 (50,669–105,421)** |
 
-**A3. Price.** Medians of 3 or more published prices (`../c2-gaps/evidence/gap-firms.md`):
+**A3. Price.** Medians of 3 or more published prices (`../R2-gaps/evidence/gap-firms.md`):
 
 | Survey | Median price | Annual spend |
 |---|---|---|

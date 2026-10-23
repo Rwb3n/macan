@@ -1,3 +1,4 @@
+// Builds: U1, ST-U2.1
 // The fixed catalogue: survey types, regions and counties. No imports, safe everywhere.
 // Survey list from S7's buyer terms (callsheet docs/screens/s7-env-buyer-demand) plus the species surveys a PEA leads to.
 

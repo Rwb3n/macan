@@ -1,10 +1,11 @@
+// Builds: PR1, O-lead
 import type { Metadata } from "next"
 import { regionBySlug, surveyBySlug } from "@/catalog"
 import { db } from "@/db"
 import { listLeads } from "@/leads"
 import { PLANNING_STAGES, PROJECT_TYPES } from "@/qualify"
 import { reviewAction } from "../../actions"
-import { LEAD_CHECKS } from "@model/objects"
+import { LEAD_CHECKS } from "@model/how"
 
 export const metadata: Metadata = { title: "Leads", robots: { index: false } }
 export const dynamic = "force-dynamic"

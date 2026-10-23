@@ -1,3 +1,5 @@
+<!-- Id R1 (written as C1). The text below is the record as committed; only links were updated when it moved to research/. -->
+
 # C1: who already serves planning-survey buyers and firms? (pre-registered 2026-10-23, before any read)
 
 Principal, 2026-10-23: "this is looking like a serious project. have we looked at competitors?"

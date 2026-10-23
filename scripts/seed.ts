@@ -1,3 +1,4 @@
+// Builds: PR4, O-listing
 // Loads firms from a JSON file (kept outside git: company data is not committed) into the SQLite database.
 // Usage: npm run db:seed [-- path/to/firms.json]. Idempotent on company number.
 import { readFileSync, mkdirSync } from "node:fs"

@@ -1,36 +1,35 @@
-// The shape of the map (modelkit levels 0-3, kept to what this product needs). No imports.
+// The shape of the map. Ids, one scheme across the project:
+//   D decision · A aim · P party · F flow · CH channel · ALT alternative · U use case · ST stage
+//   PR process · O object · Q open question · R research study (a folder in research/; R0/S7 = research/R0-imported/S7)
+// No imports.
 
 export type Status = "built" | "part" | "missing" | "outside"
-export type Source = string // who said it or what evidence, word for word where a person said it
 
-// receipt: verifiable evidence (a URL, a filing, a measured number). An element with neither receipt nor guess is a claim we owe a receipt for.
-type Element = { id: string; name: string; source: Source; guess?: boolean; receipt?: string; note?: string }
+// refs: the ids this element rests on. Each must include at least one D, R or Q. A guess must cite its Q.
+// receipt: the verifiable evidence itself (a quote, a number, a filing), from the R it cites.
+export type Element = { id: string; name: string; refs: string[]; guess?: boolean; receipt?: string; note?: string }
 
-// Level 0
-export type Party = Element & { kind: "party" }
+// why
+export type Decision = { id: string; name: string; said: string; date: string; refs: string[] }
+export type Aim = Element
+
+// who
 export type SystemOfInterest = Element & { reason: string; inside: string[] }
+export type Party = Element
 export type FlowKind = "information" | "money" | "services" | "value"
 export type Flow = Element & { from: string; to: string; kind?: FlowKind; viaUs: boolean }
-
-// How a party reaches us, or we reach them.
 export type ChannelKind = "search" | "moment" | "referral" | "outbound" | "body" | "community"
 export type Channel = Element & { party: string; kind: ChannelKind; status: Status }
+export type Alternative = Element & { kind: "firm" | "marketplace" | "directory" | "broker"; serves: string[]; offer: string }
 
-// Level 1
+// what
 export type UseCase = Element & { party: string; status: Status; flows: string[] }
-export type Aim = Element // the system's own aims: kept on the boundary, never a use case
-
-// Level 2
 export type Stage = Element & { useCase: string; outcome: string; status: Status }
 
-// Objects and lifecycles
+// how
 export type Transition = { from: string; to: string; by?: string }
-export type BusinessObject = Element & { states: string[]; initial: string; transitions: Transition[]; status: Status }
-
-// Level 3 (BPMN later; until then a named list of steps per actor)
+export type BusinessObject = Element & { states: string[]; initial: string; transitions: Transition[]; status: Status; table?: string }
 export type Process = Element & { realises: string; steps: { actor: string; step: string; status: Status }[]; status: Status }
 
-export type Decision = Element & { said: string; date: string }
-
-// What a party uses today instead of us, per use case (research C1).
-export type Alternative = Element & { kind: "firm" | "marketplace" | "directory" | "broker"; serves: string[]; offer: string }
+// open
+export type Question = { id: string; name: string; test: string; state: "open" | "some" | "answered"; refs: string[]; note?: string }

@@ -1,0 +1,153 @@
+<title>Survey Finder Models</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single reading column that walks down the modelling ladder, level 0 to level 3; wide diagrams scroll in their own frames. */
+:root {
+  --bg: #f6f7f4; --surface: #ffffff; --fg: #1b2420; --muted: #5c6b64; --line: #d9e0dc;
+  --moss: #2f5d46; --moss-soft: #e3eee7; --amber: #9a6512; --amber-soft: #f7eedd; --red: #a23b2a; --red-soft: #f6e3df;
+  --display: "Fraunces", Georgia, "Times New Roman", serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121815; --surface: #19211d; --fg: #e4ebe7; --muted: #9aaba3; --line: #2c3833;
+  --moss: #7fbf9c; --moss-soft: #1f3329; --amber: #e0ac55; --amber-soft: #33291a; --red: #e58a78; --red-soft: #3a221d; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #121815; --surface: #19211d; --fg: #e4ebe7; --muted: #9aaba3; --line: #2c3833;
+  --moss: #7fbf9c; --moss-soft: #1f3329; --amber: #e0ac55; --amber-soft: #33291a; --red: #e58a78; --red-soft: #3a221d; color-scheme: dark }
+
+body { background: var(--bg); color: var(--fg); font: 15px/1.6 var(--body); padding-inline: 16px; padding-block: 0 64px; }
+.wrap { max-width: 920px; margin: 0 auto; }
+header.top { padding-block: 40px 24px; border-bottom: 1px solid var(--line); }
+.kicker { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { font: 650 clamp(30px, 5vw, 44px)/1.1 var(--display); margin: 10px 0 12px; text-wrap: balance; }
+h2 { font: 600 24px/1.25 var(--display); margin: 0; text-wrap: balance; }
+h3 { font: 600 15px/1.3 var(--body); margin: 0 0 8px; }
+p { margin: 0; max-width: 68ch; }
+.lede { color: var(--muted); font-size: 16px; }
+nav.ladder { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+nav.ladder a { font: 500 13px/1 var(--mono); color: var(--fg); text-decoration: none; border: 1px solid var(--line); background: var(--surface); padding: 8px 10px; border-radius: 6px; }
+nav.ladder a:hover, nav.ladder a:focus-visible { border-color: var(--moss); outline: none; }
+section { padding-block: 40px 8px; display: grid; gap: 16px; }
+.lvl { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.lvl .tag { font: 500 12px/1 var(--mono); color: var(--moss); border: 1px solid var(--moss); border-radius: 4px; padding: 4px 6px; }
+.q { color: var(--muted); font-style: italic; }
+.frame { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px; overflow-x: auto; }
+.frame pre.mermaid { margin: 0; background: transparent; text-align: center; }
+.findings { display: grid; gap: 10px; }
+.finding { display: grid; grid-template-columns: 22px 1fr; gap: 8px; align-items: start; }
+.finding b { font-weight: 600; }
+.dot { width: 10px; height: 10px; border-radius: 50%; background: var(--amber); margin-top: 7px; }
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 500 12px/1.3 var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); background: var(--bg); }
+tr:last-child td { border-bottom: 0; }
+td.id { font-family: var(--mono); color: var(--muted); white-space: nowrap; }
+.pill { display: inline-block; font: 500 12px/1 var(--mono); padding: 4px 7px; border-radius: 999px; white-space: nowrap; }
+.built { background: var(--moss-soft); color: var(--moss); }
+.part { background: var(--amber-soft); color: var(--amber); }
+.missing { background: var(--red-soft); color: var(--red); }
+.outside { border: 1px dashed var(--line); color: var(--muted); }
+.stages { display: grid; grid-template-columns: repeat(5, minmax(150px, 1fr)); gap: 8px; overflow-x: auto; }
+.stage { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.stage .n { font: 500 12px/1 var(--mono); color: var(--muted); }
+.stage.out { background: transparent; border-style: dashed; }
+.stage p { font-size: 13px; color: var(--muted); }
+.decision { border: 1px solid var(--moss); background: var(--moss-soft); border-radius: 8px; padding: 16px; display: grid; gap: 6px; }
+.decision .who { font: 500 12px/1.4 var(--mono); color: var(--moss); }
+.checks { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; }
+.check { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px; display: grid; gap: 6px; }
+.check .k { font: 600 13px/1 var(--mono); color: var(--moss); }
+.check p { font-size: 13.5px; }
+.check .fail { font-size: 12.5px; color: var(--muted); }
+ol.open { margin: 0; padding-left: 20px; display: grid; gap: 6px; max-width: 70ch; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 13px; color: var(--muted); }
+footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+code { font-family: var(--mono); font-size: 13px; }
+@media (max-width: 640px) { .stages { grid-template-columns: repeat(5, 160px); } }
+
+.muted { color: var(--muted); font-size: 13px; }
+.decision + .decision { margin-top: 8px; }
+</style>
+<div class="wrap">
+<header class="top">
+  <div class="kicker">The map · generated from macan/model/</div>
+  <h1>Survey Finder, from the outside in</h1>
+  <p class="lede">Why → who → what → how → code. Every line cites the decision (D), study (R) or open question (Q) it rests on; the test suite fails when anything doesn't resolve, dangles, or disagrees with the code.</p>
+  <nav class="ladder" aria-label="Levels"><a href="#why">Why</a><a href="#who">Who</a><a href="#what">What</a><a href="#how">How</a><a href="#trace">Trace</a><a href="#open">Open</a></nav>
+</header>
+<section id="why"><div class="lvl"><span class="tag">Why</span><h2>Decisions</h2></div><p class="q">What the principal decided, word for word.</p><div class="tablewrap"><table><thead><tr><th>Id</th><th>Decision</th><th>Said</th><th>Rests on</th></tr></thead><tbody><tr><td><span class="id">D1</span></td><td>Domain: a UK directory of planning-survey firms, built lean in its own repo</td><td><span class="muted">"callsheet is huge. like a cathedral. i want a porsche macan with snow treads baby (chose: New lean repo; All planning surveys)" · 2026-10-23</span></td><td><span class="muted">R0/S7, R0/S9, R0/S10</span></td></tr><tr><td><span class="id">D2</span></td><td>Business model M1: firms pay per brief they unlock; every lead is qualified first</td><td><span class="muted">"yeah fuck it M1. we'll take in leads and qualify them. we'll build a qualification system." · 2026-10-23</span></td><td><span class="muted">R0/S10</span></td></tr><tr><td><span class="id">D3</span></td><td>We work from models: map first, territory follows, map updated</td><td><span class="muted">"models are the map. we build the territory, and the maps are updated to reflect. it's a tight, closed, loop." · 2026-10-23</span></td><td><span class="muted">principal</span></td></tr><tr><td><span class="id">D4</span></td><td>Claims need receipts; a map is not evidence</td><td><span class="muted">"you have a bad habit of believing the the maps say i want cold hard receipts." · 2026-10-23</span></td><td><span class="muted">principal</span></td></tr><tr><td><span class="id">D5</span></td><td>Sell firms intelligence on where and when demand is coming</td><td><span class="muted">"4. okay, GOOD! LETS DO THAT TOO" · 2026-10-23</span></td><td><span class="muted">R2</span></td></tr><tr><td><span class="id">D6</span></td><td>Firms can pay in kind with spare survey capacity</td><td><span class="muted">"5. GOOOD LETS DO THAT TOO" · 2026-10-23</span></td><td><span class="muted">R2</span></td></tr><tr><td><span class="id">D7</span></td><td>Delegation demands evidence up front</td><td><span class="muted">"who the FUCK sends out their asisstants to do something and NOT ASK FOR EVIDENCE?" · 2026-10-23</span></td><td><span class="muted">R3</span></td></tr><tr><td><span class="id">D8</span></td><td>A clear, traceable, business-driven information architecture; no bloat</td><td><span class="muted">"we need a clear hiearchal information architecture. traceable. clean, not stupid. business driven. i dont want it to bloat like the old callsheet." · 2026-10-23</span></td><td><span class="muted">principal</span></td></tr><tr><td><span class="id">D9</span></td><td>Threshold for M1, provisional: £100k a year at 5% capture</td><td><span class="muted">"threshold, yeah i guess. i dont know I DONT HAVE A FUCKING POINT OF REFERENCE YET DO I?" · 2026-10-23</span></td><td><span class="muted">R3, Q10</span></td></tr></tbody></table></div><p class="lede">Aims on the boundary: <span class="id">A1</span> Earn money from firms (M1, plus intelligence and in-kind) · <span class="id">A2</span> Grow and keep a correct list of firms · <span class="id">A3</span> Stay lawful: listing notices, removal, retention</p><h3>Qualification checks on every lead</h3><div class="checks"><div class="check"><span class="k">real</span></div><div class="check"><span class="k">serious</span></div><div class="check"><span class="k">timely</span></div><div class="check"><span class="k">complete</span></div></div></section>
+<section id="who"><div class="lvl"><span class="tag">Who</span><h2>Context, channels, alternatives</h2></div><p class="q">Who does the business deal with, how do they reach us, and what do they use instead?</p><div class="frame"><pre class="mermaid">flowchart LR
+  P_directory([&quot;THE DIRECTORY&quot;])
+  P_buyer[&quot;Buyers (homeowners, small developers)&quot;]
+  P_agent[&quot;Agents (architects, planning consultants) (guess)&quot;]
+  P_firm[&quot;Survey firms&quot;]
+  P_council[&quot;Councils (planning authorities)&quot;]
+  P_public[&quot;Public sources (Companies House, firms' sites)&quot;]
+  P_buyer -- &quot;site, survey needed, deadline · information&quot; --&gt; P_directory
+  P_directory -- &quot;which survey, when, who covers the area · information&quot; --&gt; P_buyer
+  P_agent -- &quot;repeat requests for clients · information&quot; --&gt; P_directory
+  P_directory -- &quot;a qualified brief · value&quot; --&gt; P_firm
+  P_firm -- &quot;claim, corrections, availability · information&quot; --&gt; P_directory
+  P_firm -- &quot;fee per unlocked brief (M1) · money&quot; --&gt; P_directory
+  P_directory -- &quot;where and when demand is coming · value&quot; --&gt; P_firm
+  P_firm -- &quot;spare survey capacity as payment in kind · services&quot; --&gt; P_directory
+  P_public -- &quot;firm facts · information&quot; --&gt; P_directory
+  P_directory -- &quot;notice that they are listed · information&quot; --&gt; P_firm
+  P_council -. &quot;survey required to validate the application · information&quot; .-&gt; P_buyer
+  P_firm -. &quot;quote, survey, report · services&quot; .-&gt; P_buyer
+  P_buyer -. &quot;payment for the survey · money&quot; .-&gt; P_firm</pre></div><h3>Channels</h3><div class="tablewrap"><table><thead><tr><th>Id</th><th>Party</th><th>Channel</th><th>Status</th><th>Receipt</th></tr></thead><tbody><tr><td><span class="id">CH-search</span></td><td>Buyers (homeowners, small developers)</td><td>Searches the survey the council asked for</td><td><span class="pill part">part</span></td><td><span class="muted">'bat survey', 'flood risk assessment', 'environmental impact assessment' each 1K-10K UK searches a month (S7); Arbtech in 14 of 23 searches (R1)</span></td></tr><tr><td><span class="id">CH-validation</span></td><td>Buyers (homeowners, small developers)</td><td>Told by the council at validation that a survey is missing</td><td><span class="pill missing">missing</span></td><td><span class="muted">'Only to be told I needed a bat survey'; 'the planning officer doesn't recommend anyone, so I'm at the mercy of Google' (R2 gap-buyer.md)</span></td></tr><tr><td><span class="id">CH-agent</span></td><td>Agents (architects, planning consultants)</td><td>Architects and planning consultants pick or recommend the firm <em>(guess)</em></td><td><span class="pill missing">missing</span></td><td><span class="muted">none yet</span></td></tr><tr><td><span class="id">CH-outbound</span></td><td>Survey firms</td><td>We find and contact firms from Companies House and their sites</td><td><span class="pill part">part</span></td><td><span class="muted">2,238 companies in the trade universe, 1,799 with filed headcount (R3)</span></td></tr><tr><td><span class="id">CH-body</span></td><td>Survey firms</td><td>Professional bodies' directories (CIEEM, ANC)</td><td><span class="pill outside">outside</span></td><td><span class="muted">CIEEM Registered Practices Directory, firms pay £147-£368+VAT a year (R1)</span></td></tr><tr><td><span class="id">CH-peers</span></td><td>Survey firms</td><td>Firms pass overflow work to each other <em>(guess)</em></td><td><span class="pill missing">missing</span></td><td><span class="muted">none yet</span></td></tr></tbody></table></div><h3>Alternatives</h3><div class="tablewrap"><table><thead><tr><th>Id</th><th>Alternative</th><th>Serves</th><th>Offer</th></tr></thead><tbody><tr><td><span class="id">ALT-arbtech</span></td><td>Arbtech (national firm)</td><td><span class="id">U1, U2</span></td><td>Fixed published prices (bat roost £399+VAT), UK coverage, money-back guarantee; in 14 of 23 searches; also runs batsurveys.co.uk, ecologysurveys.uk, biodiversitynetgainplan.co.uk<br><span class="muted">Receipt: Arbtech Consulting Ltd (05678552) accounts to 23 Sep 2024: turnover £10,841,715, profit before tax £4,483,055, 113 staff, 'over 13,800' assessments; 60% acquired by Celnor Group</span></td></tr><tr><td><span class="id">ALT-signed-off</span></td><td>Signed Off (signed-off.co.uk)</td><td><span class="id">U1, U2, U5</span></td><td>'Which reports do I need?' checker (no postcode or council step), directory, quotes from up to 3; free and paid listings</td></tr><tr><td><span class="id">ALT-planning-review</span></td><td>The Planning Review</td><td><span class="id">U2</span></td><td>Firms found on planning applications, with quotes; no checker</td></tr><tr><td><span class="id">ALT-cieem</span></td><td>CIEEM Registered Practices Directory</td><td><span class="id">U2, U5</span></td><td>Search by service and postcode; firms pay through membership</td></tr><tr><td><span class="id">ALT-worklanded</span></td><td>Worklanded</td><td><span class="id">U4</span></td><td>Bat and ecology leads sold to firms at £26 each, one firm at a time; 11 enquiries in 90 days</td></tr><tr><td><span class="id">ALT-brokers</span></td><td>Small brokers (batsurveycost.co.uk, RenKap, Yell)</td><td><span class="id">U2</span></td><td>Pass one request to up to 3 firms; firm-side terms not published</td></tr></tbody></table></div></section>
+<section id="what"><div class="lvl"><span class="tag">What</span><h2>Use cases and stages</h2></div><p class="q">What does each party come to us for, and what do they go through?</p><div class="tablewrap"><table><thead><tr><th>Id</th><th>Party</th><th>Comes to us to…</th><th>Status</th><th>Rests on</th></tr></thead><tbody><tr><td><span class="id">U1</span></td><td>Buyers (homeowners, small developers)</td><td>Find out which survey I need, and when it can be done</td><td><span class="pill built">built</span></td><td><span class="muted">R2</span></td></tr><tr><td><span class="id">U2</span></td><td>Buyers (homeowners, small developers)</td><td>Get the survey done in time for my application</td><td><span class="pill part">part</span></td><td><span class="muted">D2, R3</span></td></tr><tr><td><span class="id">U3</span></td><td>Agents (architects, planning consultants)</td><td>Get several surveys quoted for one site, quickly <em>(guess)</em></td><td><span class="pill missing">missing</span></td><td><span class="muted">Q1</span></td></tr><tr><td><span class="id">U4</span></td><td>Survey firms</td><td>Get the enquiries I want, and not the ones I don't</td><td><span class="pill missing">missing</span></td><td><span class="muted">D2, Q2, Q3</span></td></tr><tr><td><span class="id">U5</span></td><td>Survey firms</td><td>Keep my listing right, or have it removed</td><td><span class="pill part">part</span></td><td><span class="muted">D1</span></td></tr><tr><td><span class="id">U6</span></td><td>Survey firms</td><td>Know where and when demand is coming, so I can plan my season</td><td><span class="pill missing">missing</span></td><td><span class="muted">D5, D6</span></td></tr></tbody></table></div><h3>U2 · Get the survey done in time for my application</h3><div class="stages"><div class="stage"><span class="n">1</span><b>Learn what's needed</b><p>Knows the survey and its season</p><span class="pill built">built</span></div><div class="stage"><span class="n">2</span><b>Find who covers it</b><p>Has firms for the survey and region</p><span class="pill built">built</span></div><div class="stage"><span class="n">3</span><b>Ask once</b><p>Request described, confirmed and qualified</p><span class="pill part">part</span></div><div class="stage out"><span class="n">4</span><b>Choose and book</b><p>A firm is booked</p><span class="pill outside">outside</span></div><div class="stage out"><span class="n">5</span><b>Survey and report</b><p>Has the report for the council</p><span class="pill outside">outside</span></div></div><h3>U4 · Get the enquiries I want, and not the ones I don't</h3><div class="stages"><div class="stage"><span class="n">1</span><b>Be found</b><p>Listed, claimed or not</p><span class="pill built">built</span></div><div class="stage"><span class="n">2</span><b>Get a brief</b><p>Sees survey, area, deadline, site; contact hidden</p><span class="pill missing">missing</span></div><div class="stage"><span class="n">3</span><b>Decide</b><p>Unlocked (pays) or passed; paused when booked up</p><span class="pill missing">missing</span></div><div class="stage out"><span class="n">4</span><b>Quote</b><p>Buyer has the firm's quote</p><span class="pill outside">outside</span></div><div class="stage"><span class="n">5</span><b>Win or lose</b><p>We know the outcome</p><span class="pill missing">missing</span></div></div></section>
+<section id="how"><div class="lvl"><span class="tag">How</span><h2>Objects and processes</h2></div><p class="q">What do we track, and what moves it?</p><h3><span class="id">O-lead</span> Lead <span class="pill part">part</span></h3><p class="lede">Built to approved; offering is missing</p><div class="frame"><pre class="mermaid">stateDiagram-v2
+  direction LR
+  [*] --&gt; received
+  received --&gt; awaiting_confirmation: graded at intake
+  received --&gt; needs_info: graded at intake
+  received --&gt; not_a_fit: graded at intake
+  awaiting_confirmation --&gt; qualified: buyer confirms
+  awaiting_confirmation --&gt; needs_info: buyer confirms
+  needs_info --&gt; qualified: buyer adds details
+  qualified --&gt; approved: operator
+  qualified --&gt; rejected: operator
+  needs_info --&gt; rejected: operator
+  not_a_fit --&gt; rejected: operator
+  awaiting_confirmation --&gt; rejected: operator
+  approved --&gt; offered: routing (missing)
+  offered --&gt; closed
+  offered --&gt; expired</pre></div><h3><span class="id">O-brief</span> Brief (one lead offered to one firm) <span class="pill missing">missing</span></h3><p class="lede">The unit M1 sells</p><div class="frame"><pre class="mermaid">stateDiagram-v2
+  direction LR
+  [*] --&gt; offered
+  offered --&gt; unlocked: firm pays (M1)
+  offered --&gt; declined: firm
+  offered --&gt; lapsed: time
+  unlocked --&gt; quoted: firm
+  quoted --&gt; won
+  quoted --&gt; lost</pre></div><h3><span class="id">O-listing</span> Listing (a firm) <span class="pill part">part</span></h3><p class="lede">No states in code yet</p><div class="frame"><pre class="mermaid">stateDiagram-v2
+  direction LR
+  [*] --&gt; unclaimed
+  unclaimed --&gt; claim_pending: firm claims
+  claim_pending --&gt; claimed: email link confirmed
+  claimed --&gt; paused: firm
+  paused --&gt; claimed: firm
+  unclaimed --&gt; removed: removal request
+  claimed --&gt; removed: removal request</pre></div><h3><span class="id">O-slot</span> Slot (spare survey capacity, paid in kind) <span class="pill missing">missing</span></h3><div class="frame"><pre class="mermaid">stateDiagram-v2
+  direction LR
+  [*] --&gt; offered
+  offered --&gt; allocated: matched to a lead
+  allocated --&gt; used: survey done
+  offered --&gt; expired: date passes
+  allocated --&gt; expired: buyer drops out</pre></div><h3><span class="id">O-claim</span> Claim <span class="pill part">part</span></h3><p class="lede">Stored only</p><div class="frame"><pre class="mermaid">stateDiagram-v2
+  direction LR
+  [*] --&gt; submitted
+  submitted --&gt; confirmed: email link
+  submitted --&gt; rejected: operator</pre></div><h3><span class="id">O-notice</span> Notice (Article 14, to a listed firm) <span class="pill missing">missing</span></h3><div class="frame"><pre class="mermaid">stateDiagram-v2
+  direction LR
+  [*] --&gt; due
+  due --&gt; sent
+  sent --&gt; acknowledged
+  sent --&gt; objected</pre></div><div class="tablewrap"><table><thead><tr><th>Id</th><th>Process</th><th>Realises</th><th>Steps</th><th>Status</th></tr></thead><tbody><tr><td><span class="id">PR1</span></td><td>Qualify a lead</td><td><span class="id">U2</span></td><td>Buyers (homeowners, small developers): Describe the site and the need <span class="pill built">built</span><br>The directory: Grade on real, serious, timely, complete <span class="pill built">built</span><br>Buyers (homeowners, small developers): Confirm by email (button press) <span class="pill built">built</span><br>The directory: Operator approves or rejects <span class="pill built">built</span></td><td><span class="pill built">built</span></td></tr><tr><td><span class="id">PR2</span></td><td>Route a lead<br><span class="muted">Open: how many firms, how long to respond, what the buyer hears if nobody takes it</span></td><td><span class="id">U4</span></td><td>The directory: Match firms by survey, region, availability <span class="pill missing">missing</span><br>The directory: Offer briefs, contact hidden <span class="pill missing">missing</span><br>Survey firms: Unlock (pay) or pass <span class="pill missing">missing</span><br>The directory: Chase or lapse; tell the buyer <span class="pill missing">missing</span></td><td><span class="pill missing">missing</span></td></tr><tr><td><span class="id">PR3</span></td><td>Claim a listing</td><td><span class="id">U5</span></td><td>Survey firms: Claim with an email on the firm's domain <span class="pill built">built</span><br>The directory: Email a confirmation link <span class="pill missing">missing</span><br>Survey firms: Edit the listing <span class="pill missing">missing</span></td><td><span class="pill part">part</span></td></tr><tr><td><span class="id">PR4</span></td><td>Add firms<br><span class="muted">By hand: 10 firms</span></td><td><span class="id">U5</span></td><td>The directory: Take candidates from vein <span class="pill missing">missing</span><br>The directory: Check the site sells planning surveys <span class="pill part">part</span><br>The directory: Map surveys and regions <span class="pill part">part</span><br>The directory: Send the listing notice <span class="pill missing">missing</span></td><td><span class="pill part">part</span></td></tr><tr><td><span class="id">PR5</span></td><td>Correct or remove a listing</td><td><span class="id">U5</span></td><td>Survey firms: Ask <span class="pill missing">missing</span><br>The directory: Apply and tombstone <span class="pill missing">missing</span></td><td><span class="pill missing">missing</span></td></tr></tbody></table></div></section>
+<section id="trace"><div class="lvl"><span class="tag">Trace</span><h2>Decision → use case → process / object → code</h2></div><p class="q">Follow any decision down to the code it produced.</p><div class="tablewrap"><table><thead><tr><th>Decision</th><th>Use cases</th><th>Processes</th><th>Objects</th><th>Code</th></tr></thead><tbody><tr><td><span class="id">D1</span> Domain: a UK directory of planning-survey firms, built lean in its own repo</td><td><span class="id">U5</span></td><td><span class="id">PR3, PR5, PR4</span></td><td><span class="id">O-listing, O-claim, O-notice</span></td><td><span class="muted">scripts/seed.ts, src/app/actions.ts, src/app/firms/[slug]/claim/claim-form.tsx, src/app/firms/[slug]/claim/page.tsx, src/app/firms/[slug]/page.tsx, src/claim.ts, src/components/firm-card.tsx, src/db/schema.ts, src/directory.ts, src/requests.ts</span></td></tr><tr><td><span class="id">D2</span> Business model M1: firms pay per brief they unlock; every lead is qualified first</td><td><span class="id">U2, U4</span></td><td><span class="id">PR1, PR2</span></td><td><span class="id">O-lead, O-brief</span></td><td><span class="muted">src/admin.ts, src/app/actions.ts, src/app/admin/leads/page.tsx, src/app/firms/[slug]/page.tsx, src/app/for-firms/page.tsx, src/app/leads/confirm/[token]/page.tsx, src/app/page.tsx, src/app/quote/page.tsx, src/app/quote/quote-form.tsx, src/app/search/page.tsx, src/components/firm-card.tsx, src/components/search-form.tsx, src/db/schema.ts, src/directory.ts, src/leads.ts, src/proxy.ts, src/qualify.ts</span></td></tr><tr><td><span class="id">D3</span> We work from models: map first, territory follows, map updated</td><td><span class="id">-</span></td><td><span class="id">-</span></td><td><span class="id">-</span></td><td><span class="muted">-</span></td></tr><tr><td><span class="id">D4</span> Claims need receipts; a map is not evidence</td><td><span class="id">-</span></td><td><span class="id">-</span></td><td><span class="id">-</span></td><td><span class="muted">-</span></td></tr><tr><td><span class="id">D5</span> Sell firms intelligence on where and when demand is coming</td><td><span class="id">U6</span></td><td><span class="id">-</span></td><td><span class="id">-</span></td><td><span class="muted">src/app/for-firms/page.tsx</span></td></tr><tr><td><span class="id">D6</span> Firms can pay in kind with spare survey capacity</td><td><span class="id">U6</span></td><td><span class="id">-</span></td><td><span class="id">O-slot</span></td><td><span class="muted">src/app/for-firms/page.tsx</span></td></tr><tr><td><span class="id">D7</span> Delegation demands evidence up front</td><td><span class="id">-</span></td><td><span class="id">-</span></td><td><span class="id">-</span></td><td><span class="muted">-</span></td></tr><tr><td><span class="id">D8</span> A clear, traceable, business-driven information architecture; no bloat</td><td><span class="id">-</span></td><td><span class="id">-</span></td><td><span class="id">-</span></td><td><span class="muted">-</span></td></tr><tr><td><span class="id">D9</span> Threshold for M1, provisional: £100k a year at 5% capture</td><td><span class="id">-</span></td><td><span class="id">-</span></td><td><span class="id">-</span></td><td><span class="muted">-</span></td></tr></tbody></table></div></section>
+<section id="open"><div class="lvl"><span class="tag">Open</span><h2>Open questions</h2></div><p class="q">Every guess the map rests on, and the test that would settle it.</p><div class="tablewrap"><table><thead><tr><th>Id</th><th>State</th><th>Question</th><th>Test</th></tr></thead><tbody><tr><td><span class="id">Q1</span></td><td><span class="pill open">open</span></td><td>Architects and planning consultants are a repeat buyer and a referral channel</td><td>Ask 5 small practices how they choose survey firms and whether they keep a panel</td></tr><tr><td><span class="id">Q2</span></td><td><span class="pill open">open</span></td><td>Firms are capacity-constrained in season, so fit matters more than volume (callsheet A6)</td><td>On the calls: are they booked up May-September, and would pausing enquiries matter?</td></tr><tr><td><span class="id">Q3</span></td><td><span class="pill some">some</span></td><td>Firms pay per lead in this trade (callsheet A7)<br><span class="muted">some: one vendor sells at £26 (R1)</span></td><td>On the calls: what would unlocking a sample brief be worth; anchor £26 (Worklanded)</td></tr><tr><td><span class="id">Q4</span></td><td><span class="pill open">open</span></td><td>Buyers want an independent second quote when a first survey recommends a follow-on</td><td>10 real follow-on recommendations: share taking a second quote, and the price spread</td></tr><tr><td><span class="id">Q5</span></td><td><span class="pill open">open</span></td><td>Season-aware matching works both sides (off-season first surveys, pre-booked summer slots)</td><td>Ask 10 firms whether they'd buy off-season leads and sell advance slots</td></tr><tr><td><span class="id">Q6</span></td><td><span class="pill open">open</span></td><td>A postcode-to-council trigger checker beats Signed Off's generic one</td><td>Code triggers from 20 local validation lists; compare answers for a loft conversion</td></tr><tr><td><span class="id">Q7</span></td><td><span class="pill open">open</span></td><td>A 48-hour reply promise wins against firms that ignore small jobs</td><td>Mystery-shop 20 firms in April-June</td></tr><tr><td><span class="id">Q8</span></td><td><span class="pill open">open</span></td><td>Booked-out firms would pass overflow to a vetted local firm for a referral fee</td><td>Ask on the calls</td></tr><tr><td><span class="id">Q9</span></td><td><span class="pill open">open</span></td><td>Independent noise/air firms and NI/Scotland firms are reachable where Arbtech refers out or is absent</td><td>Call 5 acoustic firms; count firms per NI council area</td></tr><tr><td><span class="id">Q10</span></td><td><span class="pill open">open</span></td><td>M1 alone clears the business's threshold<br><span class="muted">At the line</span></td><td>R3: M1 at 5% capture = £99,417 against £100k provisional (D9); principal to set the threshold now reference points exist</td></tr></tbody></table></div></section>
+<footer>Generated by <code>npm run model:views</code> from <code>macan/model/</code>. Edit the model, not this page.</footer>
+</div>

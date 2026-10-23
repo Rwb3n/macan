@@ -1,3 +1,5 @@
+<!-- Id R3 (written as M2). The text below is the record as committed; only links were updated when it moved to research/. -->
+
 # M2: how much money flows from planning applicants to survey firms, and how many buyers a year? (pre-registered 2026-10-23, before any read)
 
 Principal, 2026-10-23: "GO."
@@ -36,7 +38,7 @@ England first.
   - which survey reports are on its documents list. Matching is on document names for each catalogue survey (`src/catalog.ts`), e.g. "bat", "roost", "ecolog", "PEA", "flood risk", "FRA", "noise", "acoustic", "air quality", "contaminat", "phase 1", "arboricult", "tree survey", "BNG", "biodiversity".
 - **Result:** share of applications with each survey, by type, with a 95% interval.
 
-**A3. Price per survey.** The published prices in `../c2-gaps/evidence/gap-firms.md` (each with its URL). Report the median and the range per survey. A survey with fewer than 3 published prices is reported but not priced.
+**A3. Price per survey.** The published prices in `../R2-gaps/evidence/gap-firms.md` (each with its URL). Report the median and the range per survey. A survey with fewer than 3 published prices is reported but not priced.
 
 **Route A totals:**
 - buyers a year per survey = volume × share;

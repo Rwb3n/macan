@@ -1,3 +1,4 @@
+// Builds: U1
 import type { Survey } from "@/catalog"
 
 export function SurveyFacts({ survey }: { survey: Survey }) {

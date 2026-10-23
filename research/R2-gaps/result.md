@@ -1,3 +1,5 @@
+<!-- Id R2 (written as C2). The text below is the record as committed; only links were updated when it moved to research/. -->
+
 # C2: gaps (exploration, 2026-10-23)
 
 Principal, 2026-10-23: "hmmmm explore gaps".

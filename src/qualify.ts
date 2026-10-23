@@ -1,5 +1,6 @@
-// Lead qualification (docs/brief.md §5a). Pure: no I/O, `today` passed in.
-import { LEAD_CHECKS, LEAD_GRADES } from "@model/objects"
+// Builds: PR1
+// Lead qualification (map: PR1; checks from model/how.ts). Pure: no I/O, `today` passed in.
+import { LEAD_CHECKS, LEAD_GRADES } from "@model/how"
 import { surveyBySlug } from "./catalog"
 
 export const PROJECT_TYPES = [

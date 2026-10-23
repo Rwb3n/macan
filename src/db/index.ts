@@ -1,3 +1,4 @@
+// Builds: infra
 import Database from "better-sqlite3"
 import { drizzle, type BetterSQLite3Database } from "drizzle-orm/better-sqlite3"
 import { existsSync } from "node:fs"

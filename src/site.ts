@@ -1,3 +1,4 @@
+// Builds: infra
 // Display name is a working title until the principal picks a brand.
 export const SITE = {
   name: "Survey Finder",

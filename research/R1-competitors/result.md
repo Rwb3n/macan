@@ -1,3 +1,5 @@
+<!-- Id R1 (written as C1). The text below is the record as committed; only links were updated when it moved to research/. -->
+
 # C1: result (read 2026-10-23, after the method was committed in 829ca58)
 
 Evidence: `evidence/c1-partA.md` (23 searches, 230 results classed) and `evidence/c1-partB.md` (intermediaries; every fact has a URL).
@@ -85,5 +87,5 @@ Under the method this moves **A7 to `some`** (callsheet log, 2026-10-23), and **
 3. **"phase 1 environmental assessment" returned mostly US firms.** They are classed F, which inflates F slightly. M and D are unaffected.
 4. **Search-result descriptions only, in Part A.** Arbtech is marked F+ on all 14 results by its own pages, though not every description showed both price and coverage.
 5. **Not a real Google page** (stated in the method): ads, the map pack and "People also ask" are absent. Paid competitors bidding on these terms are unmeasured.
-6. **Search-only discovery missed a direct competitor.** Signed Off (signed-off.co.uk) runs a "which reports do I need" checker, a directory and quotes from up to 3, but ranks on none of the 23 terms. It was found by C2 (`../c2-gaps/`). The "open" result holds for search, but the field has at least one directory-plus-quotes rival.
+6. **Search-only discovery missed a direct competitor.** Signed Off (signed-off.co.uk) runs a "which reports do I need" checker, a directory and quotes from up to 3, but ranks on none of the 23 terms. It was found by C2 (`../R2-gaps/`). The "open" result holds for search, but the field has at least one directory-plus-quotes rival.
 7. **Defect 1 is settled.** The three "Avoid Planning Delays" sites are run by Arbtech Consulting Ltd (each privacy policy; C2). They are F+, Arbtech's own keyword sites, not a marketplace. So Arbtech also holds #1 for "bat survey near me".

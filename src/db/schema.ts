@@ -1,3 +1,4 @@
+// Builds: O-lead, O-listing, O-claim
 import { sqliteTable, text, integer, primaryKey, index } from "drizzle-orm/sqlite-core"
 import type { Qualification } from "../qualify"
 

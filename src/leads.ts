@@ -1,4 +1,5 @@
-// Lead intake, confirmation and operator review (docs/brief.md §5a, §7 process 1).
+// Builds: PR1, O-lead
+// Lead intake, confirmation and operator review (map: PR1, O-lead; decision D2).
 import { createHash, randomBytes } from "node:crypto"
 import { z } from "zod"
 import { desc, eq } from "drizzle-orm"
@@ -7,7 +8,7 @@ import { firms, leads } from "./db/schema"
 import { REGION_SLUGS, SURVEY_SLUGS, surveyBySlug } from "./catalog"
 import { PLANNING_STAGES, PROJECT_TYPES, qualify, type Qualification } from "./qualify"
 import type { Mailer } from "./mailer"
-import { LEAD_REVIEWS } from "@model/objects"
+import { LEAD_REVIEWS } from "@model/how"
 
 const blankToNull = (v: unknown) => (typeof v === "string" && v.trim() === "" ? null : v)
 

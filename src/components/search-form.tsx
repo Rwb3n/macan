@@ -1,3 +1,4 @@
+// Builds: U2, ST-U2.2
 import { REGIONS, SURVEYS } from "@/catalog"
 
 const field = "w-full rounded-md border border-line bg-white px-3 py-2"

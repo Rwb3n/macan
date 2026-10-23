@@ -1,3 +1,4 @@
+// Builds: infra
 import type { Metadata } from "next"
 import Link from "next/link"
 import { SITE, routes } from "@/site"
