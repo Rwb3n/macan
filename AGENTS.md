@@ -23,4 +23,10 @@ Status on each element (`built`, `part`, `missing`, `outside`) is part of the ma
 - **Three to five things per view.** More means: group, then drill down.
 - **Name people by role.** No client or personal data in the model.
 - **Receipts, not maps** (principal, 2026-10-23: "i want cold hard receipts"). A claim about the world carries a `receipt`: a URL, a filing or a measured number. Otherwise it is marked `guess: true`. An inference is never stated as fact, in the model or in a reply.
+- **Delegation demands evidence up front** (2026-10-23, after M2's council readers returned tags nobody could check). Every task sent to a sub-agent:
+  1. names the receipt it must return for each claim: the exact matched text, a URL, or a filing;
+  2. names the output columns that hold that receipt;
+  3. is spot-checked against the receipts after the first 10 rows, before the rest of the spend.
+
+  A claim returned without its receipt is dropped and counted as a defect, never used.
 - **Decisions are the principal's,** quoted word for word with their date in `source`. Guesses are marked `guess: true`.
