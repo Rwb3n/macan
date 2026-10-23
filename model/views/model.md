@@ -143,7 +143,9 @@ stateDiagram-v2
 | alternative | kind | serves | offer |
 |---|---|---|---|
 | Arbtech (national firm) | firm | U1, U2 | Fixed published prices (bat roost £399+VAT), UK coverage, planning money-back guarantee; in 14 of 23 searches |
-| 'Avoid Planning Delays' sites (batsurveys.co.uk and two others) *(guess)* | firm | U2 | 'From £' prices, subcontractor network, operator unnamed; #1 for 'bat survey near me' |
+| Arbtech's keyword sites (batsurveys.co.uk, ecologysurveys.uk, biodiversitynetgainplan.co.uk) | firm | U2 | Run by Arbtech Consulting Ltd (named in each privacy policy); #1 for 'bat survey near me'; 'from £' prices |
+| Signed Off (signed-off.co.uk) | directory | U1, U2, U5 | 'Which reports do I need?' checker (no postcode or council step), directory (75 ecologists), quotes from up to 3; free and paid featured listings; operator incorporated Nov 2024 |
+| The Planning Review | directory | U2 | Lists firms found on planning applications, with quotes; no checker; operator not named |
 | CIEEM Registered Practices Directory | directory | U2, U5 | Search by service and postcode; firms pay £147–£368+VAT a year through membership |
 | Worklanded | marketplace | U4 | Bat and ecology leads sold to firms at £26 each, one firm at a time; 11 enquiries in 90 days |
 | Small brokers (batsurveycost.co.uk, RenKap, Yell enquiries) | broker | U2 | Pass one request to up to 3 firms; firm-side terms not published |

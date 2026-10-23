@@ -77,7 +77,7 @@ export const SURVEYS: readonly Survey[] = [
   {
     slug: "biodiversity-net-gain", name: "Biodiversity net gain", group: "Ecology",
     what: "Measures the site's habitats before and after development with the statutory metric, and plans the 10% gain.",
-    when: "Most planning applications in England need it, with some exemptions (for example householder applications).",
+    when: "Most planning applications in England need it. Householder applications are exempt, and since 6 August 2026 so are sites of 0.2 hectares or less (gov.uk, biodiversity net gain exempt developments).",
     ask: "How big is the site, and is a habitat survey already done?",
   },
   {
