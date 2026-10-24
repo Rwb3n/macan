@@ -485,7 +485,7 @@ const SITE_FACTS = ["works", "trees", "tpo", "ponds", "floodZone", "river", "lis
 function Helps({ facts, details, reading, readBy }: { facts: Facts; details: string; reading: boolean; readBy: "model" | "rules" | null }) {
   const items = [
     ["What you're planning", Boolean(facts.projectType)],
-    ["The building, if there is one: its type and age", Boolean(facts.building)],
+    ["The building, like \"1930s semi\" or \"old stone barn\"", Boolean(facts.building)],
     ["What the council asked for", Boolean(suggestSurvey(details)) || Boolean(facts.planningStage)],
     ["Anything about the roof, trees, ponds or flooding", SITE_FACTS.some((k) => facts[k])],
   ] as const

@@ -28,8 +28,8 @@ export const FIELDS: readonly SheetField[] = [
     why: "Bats live in roofs, lofts and walls, so this decides how much the survey involves.",
     options: [["roof", "Yes, the roof or loft"], ["walls", "Yes, the walls"], ["demolish", "Yes, a building is being knocked down"], ["none", "No"]] },
   // BCT: building type; Historic England AN12: the nature of the building (core for heritage in R12).
-  { id: "building", sheet: "Building", ask: "What kind of building is it, and roughly how old?",
-    why: "Firms use this to judge how much work the survey or report needs.", placeholder: "For example: a 1930s semi-detached house, or an old stone barn" },
+  { id: "building", sheet: "Building", ask: "What is the building, and roughly how old is it?",
+    why: "Firms use this to judge how much work the survey or report needs.", placeholder: "For example: a 1930s semi, a Victorian terrace, a 1970s bungalow, an old stone barn" },
   // BCT: access permission, safe access and structural condition, the client's health and safety requirements.
   { id: "access", sheet: "Access", ask: "Is there anything a surveyor should know about getting in?",
     why: "Surveyors need safe access to every part they inspect.", placeholder: "For example: no loft hatch, a locked barn, asbestos" },
