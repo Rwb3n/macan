@@ -24,6 +24,7 @@ Each decision, down to the use cases, processes and objects that rest on it, and
 | D18 Open the way people already know (trust headline, one plain question, proof, free, three steps), then open into what we've learned (normal? cost? time? season, follow-ons, one thing per screen) | - | - | - | - |
 | D19 Say how we're paid and what we check; show three plain steps on the site, Mermaid stays for the map | - | - | - | - |
 | D20 The quote journey shows a progress bar and, from the start, a checklist of everything we'll ask the buyer | - | - | - | - |
+| D21 Home page order: the familiar headline, then 'Has the council asked you for a survey?', then how it works, then why to trust us | - | - | - | - |
 
 ## Code → map
 

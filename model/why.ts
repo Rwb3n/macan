@@ -44,6 +44,8 @@ export const decisions: Decision[] = [
     said: "(chose: Say how we're paid; Three plain steps)", refs: ["D2", "D14", "R7"] },
   { id: "D20", date: "2026-10-24", name: "The quote journey shows a progress bar and, from the start, a checklist of everything we'll ask the buyer",
     said: "on UX. when i land here: http://localhost:3000/quote can we have a progress bar please, and a checklist of all we need from the burger", refs: ["D14", "D17"] },
+  { id: "D21", date: "2026-10-24", name: "Home page order: the familiar headline, then 'Has the council asked you for a survey?', then how it works, then why to trust us",
+    said: "lets tweak the homepage journey. first of all - this section  belongs higher up: Has the council asked you for a survey?. why do you think i say that? this one is second: How it works, and then the 3 card banner section", refs: ["R7", "D18"] },
 ]
 
 // The buyer's pains today, synthesised from R2's sources (counted independently). Front and centre (D10).

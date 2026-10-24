@@ -11,7 +11,7 @@ export const useCases: UseCase[] = [
 ]
 
 export const stages: Stage[] = [
-  { id: "ST-U2.1", useCase: "U2", name: "Tell us what's going on", outcome: "The problem in my own words, and where the site is", status: "built", refs: ["D14", "D18", "D20"],
+  { id: "ST-U2.1", useCase: "U2", name: "Tell us what's going on", outcome: "The problem in my own words, and where the site is", status: "built", refs: ["D14", "D18", "D20", "D21"],
     note: "Opens the way quote sites do (one plain question), then one question per screen (R7); a progress bar and a checklist of everything we'll ask (D20)" },
   { id: "ST-U2.2", useCase: "U2", name: "Find out what you need and when", outcome: "Knows the survey, its season, a typical price and how many firms cover the area", status: "built", refs: ["D1", "D14", "R3", "R8"],
     note: "33 surveys: every specialist report 3 or more of 10 councils ask for (R8)" },

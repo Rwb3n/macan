@@ -1,6 +1,6 @@
 // Builds: U1, U2, ST-U2.1, ST-U2.2, PN1, PN2, PN3, PN4
-// Opens the way people already know quote sites (trust promise, one plain question, proof, free, three steps),
-// then opens into what we've learned about the council's letter: is it normal, what it costs, how long (D18, R7).
+// Opens the way people already know quote sites (trust promise, one plain question), then meets the buyer at the council's
+// letter (is it normal, what it costs, how long), then how it works, then why to trust us: the order buyers ask in (D18, D21, R7).
 import Link from "next/link"
 import { surveyBySlug } from "@/catalog"
 import { ROUTING } from "@model/how"
@@ -29,24 +29,6 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="border-b border-line bg-white">
-        <ul className="mx-auto max-w-5xl px-4 py-8 grid gap-6 sm:grid-cols-3">
-          <Proof title="Free for you">Firms pay us a small fee, and only when they take your job on.</Proof>
-          <Proof title="Your details stay private">Firms see the job and the area, not your name or contact details, until one takes it on.</Proof>
-          <Proof title="Checked firms">Every firm we send your job to is a registered company that does the survey and has confirmed its details with us.</Proof>
-        </ul>
-      </section>
-
-      <section className="mx-auto max-w-5xl px-4 py-12">
-        <h2 className="text-2xl font-semibold">How it works</h2>
-        <ol className="mt-6 grid gap-6 sm:grid-cols-3">
-          <Step n={1} title="Tell us what you need">A few quick questions about the site and what the council has asked for. Takes about two minutes.</Step>
-          <Step n={2} title="Local firms see your job">Up to {many} firms that work near you see the job. They have {ROUTING.replyHours} hours to say whether they can do it.</Step>
-          <Step n={3} title="You choose">A firm that wants the job gets in touch with a quote. You decide who, if anyone, to book.</Step>
-        </ol>
-        <Link href={routes.quote()} className="mt-8 inline-block rounded-md bg-moss px-6 py-3 text-white hover:bg-moss-dark">Get started</Link>
-      </section>
-
       <section className="bg-leaf">
         <div className="mx-auto max-w-5xl px-4 py-12">
           <h2 className="text-2xl font-semibold">Has the council asked you for a survey?</h2>
@@ -71,6 +53,24 @@ export default function Home() {
           </div>
           <p className="mt-8"><Link href={routes.surveys} className="text-moss underline">See every survey we cover</Link></p>
         </div>
+      </section>
+
+      <section className="mx-auto max-w-5xl px-4 py-12">
+        <h2 className="text-2xl font-semibold">How it works</h2>
+        <ol className="mt-6 grid gap-6 sm:grid-cols-3">
+          <Step n={1} title="Tell us what you need">A few quick questions about the site and what the council has asked for. Takes about two minutes.</Step>
+          <Step n={2} title="Local firms see your job">Up to {many} firms that work near you see the job. They have {ROUTING.replyHours} hours to say whether they can do it.</Step>
+          <Step n={3} title="You choose">A firm that wants the job gets in touch with a quote. You decide who, if anyone, to book.</Step>
+        </ol>
+        <Link href={routes.quote()} className="mt-8 inline-block rounded-md bg-moss px-6 py-3 text-white hover:bg-moss-dark">Get started</Link>
+      </section>
+
+      <section className="border-y border-line bg-white">
+        <ul className="mx-auto max-w-5xl px-4 py-8 grid gap-6 sm:grid-cols-3">
+          <Proof title="Free for you">Firms pay us a small fee, and only when they take your job on.</Proof>
+          <Proof title="Your details stay private">Firms see the job and the area, not your name or contact details, until one takes it on.</Proof>
+          <Proof title="Checked firms">Every firm we send your job to is a registered company that does the survey and has confirmed its details with us.</Proof>
+        </ul>
       </section>
 
       <section className="mx-auto max-w-5xl px-4 py-12">
