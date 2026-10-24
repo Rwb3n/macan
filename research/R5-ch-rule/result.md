@@ -55,3 +55,4 @@ Evidence: `evidence/counts.md` (every number) and `evidence/rules-a-d.sql`. Comp
    - Some "unknown" rows had LinkedIn leads, which were left out by rule.
 7. **The answer key is ecology only,** as stated before the read. Nothing here speaks for flood, noise, air, ground or tree firms.
 8. **vein ends February 2026.** One sampled company has since dissolved (row 15).
+9. **The "sells" bar was tightened after the read.** After row 10, an explicit survey offer was required. Row 4 moved from sells to unknown. Counted as sells, precision is 9/30 = 30%, exactly the bar. The decision does not change, because recall (47%) fails on its own.

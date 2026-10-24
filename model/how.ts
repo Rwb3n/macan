@@ -84,7 +84,7 @@ export const processes: Process[] = [
     { actor: "P-directory", step: "Operator approves or rejects", status: "built" },
   ] },
   { id: "PR2", name: "Route a lead", realises: "U4", status: "part", refs: ["D2", "Q3", "Q15", "Q16"],
-    note: "Terms are guesses (ROUTING: Q15, Q16). The firm's brief page waits on the terms (D11)", steps: [
+    note: "Terms are guesses (ROUTING: Q15, Q16). With claimed firms only, no brief goes out until PR3's confirmation link exists. Next: PR3 step 2, then the firm's brief page once the terms are set (D11)", steps: [
     { actor: "P-directory", step: "Match firms by survey, region, availability", status: "built" },
     { actor: "P-directory", step: "Offer briefs, contact hidden", status: "built" },
     { actor: "P-firm", step: "Unlock (fee owed) or pass", status: "part" },
