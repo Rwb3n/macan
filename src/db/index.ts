@@ -64,6 +64,8 @@ CREATE TABLE IF NOT EXISTS claim_requests (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   firm_id INTEGER NOT NULL REFERENCES firms(id) ON DELETE CASCADE,
   email TEXT NOT NULL,
+  token_hash TEXT UNIQUE,
+  confirmed_at INTEGER,
   created_at INTEGER NOT NULL
 );
 `
@@ -76,10 +78,14 @@ export function openDb(path: string, { create = false } = {}): Db {
   sqlite.pragma("journal_mode = WAL")
   sqlite.pragma("foreign_keys = ON")
   sqlite.exec(DDL)
-  // Databases made before routing (PR2): add its columns.
+  // Databases made before routing (PR2) and claim confirmation (PR3): add their columns.
   const has = (table: string, col: string) => (sqlite.prepare(`PRAGMA table_info(${table})`).all() as { name: string }[]).some((c) => c.name === col)
   if (!has("firms", "paused_at")) sqlite.exec("ALTER TABLE firms ADD COLUMN paused_at INTEGER")
   if (!has("leads", "routed_at")) sqlite.exec("ALTER TABLE leads ADD COLUMN routed_at INTEGER")
+  if (!has("claim_requests", "token_hash")) {
+    sqlite.exec("ALTER TABLE claim_requests ADD COLUMN token_hash TEXT; ALTER TABLE claim_requests ADD COLUMN confirmed_at INTEGER")
+    sqlite.exec("CREATE UNIQUE INDEX IF NOT EXISTS claim_requests_token ON claim_requests(token_hash)")
+  }
   return drizzle(sqlite, { schema })
 }
 

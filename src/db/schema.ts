@@ -83,5 +83,8 @@ export const claimRequests = sqliteTable("claim_requests", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   firmId: integer("firm_id").notNull().references(() => firms.id, { onDelete: "cascade" }),
   email: text("email").notNull(),
+  // sha256 of the emailed confirmation token; the token itself is never stored. Null on claims made before PR3 step 2.
+  tokenHash: text("token_hash").unique(),
+  confirmedAt: integer("confirmed_at", { mode: "timestamp" }),
   createdAt: createdAt(),
 })

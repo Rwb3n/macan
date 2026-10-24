@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache"
 import { db } from "@/db"
 import { isAdmin } from "@/admin"
 import { mailer } from "@/mailer"
-import { submitClaim, type Result } from "@/requests"
+import { confirmClaim, submitClaim, type Result } from "@/requests"
 import { confirmLead, reviewLead, submitLead, type Submitted } from "@/leads"
 import { redirect } from "next/navigation"
 
@@ -35,7 +35,13 @@ export async function confirmAction(form: FormData): Promise<void> {
 }
 
 export async function claimAction(_prev: FormState, form: FormData): Promise<FormState> {
-  return submitClaim(db(), Object.fromEntries(form))
+  return submitClaim({ db: db(), mailer: mailer(), now: () => new Date(), baseUrl: await baseUrl() }, Object.fromEntries(form))
+}
+
+export async function confirmClaimAction(form: FormData): Promise<void> {
+  const token = String(form.get("token") ?? "")
+  if (!confirmClaim({ db: db(), now: () => new Date() }, token)) throw new Error("Unknown confirmation link")
+  redirect(`/claims/confirm/${encodeURIComponent(token)}?done=1`)
 }
 
 // Operator only. Server actions can be called directly, so the password is checked here, not only by the proxy.

@@ -2,7 +2,8 @@ import { beforeEach, describe, expect, it } from "vitest"
 import { openDb, type Db } from "./db"
 import { firms, firmRegions, firmSurveys, claimRequests } from "./db/schema"
 import { findFirms, firmBySlug, surveyCounts } from "./directory"
-import { submitClaim } from "./requests"
+import { claimByToken, confirmClaim, submitClaim } from "./requests"
+import { memoryMailer } from "./mailer"
 
 let db: Db
 
@@ -38,16 +39,37 @@ describe("findFirms", () => {
   })
 })
 
-describe("submitClaim", () => {
-  it("accepts an address on the firm's domain", () => {
-    expect(submitClaim(db, { firm: "bats-north", email: "Info@BatsNorth.co.uk" })).toEqual({ ok: true })
-    expect(db.select().from(claimRequests).get()?.email).toBe("info@batsnorth.co.uk")
+describe("submitClaim and confirmClaim", () => {
+  const deps = () => ({ db, mailer, now: () => new Date(Date.UTC(2026, 9, 24)), baseUrl: "http://test" })
+  let mailer: ReturnType<typeof memoryMailer>
+  beforeEach(() => { mailer = memoryMailer() })
+  const token = () => mailer.sent.at(-1)!.text.match(/\/claims\/confirm\/([\w-]+)/)![1]!
+
+  it("accepts an address on the firm's domain and emails it a link; the listing stays unclaimed", async () => {
+    expect(await submitClaim(deps(), { firm: "bats-north", email: "Info@BatsNorth.co.uk" })).toEqual({ ok: true })
+    const claim = db.select().from(claimRequests).get()!
+    expect(claim.email).toBe("info@batsnorth.co.uk")
+    expect(mailer.sent[0]?.to).toBe("info@batsnorth.co.uk")
+    expect(claim.tokenHash).not.toContain(token())
+    expect(firmBySlug(db, "bats-north")?.claimedAt).toBeNull()
   })
-  it("refuses another domain and stores nothing", () => {
-    expect(submitClaim(db, { firm: "bats-north", email: "me@gmail.com" }).ok).toBe(false)
+  it("pressing the link's button confirms the claim and claims the listing, once", async () => {
+    await submitClaim(deps(), { firm: "bats-north", email: "info@batsnorth.co.uk" })
+    const t = token()
+    expect(claimByToken(db, t)?.firm.slug).toBe("bats-north")
+    expect(confirmClaim(deps(), t)).toBe(true)
+    const claimedAt = firmBySlug(db, "bats-north")?.claimedAt
+    expect(claimedAt).toBeInstanceOf(Date)
+    expect(confirmClaim({ db, now: () => new Date(Date.UTC(2027, 0, 1)) }, t)).toBe(true)
+    expect(firmBySlug(db, "bats-north")?.claimedAt).toEqual(claimedAt)
+    expect(confirmClaim(deps(), "nope")).toBe(false)
+  })
+  it("refuses another domain and stores and sends nothing", async () => {
+    expect((await submitClaim(deps(), { firm: "bats-north", email: "me@gmail.com" })).ok).toBe(false)
     expect(db.select().from(claimRequests).all()).toHaveLength(0)
+    expect(mailer.sent).toHaveLength(0)
   })
-  it("refuses a firm with no website", () => {
-    expect(submitClaim(db, { firm: "flood-only", email: "me@flood-only.co.uk" }).ok).toBe(false)
+  it("refuses a firm with no website", async () => {
+    expect((await submitClaim(deps(), { firm: "flood-only", email: "me@flood-only.co.uk" })).ok).toBe(false)
   })
 })

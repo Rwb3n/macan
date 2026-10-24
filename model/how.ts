@@ -48,7 +48,7 @@ export const objects: BusinessObject[] = [
     ],
   },
   {
-    id: "O-listing", name: "Listing (a firm)", status: "part", table: "firms", refs: ["D1"], note: "In code: claimed and paused (paused firms get no briefs)",
+    id: "O-listing", name: "Listing (a firm)", status: "part", table: "firms", refs: ["D1"], note: "In code: claim pending, claimed (confirmed link), paused (no briefs); removal missing",
     initial: "unclaimed", states: ["unclaimed", "claim-pending", "claimed", "paused", "removed"],
     transitions: [
       { from: "unclaimed", to: "claim-pending", by: "firm claims" }, { from: "claim-pending", to: "claimed", by: "email link confirmed" },
@@ -65,7 +65,7 @@ export const objects: BusinessObject[] = [
     ],
   },
   {
-    id: "O-claim", name: "Claim", status: "part", table: "claim_requests", refs: ["D1"], note: "Stored only",
+    id: "O-claim", name: "Claim", status: "part", table: "claim_requests", refs: ["D1"], note: "Confirmed by the emailed link's button; operator rejection missing",
     initial: "submitted", states: ["submitted", "confirmed", "rejected"],
     transitions: [{ from: "submitted", to: "confirmed", by: "email link" }, { from: "submitted", to: "rejected", by: "operator" }],
   },
@@ -84,7 +84,7 @@ export const processes: Process[] = [
     { actor: "P-directory", step: "Operator approves or rejects", status: "built" },
   ] },
   { id: "PR2", name: "Route a lead", realises: "U4", status: "part", refs: ["D2", "Q3", "Q15", "Q16"],
-    note: "Terms are guesses (ROUTING: Q15, Q16). With claimed firms only, no brief goes out until PR3's confirmation link exists. Next: PR3 step 2, then the firm's brief page once the terms are set (D11)", steps: [
+    note: "Terms are guesses (ROUTING: Q15, Q16). Briefs go to claimed firms' business inboxes; claims are confirmed by link (PR3). Next: the firm's brief page and the operator's route button, once the terms are set (D11)", steps: [
     { actor: "P-directory", step: "Match firms by survey, region, availability", status: "built" },
     { actor: "P-directory", step: "Offer briefs, contact hidden", status: "built" },
     { actor: "P-firm", step: "Unlock (fee owed) or pass", status: "part" },
@@ -92,7 +92,7 @@ export const processes: Process[] = [
   ] },
   { id: "PR3", name: "Claim a listing", realises: "U5", status: "part", refs: ["D1"], steps: [
     { actor: "P-firm", step: "Claim with an email on the firm's domain", status: "built" },
-    { actor: "P-directory", step: "Email a confirmation link", status: "missing" },
+    { actor: "P-directory", step: "Email a confirmation link", status: "built" },
     { actor: "P-firm", step: "Edit the listing", status: "missing" },
   ] },
   { id: "PR4", name: "Add firms", realises: "U5", status: "part", refs: ["R0/S9", "R3", "R4", "R5"],
