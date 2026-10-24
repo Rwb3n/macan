@@ -84,9 +84,9 @@ describe("2. nothing dangles", () => {
     expect(parties.length).toBeLessThanOrEqual(5)
     for (const u of useCases) expect([u.id, stages.filter((s) => s.useCase === u.id).length <= 5]).toEqual([u.id, true])
   })
-  it("every product decision is cited by something (working rules D3, D4, D7, D8, D15 are enforced by AGENTS.md and these checks)", () => {
+  it("every product decision is cited by something (working rules D3, D4, D7, D8, D15, D17 are enforced by AGENTS.md and these checks)", () => {
     const cited = new Set([...elements, ...questions].flatMap((e) => e.refs))
-    const rules = new Set(["D3", "D4", "D7", "D8", "D15"])
+    const rules = new Set(["D3", "D4", "D7", "D8", "D15", "D17"])
     expect(decisions.filter((d) => !rules.has(d.id) && !cited.has(d.id)).map((d) => d.id)).toEqual([])
   })
 })
