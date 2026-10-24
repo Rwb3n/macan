@@ -56,6 +56,8 @@ export const decisions: Decision[] = [
     said: "(and, choosing pool size:) 5 or 10 or all that cover the area - up to the buyer. firm side. for now lets do free and get our first firms onboarded, when theyre happy and we got clout we can say look - we make everyones life easy, what would it cost for you to do this yourself? guess what you can do what youre good at and we only want this much, win for you, the buyer and us(me and you, claude).", refs: ["D2", "Q16", "Q25"] },
   { id: "D26", date: "2026-10-24", name: "The status link shows the final state after a firm takes the job; email updates now, texts later; research the model options before building the drafter",
     said: "(chose: Show the final state; Email now, text later; Research, then compare)", refs: ["D22", "D23", "Q26"] },
+  { id: "D27", date: "2026-10-24", name: "Firms get a standard job sheet plus a trimmed excerpt of the buyer's words, not a drafted story; fields come from survey standards and firms' own quote forms",
+    said: "hmmm maybe the experience needs to be different. traditionally what does the firm see vs what we are trying to innovate here? because a buyer saying \"x y z quoted £nnn\" isnt helping anyone. (then:) run R12, sheet plus trimmed excerpt < on the fields a surveyor needs to price a job - surely theres some sort of standard to start from?", refs: ["R9", "R11", "Q11", "Q27"] },
 ]
 
 // The buyer's pains today, synthesised from R2's sources (counted independently). Front and centre (D10).

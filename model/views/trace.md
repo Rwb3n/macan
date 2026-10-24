@@ -30,6 +30,7 @@ Each decision, down to the use cases, processes and objects that rest on it, and
 | D24 At most three firms per job, unless the buyer chooses a bigger pool | - | PR2 | - | scripts/tick.ts, src/app/actions.ts, src/app/admin/leads/page.tsx, src/app/briefs/[token]/page.tsx, src/app/requests/[token]/page.tsx, src/leads.ts, src/routing.ts |
 | D25 Free for firms at first, to get the first firms on board; charge once they're happy and we have standing | - | PR2 | - | scripts/tick.ts, src/app/actions.ts, src/app/admin/leads/page.tsx, src/app/briefs/[token]/page.tsx, src/app/requests/[token]/page.tsx, src/leads.ts, src/routing.ts |
 | D26 The status link shows the final state after a firm takes the job; email updates now, texts later; research the model options before building the drafter | - | PR2 | - | scripts/tick.ts, src/app/actions.ts, src/app/admin/leads/page.tsx, src/app/briefs/[token]/page.tsx, src/app/requests/[token]/page.tsx, src/leads.ts, src/routing.ts |
+| D27 Firms get a standard job sheet plus a trimmed excerpt of the buyer's words, not a drafted story; fields come from survey standards and firms' own quote forms | - | PR1 | - | src/admin.ts, src/app/actions.ts, src/app/admin/leads/page.tsx, src/app/leads/confirm/[token]/page.tsx, src/app/quote/page.tsx, src/app/quote/quote-form.tsx, src/app/search/page.tsx, src/leads.ts, src/postcode.ts, src/proxy.ts, src/qualify.ts |
 
 ## Code → map
 
