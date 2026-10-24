@@ -11,7 +11,8 @@ const form = {
   survey: "bat-survey", region: "south-east", projectType: "loft", planningStage: "council-asked",
   postcode: "ox1 2jd", councilRef: "", deadline: "2027-07-01",
   details: "1930s semi, loft conversion with two dormers; council validation asked for a bat survey.",
-  answer: "1930s, clay tiles, yes", name: "Sam Buyer", email: "sam@example.com", phone: "",
+  sheet: JSON.stringify({ works: { value: "roof", quote: "loft conversion" }, building: { value: "1930s semi", quote: "1930s semi" }, ponds: { value: "none" }, previous: { value: "maybe" } }),
+  name: "Sam Buyer", email: "sam@example.com", phone: "",
 }
 
 function tokenFromMail(): string {
@@ -33,6 +34,11 @@ describe("submitLead", () => {
     expect(row?.councilRef).toBeNull()
     expect(deps.mailer.sent[0]?.to).toBe("sam@example.com")
     expect(row?.tokenHash).not.toContain(tokenFromMail())
+  })
+  it("keeps only this survey's well-formed job-sheet answers", async () => {
+    await submitLead(deps, form)
+    // ponds isn't asked for a bat survey; "maybe" isn't an answer to a yes/no question.
+    expect(deps.db.select().from(leads).get()?.sheet).toEqual({ works: { value: "roof", quote: "loft conversion" }, building: { value: "1930s semi", quote: "1930s semi" } })
   })
   it("tells the buyer at once when the deadline misses the season", async () => {
     const r = await submitLead(deps, { ...form, deadline: "2027-03-01" })

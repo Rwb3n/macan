@@ -1,6 +1,7 @@
 // Builds: O-lead, O-listing, O-claim, O-brief
 import { sqliteTable, text, integer, primaryKey, index } from "drizzle-orm/sqlite-core"
 import type { Qualification } from "../qualify"
+import type { Facts } from "../jobsheet"
 
 const createdAt = () => integer("created_at", { mode: "timestamp" }).notNull().$defaultFn(() => new Date())
 
@@ -48,7 +49,10 @@ export const leads = sqliteTable("leads", {
   councilRef: text("council_ref"),
   deadline: text("deadline"),
   details: text("details").notNull(),
+  // The one free-text answer asked before job sheets (D27); kept for older leads.
   answer: text("answer").notNull().default(""),
+  // The job-sheet answers (D27, R12): field id → { value, quote when read from the buyer's words }.
+  sheet: text("sheet", { mode: "json" }).$type<Facts>().notNull().default({}),
   name: text("name").notNull(),
   email: text("email").notNull(),
   phone: text("phone"),

@@ -11,8 +11,6 @@ export type Survey = {
   season?: string
   // Months (1-12) in which the fieldwork that decides the outcome can be done. Absent: any time of year.
   window?: readonly number[]
-  // What a firm needs to know to price it, beyond the site description.
-  ask?: string
   // Median of 3+ published prices, ex VAT (R3, A3), for the first visit only; follow-on surveys cost more (PN1).
   typicalPrice?: { pounds: number; covers: string }
 }
@@ -27,7 +25,6 @@ export const SURVEYS: readonly Survey[] = [
     what: "A first ecology visit and desk study that says which habitats and protected species could be affected, and which further surveys you need.",
     when: "Usually the first ecology step for a planning application on land with any wildlife value.",
     season: "Possible all year; best April to September.",
-    ask: "Roughly how big is the site, and what is on it now (buildings, grass, trees, ponds)?",
   },
   {
     slug: "bat-survey", name: "Bat survey", group: "Ecology",
@@ -35,55 +32,53 @@ export const SURVEYS: readonly Survey[] = [
     what: "Checks a building or tree for signs of roosting bats, then, if needed, watches at dusk or dawn to confirm.",
     when: "Often asked for when you alter a roof or loft, convert a barn or demolish an older building.",
     season: "The first inspection can happen all year. Follow-up dusk and dawn surveys only run from May to September.",
-    window: [5, 6, 7, 8, 9], ask: "How old is the building, what is the roof made of, and will the work touch the roof, loft or walls?",
+    window: [5, 6, 7, 8, 9],
   },
   {
     slug: "great-crested-newt-survey", name: "Great crested newt survey", group: "Ecology",
     what: "Tests ponds near your site for great crested newts, often by water sample (eDNA).",
     when: "When there's a pond within about 500 metres and suitable land in between.",
     season: "eDNA samples: mid-April to the end of June.",
-    window: [4, 5, 6], ask: "How many ponds are within about 500 metres, and are any on the site?",
+    window: [4, 5, 6],
   },
   {
     slug: "badger-survey", name: "Badger survey", group: "Ecology",
     what: "Looks for setts and badger activity on and around the site.",
     when: "When signs of badgers turn up, or the site has suitable banks, hedges or woodland.",
     season: "All year; easiest in spring and autumn.",
-    ask: "Have you seen setts or signs of badgers?",
   },
   {
     slug: "reptile-survey", name: "Reptile survey", group: "Ecology",
     what: "Repeat visits checking refuges for slow-worms, lizards and snakes.",
     when: "On rough grassland, scrub and brownfield sites.",
     season: "Roughly March to October, in suitable weather.",
-    window: [3, 4, 5, 6, 7, 8, 9, 10], ask: "Roughly how big is the area of rough grass or scrub?",
+    window: [3, 4, 5, 6, 7, 8, 9, 10],
   },
   {
     slug: "bird-survey", name: "Bird survey", group: "Ecology",
     what: "Records breeding or wintering birds on the site.",
     when: "Larger sites, or work that removes hedges, trees or buildings used by nesting birds.",
     season: "Breeding birds: March to August.",
-    window: [3, 4, 5, 6, 7, 8], ask: "What will be removed: hedges, trees, buildings?",
+    window: [3, 4, 5, 6, 7, 8],
   },
   {
     slug: "water-vole-otter-survey", name: "Water vole and otter survey", group: "Ecology",
     what: "Checks riverbanks, ditches and ponds for water voles and otters.",
     when: "Work on or near watercourses.",
     season: "Water voles: April to September.",
-    window: [4, 5, 6, 7, 8, 9], ask: "How long a stretch of river, ditch or bank is affected?",
+    window: [4, 5, 6, 7, 8, 9],
   },
   {
     slug: "dormouse-survey", name: "Dormouse survey", group: "Ecology",
     what: "Nest tubes checked over several months in hedges and woodland.",
     when: "Work affecting hedgerows or woodland in dormouse areas.",
     season: "April to November.",
-    window: [4, 5, 6, 7, 8, 9, 10, 11], ask: "How much hedgerow or woodland is affected?",
+    window: [4, 5, 6, 7, 8, 9, 10, 11],
   },
   {
     slug: "biodiversity-net-gain", name: "Biodiversity net gain", group: "Ecology",
     what: "Measures the site's habitats before and after development with the statutory metric, and plans the 10% gain.",
     when: "Most planning applications in England need it. Householder applications are exempt, and since 6 August 2026 so are sites of 0.2 hectares or less (gov.uk, biodiversity net gain exempt developments).",
-    ask: "How big is the site, and is a habitat survey already done?",
   },
   {
     slug: "ecological-impact-assessment", name: "Ecological impact assessment", group: "Ecology",
@@ -95,31 +90,26 @@ export const SURVEYS: readonly Survey[] = [
     typicalPrice: { pounds: 599, covers: "the assessment" },
     what: "Shows how the site floods, whether the development is safe, and that it won't make flooding worse elsewhere.",
     when: "Required for development in Flood Zones 2 and 3, and for sites over 1 hectare in Flood Zone 1.",
-    ask: "Which flood zone is the site in, if you know, and how big is it?",
   },
   {
     slug: "noise-impact-assessment", name: "Noise impact assessment", group: "Noise and air",
     what: "Measures existing noise and predicts the effect of the development, with mitigation.",
     when: "New homes near roads, railways or businesses, and noisy uses such as bars, plant or workshops.",
-    ask: "What is the noise source or the noisy use (road, rail, plant, venue)?",
   },
   {
     slug: "air-quality-assessment", name: "Air quality assessment", group: "Noise and air",
     what: "Assesses traffic, dust and other emissions from the development and their effect on people nearby.",
     when: "Developments in or near an Air Quality Management Area, or that add a lot of traffic.",
-    ask: "Is the site in an Air Quality Management Area, and how many homes or vehicle trips?",
   },
   {
     slug: "contaminated-land-assessment", name: "Contaminated land assessment", group: "Ground",
     what: "A desk study (phase 1) of the site's past uses, and if needed sampling (phase 2) to show the ground is safe.",
     when: "Land with a past industrial, agricultural or garage use, and most new homes on previously used land.",
-    ask: "What was the site used for before?",
   },
   {
     slug: "arboricultural-survey", name: "Tree survey (arboricultural)", group: "Trees",
     what: "A BS 5837 survey of trees on and near the site, with root protection areas and a tree protection plan.",
     when: "When there are trees on or next to the site, or a tree preservation order.",
-    ask: "Roughly how many trees are on or next to the site, and are any protected?",
   },
   {
     slug: "environmental-impact-assessment", name: "Environmental impact assessment", group: "Major projects",

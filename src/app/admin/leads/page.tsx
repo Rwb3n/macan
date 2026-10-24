@@ -9,6 +9,7 @@ import { briefsByLead, tick, leadRouting } from "@/routing"
 import { reviewAction, routeAction } from "../../actions"
 import { baseUrl } from "../../base-url"
 import { LEAD_CHECKS } from "@model/how"
+import { jobSheet } from "@/jobsheet"
 
 export const metadata: Metadata = { title: "Leads", robots: { index: false } }
 export const dynamic = "force-dynamic"
@@ -43,6 +44,9 @@ export default async function LeadsPage() {
               <p className="text-sm text-muted">{label(PROJECT_TYPES, l.projectType)} · {label(PLANNING_STAGES, l.planningStage)}{l.councilRef ? ` · ref ${l.councilRef}` : ""}{l.deadline ? ` · by ${l.deadline}` : ""}</p>
               <p className="mt-2 text-sm whitespace-pre-line">{l.details}</p>
               {l.answer ? <p className="mt-1 text-sm text-muted whitespace-pre-line">{l.answer}</p> : null}
+              {(() => { const s = jobSheet(l); return (
+                <p className="mt-1 text-sm text-muted">{s.rows.slice(3).map((r) => `${r.label}: ${r.value}`).join(" · ")}{s.unknown.length ? ` · Not known: ${s.unknown.join(", ")}` : ""}</p>
+              ) })()}
               <ul className="mt-3 grid gap-1 sm:grid-cols-4 text-xs">
                 {LEAD_CHECKS.map((k) => (
                   <li key={k} className={q.checks[k].pass ? "text-moss" : "text-amber"} title={q.checks[k].note}>{q.checks[k].pass ? "✓" : "✗"} {k}{q.checks[k].note ? `: ${q.checks[k].note}` : ""}</li>

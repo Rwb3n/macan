@@ -13,6 +13,7 @@ import { redirect } from "next/navigation"
 import { decideBrief, recordOutcome, routeLead, setPausedByToken } from "@/routing"
 import { baseUrl } from "./base-url"
 import { lookupPostcode, type Place } from "@/postcode"
+import { extractFacts, type Extraction } from "@/extract"
 
 export type FormState = Result | null
 export type LeadState = Submitted | null
@@ -79,6 +80,11 @@ export async function pauseAction(form: FormData): Promise<void> {
 // The buyer's area and council from the site postcode (PR1). Runs on our server, so the buyer's browser talks only to us.
 export async function postcodeAction(postcode: string): Promise<Place | null> {
   return (await lookupPostcode(String(postcode).slice(0, 10))) ?? null
+}
+
+// The buyer's words, read into pills while they answer the next questions (D23, D27).
+export async function factsAction(text: string): Promise<Extraction> {
+  return extractFacts(String(text).slice(0, 2000))
 }
 
 // The firm records how it went (ST-U4.5): quoted, then won or lost.

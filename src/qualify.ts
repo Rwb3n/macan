@@ -34,7 +34,6 @@ export type LeadFacts = {
   planningStage: string
   postcode: string
   details: string
-  answer: string
   deadline: string | null // YYYY-MM-DD
   emailConfirmed: boolean
 }
@@ -53,7 +52,7 @@ export function qualify(lead: LeadFacts, today: Date): Qualification {
   const survey = surveyBySlug(lead.survey)
   const real = checkReal(lead, survey !== undefined)
   const serious: Check = lead.emailConfirmed ? { pass: true } : { pass: false, note: "Email not confirmed yet" }
-  const missing = missingDetails(lead, survey?.ask, today)
+  const missing = missingDetails(lead, today)
   const complete: Check = missing.length ? { pass: false, note: `Missing: ${missing.join("; ")}` } : { pass: true }
   const timely = checkTimely(lead.deadline, survey?.window, today)
   const grade: Grade = !real.pass ? "not-a-fit" : !complete.pass ? "needs-info" : !serious.pass ? "awaiting-confirmation" : "qualified"
@@ -68,11 +67,12 @@ function checkReal(lead: LeadFacts, knownSurvey: boolean): Check {
   return lead.planningStage === "not-sure" ? { pass: true, note: "Buyer not sure a survey is needed" } : { pass: true }
 }
 
-function missingDetails(lead: LeadFacts, ask: string | undefined, today: Date): string[] {
+// Only the core fields every survey needs are required: where the site is and what work is planned (R12).
+// The survey's own questions are asked, but "not sure" is a fair answer; unknowns are listed on the job sheet (D27).
+function missingDetails(lead: LeadFacts, today: Date): string[] {
   const out: string[] = []
   if (!FULL_POSTCODE.test(lead.postcode.trim())) out.push("the full site postcode")
   if (lead.details.trim().length < MIN_DETAILS) out.push("a description of the site and the work")
-  if (ask && lead.answer.trim().length < 3) out.push(ask)
   if (lead.deadline && lead.deadline < isoDate(today)) out.push("a deadline in the future")
   return out
 }

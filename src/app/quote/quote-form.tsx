@@ -4,24 +4,29 @@
 // One thing per screen, a back link on each, one short reason per question, "not sure" where it's a fair answer,
 // the answer before anything personal, contact last and only by choice, then check your answers (D14, D17, D18; R7).
 // A progress bar, and from the start a checklist of everything we'll ask, ticked off as the buyer goes (D20).
+// The buyer's words become pills they can remove or change; then only this survey's missing questions are asked,
+// one per screen, each with "not sure" (D23, D27, R12). The check page shows the excerpt firms will read.
 
 import Link from "next/link"
 import { useActionState, useEffect, useMemo, useState } from "react"
 import { SURVEYS, SURVEY_GROUPS, REGIONS, regionBySlug, suggestSurvey, surveyBySlug } from "@/catalog"
 import { PLANNING_STAGES, PROJECT_TYPES, isoDate, nextWindowStart, type Qualification } from "@/qualify"
 import { ROUTING } from "@model/how"
-import { leadAction, postcodeAction, type LeadState } from "../actions"
+import { NOT_SURE, answerLabel, fieldById, fieldsFor, trimExcerpt, type Facts } from "@/jobsheet"
+import { factsAction, leadAction, postcodeAction, type LeadState } from "../actions"
 
-const BLANK = { pool: "3", survey: "", region: "", council: "", details: "", postcode: "", projectType: "", planningStage: "", deadline: "", councilRef: "", answer: "", name: "", email: "", phone: "" }
+const BLANK = { pool: "3", survey: "", region: "", council: "", details: "", postcode: "", projectType: "", planningStage: "", deadline: "", councilRef: "", name: "", email: "", phone: "" }
 type Values = typeof BLANK
-type Screen = "problem" | "postcode" | "area" | "project" | "stage" | "deadline" | "answer" | "ask" | "details" | "pool" | "check"
+// q:<field> asks one job-sheet question (jobsheet.ts).
+type Screen = "problem" | "postcode" | "area" | "project" | "stage" | "deadline" | "answer" | "pills" | `q:${string}` | "details" | "pool" | "check"
 const SCREEN_OF: Record<string, Screen> = {
   details: "problem", postcode: "postcode", region: "area", projectType: "project", planningStage: "stage", deadline: "deadline",
-  councilRef: "deadline", survey: "answer", answer: "ask", name: "details", email: "details", phone: "details", pool: "pool",
+  councilRef: "deadline", survey: "answer", name: "details", email: "details", phone: "details", pool: "pool",
 }
 const WORDS = ["", "one", "two", "three", "four", "five"]
-const PHASES = ["The job", "About the work", "What you need", "Your details", "Check and send"] as const
-const PHASE_OF: Record<Screen, number> = { problem: 0, postcode: 0, area: 0, project: 1, stage: 1, deadline: 1, answer: 2, ask: 3, details: 3, pool: 4, check: 4 }
+const PHASES = ["The job", "About the work", "What you need", "About the site", "Your details"] as const
+const PHASE_OF: Record<string, number> = { problem: 0, postcode: 0, area: 0, project: 1, stage: 1, deadline: 1, answer: 2, pills: 3, details: 4, pool: 4, check: 4 }
+const phaseOf = (s: Screen) => PHASE_OF[s] ?? 3
 // How many firms see the job: three unless the buyer chooses more (D24).
 const POOLS = [["3", "Up to 3 firms (recommended)"], ["5", "Up to 5 firms"], ["10", "Up to 10 firms"], ["all", "Every firm we list that covers the area"]] as const
 const poolWords = (p: string) => (p === "all" ? "every firm we list that covers your area" : `up to ${WORDS[Number(p)] ?? p} firms`)
@@ -37,6 +42,11 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
   const [checking, setChecking] = useState(false) // came from "check your answers": Continue returns there
   const [looking, setLooking] = useState(false)
   const [hasDeadline, setHasDeadline] = useState<"" | "yes" | "no">("")
+  // Job-sheet answers. Those with a quote were read from the buyer's words; the rest the buyer gave.
+  const [facts, setFacts] = useState<Facts>({})
+  const [readFor, setReadFor] = useState<string | null>(null) // the words last sent to be read
+  const [reading, setReading] = useState(false)
+  const [removed, setRemoved] = useState<Set<string>>(new Set())
   const screen = trail.at(-1)!
   const set = (k: keyof Values, val: string) => setV((x) => ({ ...x, [k]: val }))
   const go = (next: Screen) => { setTrail((t) => [...t, checking && next !== "check" ? "check" : next]); setChecking(false) }
@@ -68,6 +78,36 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
   }
   const deadlineChoice = hasDeadline || (v.deadline ? "yes" : "")
 
+  // Read the buyer's words while they answer the next questions. New words replace the old pills, never the buyer's own answers.
+  const readWords = () => {
+    const text = v.details
+    if (text === readFor) return
+    setReadFor(text); setReading(true); setRemoved(new Set())
+    factsAction(text).then((r) => r.facts).catch(() => ({}) as Facts).then((found) => {
+      setFacts((f) => {
+        const out: Facts = Object.fromEntries(Object.entries(f).filter(([, x]) => !x.quote))
+        for (const [id, x] of Object.entries(found)) if (!out[id]) out[id] = x
+        return out
+      })
+      setReading(false)
+    })
+  }
+  const fields = fieldsFor(v.survey)
+  const pills = fields.filter((f) => facts[f.id]?.quote)
+  const unanswered = fields.filter((f) => !facts[f.id]).length
+  const setFact = (id: string, value: string) => setFacts((f) => ({ ...f, [id]: { value } }))
+  const removePill = (id: string) => { setFacts(({ [id]: _, ...rest }) => rest); setRemoved((r) => new Set(r).add(id)) }
+  // The next question with no answer after `id` (or the first), else the contact details.
+  const nextAfter = (id?: string): Screen => {
+    const from = id ? fields.findIndex((f) => f.id === id) + 1 : 0
+    const next = fields.slice(from).find((f) => !facts[f.id])
+    return next ? `q:${next.id}` : "details"
+  }
+  const toSite = () => go(reading || pills.length ? "pills" : nextAfter())
+  const sheet = JSON.stringify(Object.fromEntries(fields.filter((f) => facts[f.id]).map((f) => [f.id, facts[f.id]])))
+  const asking = screen.startsWith("q:") ? fieldById(screen.slice(2)) : undefined
+  const trimmed = trimExcerpt(v.details)
+
   const visited = new Set(trail)
   const needed: Item[] = [
     { label: "What the council has asked for, or what you're planning", done: visited.has("postcode") },
@@ -77,11 +117,11 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
     { label: "When you need the report by, if there's a date", done: visited.has("answer") },
   ]
   const ifQuotes: Item[] = [
-    { label: "A detail or two about the building, for some surveys", done: Boolean(v.answer) || (visited.has("details") && !s?.ask) },
+    { label: "A few questions about the site, picked for this survey", done: visited.has("details") },
     { label: "Your name and email address", done: visited.has("check") },
     { label: "A phone number, only if you'd like calls", done: Boolean(v.phone) || visited.has("check"), optional: true },
   ]
-  const phase = PHASE_OF[screen]
+  const phase = phaseOf(screen)
   const doneCount = [...needed, ...ifQuotes].filter((i) => i.done).length
 
   return (
@@ -101,6 +141,7 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
       <Progress phase={phase} />
       {firm ? <input type="hidden" name="firm" value={firm} /> : null}
       {Object.entries(v).map(([k, val]) => <input key={k} type="hidden" name={k} value={val} />)}
+      <input type="hidden" name="sheet" value={sheet} />
       {trail.length > 1 ? <button type="button" onClick={back} className="mb-6 text-moss underline">Back</button> : null}
 
       {screen === "problem" ? (
@@ -109,7 +150,7 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
           <textarea rows={5} className={input} value={v.details} onChange={(e) => set("details", e.target.value)}
             placeholder="For example: We're converting our loft. The council says they need a bat survey before they'll look at the application." />
           <p className="text-muted">Not sure what you need yet? Just describe the work you&apos;re planning.</p>
-          <Continue disabled={v.details.trim().length < 10} onClick={() => go("postcode")} />
+          <Continue disabled={v.details.trim().length < 10} onClick={() => { readWords(); go("postcode") }} />
         </Question>
       ) : null}
 
@@ -160,13 +201,44 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
           firms={v.survey && v.region ? coverage[v.survey]?.[v.region] ?? 0 : undefined}
           onSurvey={(x) => set("survey", x)} onArea={() => change("area")} err={err.survey}
           quotesLabel={firmName ? `Get a quote from ${firmName}` : `Get quotes from up to ${many} local firms`}
-          onQuotes={() => go(s?.ask ? "ask" : "details")} />
+          onQuotes={toSite} />
       ) : null}
 
-      {screen === "ask" && s?.ask ? (
-        <Question title={s.ask} hint="Firms need this to give you a price." error={err.answer}>
-          <textarea rows={3} className={input} value={v.answer} onChange={(e) => set("answer", e.target.value)} />
-          <Continue disabled={v.answer.trim().length < 3} onClick={() => go("details")} />
+      {screen === "pills" ? (
+        <Question title={reading ? "Reading what you wrote…" : pills.length ? "Here's what we picked up from what you wrote" : "A few quick questions about the site"}
+          hint={reading ? "Just a moment." : pills.length ? "Firms will see these. If one is wrong, change it, or remove it and we'll ask you instead." : "We couldn't find these in what you wrote. “Not sure” is always a fine answer."}>
+          {pills.length ? (
+            <ul className="flex flex-wrap gap-3">
+              {pills.map((f) => (
+                <li key={f.id} className="rounded-lg border-2 border-moss bg-leaf px-4 py-3">
+                  <p className="text-lg"><span className="font-semibold">{f.sheet}:</span> {answerLabel(f, facts[f.id]!.value)}</p>
+                  <p className="text-sm text-muted">You wrote &ldquo;{facts[f.id]!.quote}&rdquo;</p>
+                  <p className="mt-2 flex gap-4 text-sm">
+                    <button type="button" onClick={() => go(`q:${f.id}`)} className="text-moss underline">Change<span className="sr-only"> {f.sheet.toLowerCase()}</span></button>
+                    <button type="button" onClick={() => removePill(f.id)} className="text-moss underline">Remove<span className="sr-only"> {f.sheet.toLowerCase()}</span></button>
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          {removed.size ? <p className="text-muted">Removed: {[...removed].map((id) => fieldById(id)?.sheet).join(", ")}. We&apos;ll ask you instead.</p> : null}
+          {!reading ? <p className="text-muted">{unanswered ? `Next, ${unanswered === 1 ? "one short question" : `${WORDS[unanswered] ?? unanswered} short questions`} firms need to price the job.` : "That's everything firms need to price the job."}</p> : null}
+          <Continue disabled={reading} onClick={() => go(nextAfter())} />
+        </Question>
+      ) : null}
+
+      {asking ? (
+        <Question title={asking.ask} hint={asking.why}>
+          {asking.options ? (
+            <Radios name={asking.id} value={facts[asking.id]?.value ?? ""} onChange={(x) => setFact(asking.id, x)} options={[...asking.options, [NOT_SURE, "Not sure"]]} />
+          ) : (
+            <>
+              <textarea rows={2} className={input} placeholder={asking.placeholder}
+                value={facts[asking.id]?.value === NOT_SURE ? "" : facts[asking.id]?.value ?? ""} onChange={(e) => setFact(asking.id, e.target.value)} />
+              <button type="button" onClick={() => { setFact(asking.id, NOT_SURE); go(nextAfter(asking.id)) }} className="block text-moss underline">I&apos;m not sure, skip this</button>
+            </>
+          )}
+          <Continue disabled={!facts[asking.id]?.value.trim()} onClick={() => go(nextAfter(asking.id))} />
         </Question>
       ) : null}
 
@@ -196,7 +268,9 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
             <Row k="What you're planning" val={label(PROJECT_TYPES, v.projectType)} onChange={() => change("project")} />
             <Row k="Planning permission" val={label(PLANNING_STAGES, v.planningStage)} onChange={() => change("stage")} />
             <Row k="Needed by" val={v.deadline ? new Date(v.deadline).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : "No date"} onChange={() => change("deadline")} />
-            {s?.ask ? <Row k="About the building" val={v.answer} onChange={() => change("ask")} /> : null}
+            {fields.map((f) => <Row key={f.id} k={f.sheet} val={facts[f.id] ? answerLabel(f, facts[f.id]!.value) : "Not answered"} onChange={() => change(`q:${f.id}`)} />)}
+            <Row k="Firms will read, in your words" onChange={() => change("problem")}
+              val={trimmed.excerpt ? `“${trimmed.excerpt}”${trimmed.dropped ? `\n\nWe've left out ${trimmed.dropped === 1 ? "a sentence" : `${trimmed.dropped} sentences`} with prices, quotes or contact details.` : ""}` : "Nothing"} />
             <Row k="Your details" val={[v.name, v.email, v.phone].filter(Boolean).join("\n")} onChange={() => change("details")} />
             {firm ? null : <Row k="How many firms" val={POOLS.find(([k]) => k === v.pool)?.[1] ?? v.pool} onChange={() => change("pool")} />}
           </dl>

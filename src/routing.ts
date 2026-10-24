@@ -9,6 +9,7 @@ import { findFirms } from "./directory"
 import { regionBySlug, surveyBySlug } from "./catalog"
 import { PLANNING_STAGES, PROJECT_TYPES } from "./qualify"
 import type { Mailer } from "./mailer"
+import { jobSheet, type JobSheet } from "./jobsheet"
 import { BRIEF_STATES, ROUTING, objects } from "@model/how"
 
 export type Deps = { db: Db; mailer: Mailer; now: () => Date; baseUrl: string }
@@ -18,10 +19,10 @@ export type LeadRouting = "unrouted" | "offered" | "closed" | "expired" | "cance
 type Lead = typeof leads.$inferSelect
 type Firm = typeof firms.$inferSelect
 
-// What a firm sees before unlocking: survey, area, timing and the site. Never the buyer's name, email or phone.
+// What a firm sees before unlocking: survey, area, timing, the job sheet and its excerpt (D27). Never the buyer's name, email or phone.
 export type BriefView = {
   survey: string; area: string; region: string; council: string | null; projectType: string; planningStage: string
-  deadline: string | null; details: string; answer: string; state: BriefState; expiresAt: Date
+  deadline: string | null; details: string; sheet: JobSheet; state: BriefState; expiresAt: Date
   feePence: number | null; firm: { name: string; paused: boolean }
   contact?: { name: string; email: string; phone: string | null }
 }
@@ -60,10 +61,9 @@ export async function routeLead(deps: Deps, leadId: number): Promise<{ routing: 
       to: firm.email!,
       subject: `New ${v.survey.toLowerCase()} brief: ${v.area}`,
       text: [
-        `${v.survey} near ${v.area} (${v.region}${v.council ? `, ${v.council} council` : ""}).`,
-        `${v.projectType} · ${v.planningStage}${v.deadline ? ` · needed by ${v.deadline}` : ""}`,
-        "", v.details, v.answer ? `\n${v.answer}` : "",
-        "", `Unlock the buyer's contact or pass, by ${expiresAt.toUTCString()}:`, `${deps.baseUrl}/briefs/${token}`,
+        `${v.survey.toUpperCase()} · near ${v.area} · ${v.council ? `${v.council} council` : v.region}`, "",
+        sheetText(v.sheet),
+        "", `Take this job on or pass, by ${expiresAt.toUTCString()}:`, `${deps.baseUrl}/briefs/${token}`,
       ].join("\n"),
     })
   }
@@ -225,8 +225,19 @@ function leadView(lead: Lead) {
     council: lead.council,
     projectType: label(PROJECT_TYPES, lead.projectType),
     planningStage: label(PLANNING_STAGES, lead.planningStage),
-    deadline: lead.deadline, details: mask(lead.details), answer: mask(lead.answer),
+    deadline: lead.deadline, details: mask(lead.details), sheet: jobSheet({ ...lead, details: mask(lead.details) }),
   }
+}
+
+// The job sheet as plain text, for the firm's email.
+export function sheetText(s: JobSheet): string {
+  const w = Math.max(...s.rows.map((r) => r.label.length), s.unknown.length ? 9 : 0, 7) + 2
+  return [
+    ...s.rows.map((r) => `${r.label.padEnd(w)}${r.value}`),
+    ...(s.unknown.length ? [`${"Not known".padEnd(w)}${s.unknown.join("; ")}`] : []),
+    `${"Checked".padEnd(w)}Email confirmed · a real planning need · checked by us`,
+    ...(s.excerpt ? ["", "In the buyer's words:", `"${s.excerpt}"`] : []),
+  ].join("\n")
 }
 
 // Unlocked, and every state the map lets a brief reach after it.
@@ -246,7 +257,7 @@ function viewOf(db: Db, b: typeof briefs.$inferSelect): BriefView {
   return {
     ...leadView(lead), state, expiresAt: b.expiresAt, feePence: b.feePence, firm: { name: firm.name, paused: Boolean(firm.pausedAt) },
     // Once unlocked, the firm has paid to see everything the buyer wrote, for the rest of the brief's life.
-    ...(PAID.has(state) ? { details: lead.details, answer: lead.answer, contact: { name: lead.name, email: lead.email, phone: lead.phone } } : {}),
+    ...(PAID.has(state) ? { details: lead.details, contact: { name: lead.name, email: lead.email, phone: lead.phone } } : {}),
   }
 }
 

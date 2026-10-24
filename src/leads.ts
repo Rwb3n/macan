@@ -9,6 +9,7 @@ import { REGION_SLUGS, SURVEY_SLUGS, surveyBySlug } from "./catalog"
 import { PLANNING_STAGES, PROJECT_TYPES, qualify, type Qualification } from "./qualify"
 import type { Mailer } from "./mailer"
 import { LEAD_REVIEWS } from "@model/how"
+import { cleanFacts } from "./jobsheet"
 
 const blankToNull = (v: unknown) => (typeof v === "string" && v.trim() === "" ? null : v)
 
@@ -22,7 +23,8 @@ export const LeadInput = z.object({
   councilRef: z.preprocess(blankToNull, z.string().trim().max(40).nullable()),
   deadline: z.preprocess(blankToNull, z.iso.date("Enter a date").nullable()),
   details: z.string().trim().max(2000),
-  answer: z.string().trim().max(1000).default(""),
+  // The job-sheet answers as JSON (D27); only this survey's well-formed answers are kept.
+  sheet: z.preprocess((v) => { if (typeof v !== "string") return v; try { return JSON.parse(v) } catch { return {} } }, z.unknown()).default({}),
   name: z.string().trim().min(2, "Enter your name").max(100),
   email: z.email("Enter a valid email address"),
   phone: z.preprocess(blankToNull, z.string().trim().max(30).nullable()),
@@ -44,8 +46,8 @@ export const STATUS_LINK_DAYS = 90
 export async function submitLead(deps: Deps, raw: unknown): Promise<Submitted> {
   const parsed = LeadInput.safeParse(raw)
   if (!parsed.success) return { ok: false, errors: fieldErrors(parsed.error) }
-  const { firm: firmSlug, pool, ...l } = parsed.data
-  const lead = { ...l, postcode: l.postcode.toUpperCase().replace(/\s+/g, " "), poolSize: pool === "all" ? 0 : Number(pool) }
+  const { firm: firmSlug, pool, sheet, ...l } = parsed.data
+  const lead = { ...l, sheet: cleanFacts(l.survey, sheet), postcode: l.postcode.toUpperCase().replace(/\s+/g, " "), poolSize: pool === "all" ? 0 : Number(pool) }
   const qualification = qualify({ ...lead, emailConfirmed: false }, deps.now())
   const firm = firmSlug ? deps.db.select({ id: firms.id }).from(firms).where(eq(firms.slug, firmSlug)).get() : undefined
   const token = randomBytes(24).toString("base64url")

@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS leads (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   survey TEXT NOT NULL, region TEXT NOT NULL, postcode TEXT NOT NULL, council TEXT,
   project_type TEXT NOT NULL, planning_stage TEXT NOT NULL, council_ref TEXT, deadline TEXT,
-  details TEXT NOT NULL, answer TEXT NOT NULL DEFAULT '',
+  details TEXT NOT NULL, answer TEXT NOT NULL DEFAULT '', sheet TEXT NOT NULL DEFAULT '{}',
   name TEXT NOT NULL, email TEXT NOT NULL, phone TEXT,
   firm_id INTEGER REFERENCES firms(id) ON DELETE SET NULL,
   token_hash TEXT NOT NULL UNIQUE,
@@ -87,6 +87,7 @@ export function openDb(path: string, { create = false } = {}): Db {
   if (!has("firms", "paused_at")) sqlite.exec("ALTER TABLE firms ADD COLUMN paused_at INTEGER")
   if (!has("leads", "routed_at")) sqlite.exec("ALTER TABLE leads ADD COLUMN routed_at INTEGER")
   if (!has("leads", "council")) sqlite.exec("ALTER TABLE leads ADD COLUMN council TEXT")
+  if (!has("leads", "sheet")) sqlite.exec("ALTER TABLE leads ADD COLUMN sheet TEXT NOT NULL DEFAULT '{}'")
   if (!has("leads", "status_token")) {
     sqlite.exec("ALTER TABLE leads ADD COLUMN status_token TEXT; ALTER TABLE leads ADD COLUMN pool_size INTEGER NOT NULL DEFAULT 3; ALTER TABLE leads ADD COLUMN cancelled_at INTEGER")
     sqlite.exec("CREATE UNIQUE INDEX IF NOT EXISTS leads_status_token ON leads(status_token)")

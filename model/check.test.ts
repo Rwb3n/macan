@@ -125,7 +125,7 @@ describe("5. the code agrees with the map", () => {
   })
   it("qualification reports exactly the map's four checks", () => {
     const q = qualify({ survey: "bat-survey", projectType: "loft", planningStage: "preparing", postcode: "OX1 2JD",
-      details: "x".repeat(40), answer: "yes", deadline: null, emailConfirmed: true }, new Date(Date.UTC(2026, 5, 1)))
+      details: "x".repeat(40), deadline: null, emailConfirmed: true }, new Date(Date.UTC(2026, 5, 1)))
     expect(Object.keys(q.checks).sort()).toEqual([...LEAD_CHECKS].sort())
   })
   const tables = new Set(Object.values(schema).flatMap((t) => {

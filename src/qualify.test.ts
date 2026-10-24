@@ -8,7 +8,7 @@ const bats = [5, 6, 7, 8, 9]
 const good: LeadFacts = {
   survey: "bat-survey", projectType: "loft", planningStage: "council-asked", postcode: "OX1 2JD",
   details: "1930s semi, loft conversion with two dormers; council validation asked for a bat survey.",
-  answer: "1930s, clay tiles, yes the roof", deadline: "2027-07-01", emailConfirmed: true,
+deadline: "2027-07-01", emailConfirmed: true,
 }
 
 describe("nextWindowStart", () => {
@@ -44,9 +44,9 @@ describe("qualify", () => {
     expect(qualify({ ...good, emailConfirmed: false }, oct).grade).toBe("awaiting-confirmation")
   })
   it("asks for missing details, naming each", () => {
-    const q = qualify({ ...good, postcode: "OX1", answer: "", details: "loft" }, oct)
+    const q = qualify({ ...good, postcode: "OX1", details: "loft" }, oct)
     expect(q.grade).toBe("needs-info")
-    expect(q.missing).toHaveLength(3)
+    expect(q.missing).toHaveLength(2)
   })
   it("asks for a future deadline", () => {
     expect(qualify({ ...good, deadline: "2026-01-01" }, oct).missing).toContain("a deadline in the future")
@@ -57,7 +57,7 @@ describe("qualify", () => {
   it("is not a fit for an unknown survey", () => {
     expect(qualify({ ...good, survey: "asbestos" }, oct).grade).toBe("not-a-fit")
   })
-  it("does not ask a survey-specific question where there is none", () => {
-    expect(qualify({ ...good, survey: "environmental-impact-assessment", answer: "" }, oct).grade).toBe("qualified")
+  it("requires only the core fields, not the survey's own questions (R12)", () => {
+    expect(qualify({ ...good, survey: "flood-risk-assessment" }, oct).grade).toBe("qualified")
   })
 })

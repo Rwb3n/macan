@@ -22,12 +22,31 @@ export default async function BriefPage({ params }: { params: Promise<{ token: s
     <div className="mx-auto max-w-2xl px-4 py-10">
       <p className="text-sm text-muted">Brief for {b.firm.name}</p>
       <h1 className="mt-1 text-3xl font-semibold tracking-tight">{b.survey} near {b.area}</h1>
-      <p className="mt-1 text-muted">{b.council ? `${b.council} council, ` : ""}{b.region} · {b.projectType} · {b.planningStage}{b.deadline ? ` · needed by ${b.deadline}` : ""}</p>
+      <p className="mt-1 text-muted">{b.council ? `${b.council} council, ` : ""}{b.region}</p>
 
+      {/* The job sheet (D27): the facts the survey's standard needs (R12), what's not known, then the buyer's own words. */}
       <div className="mt-6 rounded-lg border border-line bg-white p-5">
-        <p className="whitespace-pre-line">{b.details}</p>
-        {b.answer ? <p className="mt-3 text-sm text-muted whitespace-pre-line">{b.answer}</p> : null}
-        <p className="mt-4 text-xs text-muted">Checked before it reached you: the buyer confirmed by email, the job is real and serious, the deadline fits the survey season, and the details are complete.</p>
+        <dl className="divide-y divide-line">
+          {b.sheet.rows.map((r) => (
+            <div key={r.label} className="grid gap-1 py-2 sm:grid-cols-[11rem_1fr] sm:gap-4">
+              <dt className="font-semibold">{r.label}</dt>
+              <dd>{r.value}{r.fromWords ? <span className="ml-2 text-xs text-muted">from the buyer&apos;s words</span> : null}</dd>
+            </div>
+          ))}
+          {b.sheet.unknown.length ? (
+            <div className="grid gap-1 py-2 sm:grid-cols-[11rem_1fr] sm:gap-4">
+              <dt className="font-semibold">Not known</dt>
+              <dd className="text-muted">{b.sheet.unknown.join("; ")}</dd>
+            </div>
+          ) : null}
+        </dl>
+        {b.sheet.excerpt ? (
+          <blockquote className="mt-4 border-l-4 border-leaf pl-4">
+            <p className="text-sm font-semibold">In the buyer&apos;s words</p>
+            <p className="mt-1 italic">&ldquo;{b.sheet.excerpt}&rdquo;</p>
+          </blockquote>
+        ) : null}
+        <p className="mt-4 text-xs text-muted">Checked before it reached you: the buyer confirmed by email, it&apos;s for a planning application, and we&apos;ve read it. The buyer chose &ldquo;not sure&rdquo; for anything under Not known.</p>
       </div>
 
       {b.state === "offered" ? (
