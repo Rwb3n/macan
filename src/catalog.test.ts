@@ -9,6 +9,11 @@ describe("suggestSurvey", () => {
     ["We need a tree survey for the oak with a TPO", "arboricultural-survey"],
     ["Planning officer asked for an ecology report", "preliminary-ecological-appraisal"],
     ["Pub garden next to houses, they want a noise report", "noise-impact-assessment"],
+    ["Our barn is in a conservation area", "heritage-statement"],
+    ["The site is over old coal mine workings", "coal-mining-risk-assessment"],
+    ["We'll use a septic tank, not the sewer", "drainage-strategy"],
+    ["A new takeaway with a commercial kitchen", "ventilation-extraction"],
+    ["Bats found in the loft of a listed building", "bat-survey"],
   ])("%s → %s", (text, slug) => expect(suggestSurvey(text)).toBe(slug))
   it("returns nothing when it can't tell", () => expect(suggestSurvey("I want to build an extension")).toBeUndefined())
   it("only suggests surveys in the catalogue", () => expect(SURVEY_SLUGS).toContain(suggestSurvey("bats")))

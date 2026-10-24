@@ -2,7 +2,7 @@
 // Every survey we cover, grouped, with what it is. Firm counts only where we list firms: "0 firms" reads as empty.
 import type { Metadata } from "next"
 import Link from "next/link"
-import { SURVEYS, SURVEY_GROUPS } from "@/catalog"
+import { OTHER_REPORTS, SURVEYS, SURVEY_GROUPS } from "@/catalog"
 import { db } from "@/db"
 import { surveyCounts } from "@/directory"
 import { routes } from "@/site"
@@ -36,6 +36,13 @@ export default function SurveysPage() {
             </ul>
           </section>
         ))}
+        <section>
+          <h2 className="text-lg font-semibold">Also asked for sometimes</h2>
+          <p className="mt-1 text-sm text-muted">A few councils ask for these. If yours has, <Link href={routes.quote()} className="text-moss underline">tell us what you need</Link> and we&apos;ll see who can help.</p>
+          <ul className="mt-3 divide-y divide-line border-y border-line">
+            {OTHER_REPORTS.map((r) => <li key={r.name} className="py-3"><span className="font-medium">{r.name}</span><span className="block text-sm text-muted">{r.what}</span></li>)}
+          </ul>
+        </section>
       </div>
     </div>
   )
