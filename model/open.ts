@@ -45,6 +45,8 @@ export const questions: Question[] = [
     test: "Principal chooses; the skin is the colour and font tokens in globals.css, which the site and the journey diagram read" },
   { id: "Q21", state: "open", name: "How we send email and where we host, so the product can go live", refs: ["D12"],
     test: "Principal chooses a mail provider and a host; until then production refuses to send email, so buyers and firms get nothing" },
+  { id: "Q22", state: "open", name: "Buyers understand, trust and finish a site that meets them at the council's letter: it answers 'is this normal, what will it cost, how long' before asking anything, shows why to trust it, and asks one thing per screen", refs: ["R7", "D17"],
+    test: "Watch 3-5 people who have done home improvements use it with the council-letter scenario, thinking aloud for 10 minutes each (principal runs it; method first). Where do they stall, what do they say about trust?" },
   { id: "Q15", state: "open", name: "Routing terms: 3 firms per lead, 48 hours to reply, claimed firms only", refs: ["R1", "R2", "R6", "D12"],
     test: "R6 calls: how many competitors per lead is acceptable, and how fast can they reply in season? Principal sets the terms" },
   { id: "Q16", state: "open", name: "How a firm settles an unlocked brief: card at unlock, monthly invoice, prepaid credit, or spare capacity (D6)", refs: ["D2", "D6", "R6"],
