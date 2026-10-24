@@ -58,6 +58,16 @@ export const decisions: Decision[] = [
     said: "(chose: Show the final state; Email now, text later; Research, then compare)", refs: ["D22", "D23", "Q26"] },
   { id: "D27", date: "2026-10-24", name: "Firms get a standard job sheet plus a trimmed excerpt of the buyer's words, not a drafted story; fields come from survey standards and firms' own quote forms",
     said: "hmmm maybe the experience needs to be different. traditionally what does the firm see vs what we are trying to innovate here? because a buyer saying \"x y z quoted £nnn\" isnt helping anyone. (then:) run R12, sheet plus trimmed excerpt < on the fields a surveyor needs to price a job - surely theres some sort of standard to start from?", refs: ["R9", "R11", "Q11", "Q27"] },
+  { id: "D28", date: "2026-10-24", name: "Show the buyer the request firms will get, beside every step, filling in live as they type and answer; the pills are its editable rows",
+    said: "right. ask yourself.... because right now i dont know what im looking at. (then, on the proposed panel:) lets see what it looks like. go", refs: ["D23", "D27", "D17"] },
+  { id: "D29", date: "2026-10-24", name: "Keep the familiar form parts (checklist ticks, the step-by-step questions); read the work type and planning stage from the buyer's words too, pre-filled for them to confirm",
+    said: "very close. i think you threw the baby out with the bathwater though. this looks good but there needs to be some traditional parts still present. yep pull the work type and planning stage from the words too", refs: ["D28", "D20"] },
+  { id: "D30", date: "2026-10-24", name: "Every checklist row can be clicked to fill it in or change it; no repeated filler text; 'Something else' can be described",
+    said: "they should be able to click on the checklist items to fill in at the end. also \"we'll ask\" as a filler repeated over and over like that is confusing and slightly annoying to look at? (then:) agreed. and on \"other\" options such as 'what are you planning?' > something else. theres no way to describe it?", refs: ["D28", "D20"] },
+  { id: "D31", date: "2026-10-24", name: "The first screen says plainly that our AI reads what they write to make the most helpful request: what helps, ticked live; what the AI does and doesn't; honest when it isn't running; the provider isn't named",
+    said: "maybe we can have the in your own words a bit more fleshed out, so that they can understand we're using modern tech (ai) to help them with the most helpful request? (then, on the proposed requirements:) 1. agreed. 2. yep 3. sure 4. not that important i think at this point in their journey. 5. yes 6. yes.", refs: ["D23", "D17", "Q29"] },
+  { id: "D32", date: "2026-10-24", name: "Ask about the building in everyday words with examples, not its 'type'",
+    said: "im not sure people would know what \"type\" of building their house is. maybe. but type os vague?", refs: ["D17", "R12"] },
 ]
 
 // The buyer's pains today, synthesised from R2's sources (counted independently). Front and centre (D10).

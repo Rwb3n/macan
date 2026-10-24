@@ -1,0 +1,214 @@
+[
+  {
+    "id": 1,
+    "A": {
+      "out": {
+        "survey": "bat-survey",
+        "pills": [
+          {
+            "label": "Survey",
+            "value": "Bat survey"
+          },
+          {
+            "label": "Project",
+            "value": "Loft conversion"
+          },
+          {
+            "label": "Building",
+            "value": "1930s semi"
+          },
+          {
+            "label": "Roof",
+            "value": "Clay tile"
+          },
+          {
+            "label": "Location",
+            "value": "OX4"
+          },
+          {
+            "label": "Deadline",
+            "value": "Start building March next year"
+          },
+          {
+            "label": "Council",
+            "value": "Required before validation"
+          }
+        ],
+        "draft": "A buyer needs a bat survey for a loft conversion at a 1930s semi-detached house in OX4, with a clay tile roof. The local council requires the survey before it will validate the planning application. The buyer wants to start building in March next year. The buyer has not yet confirmed the council's exact survey requirements, the survey season you would recommend, or whether any bats have been recorded at the property. Please confirm what the survey must cover and the timing needed to meet the March start."
+      },
+      "valid": true,
+      "ms": 3759,
+      "cost": 0.00032960000000000004,
+      "usage": {
+        "input_tokens": 1776,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 304,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "invented": []
+    },
+    "B": {
+      "supported": 0.71,
+      "survey": "bat-survey",
+      "surveyConfidence": 1,
+      "model": "typesafe/jev-1.14-20261014",
+      "cost": 0.000082362,
+      "ms": 369
+    },
+    "C": {
+      "out": {
+        "survey": "bat-survey",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "loft conversion"
+          },
+          {
+            "label": "Building",
+            "value": "1930s semi"
+          },
+          {
+            "label": "Roof",
+            "value": "clay tile roof"
+          },
+          {
+            "label": "Location",
+            "value": "OX4"
+          },
+          {
+            "label": "Deadline",
+            "value": "March next year"
+          },
+          {
+            "label": "Council",
+            "value": "not known"
+          }
+        ],
+        "draft": "A buyer needs a bat survey for a loft conversion. The property is a 1930s semi with a clay tile roof, located in OX4. The goal is to start building in March next year. The council has requested the survey before validating the project."
+      },
+      "valid": true,
+      "ms": 5121,
+      "cost": 0.000069592,
+      "provider": "Darkbloom",
+      "invented": []
+    }
+  },
+  {
+    "id": 2,
+    "A": {
+      "out": {
+        "survey": "bat-survey",
+        "pills": [
+          {
+            "label": "Survey",
+            "value": "bat survey"
+          },
+          {
+            "label": "Project",
+            "value": "barn conversion"
+          },
+          {
+            "label": "Building",
+            "value": "old stone barn"
+          },
+          {
+            "label": "Roof",
+            "value": "slate roof"
+          },
+          {
+            "label": "Location",
+            "value": "near Hereford HR2"
+          },
+          {
+            "label": "Deadline",
+            "value": "no deadline yet"
+          },
+          {
+            "label": "Council",
+            "value": "planning officer requested survey"
+          },
+          {
+            "label": "Other",
+            "value": "as soon as possible"
+          }
+        ],
+        "draft": "A buyer needs a bat survey for a barn conversion. The building is an old stone barn with a slate roof, near Hereford HR2. A planning officer has asked for the survey. No deadline has been set yet, but the buyer would like it as soon as possible. Details not yet known: the barn's exact age, floor area, and any existing bat records or prior surveys. Please confirm what you need from the buyer to scope and price the work."
+      },
+      "valid": true,
+      "ms": 2435,
+      "cost": 0.00033489999999999995,
+      "usage": {
+        "input_tokens": 1774,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 315,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "invented": []
+    },
+    "B": {
+      "supported": 0.83,
+      "survey": "bat-survey",
+      "surveyConfidence": 1,
+      "model": "typesafe/jev-1.14-20261014",
+      "cost": 0.000081354,
+      "ms": 213
+    },
+    "C": {
+      "out": {
+        "survey": "bat-survey",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "barn conversion"
+          },
+          {
+            "label": "Building",
+            "value": "old stone barn"
+          },
+          {
+            "label": "Roof",
+            "value": "slate roof"
+          },
+          {
+            "label": "Location",
+            "value": "near Hereford HR2"
+          },
+          {
+            "label": "Deadline",
+            "value": "asap"
+          },
+          {
+            "label": "Council",
+            "value": "planning officer"
+          }
+        ],
+        "draft": "A buyer needs a bat survey for a barn conversion. The building is an old stone barn with a slate roof, located near Hereford HR2. The buyer requests this as soon as possible, though no specific deadline is known yet."
+      },
+      "valid": true,
+      "ms": 6120,
+      "cost": 0.000088144,
+      "provider": "Darkbloom",
+      "invented": []
+    }
+  }
+]

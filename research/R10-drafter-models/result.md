@@ -2,7 +2,7 @@
 
 Evidence: `evidence/part1.md` has 13 candidates, each with a URL and the provider's own wording, plus OpenRouter's "Jev-Verified Cascade" pattern.
 
-**Part 2 (the side-by-side test) has not run.** It needs the principal's API keys.
+**Part 2 (the side-by-side test) has not run.** It needs the principal's API keys. (It has since run: see Part 2 below.)
 
 ## What "decision models" are
 They are a real, named category on OpenRouter and Cloudflare, launched October 2026. By their makers' own words they write no text: "Send it application state and one or more typed questions, and get back a typed answer with probabilities instead of generated text" and "Jev does not produce reasoning traces, explanations, or free-form text" (https://openrouter.ai/docs/guides/community/jev; spot-checked word for word). Cloudflare's Clef is "in the same family".
@@ -78,3 +78,4 @@ Pills don't have to wait for the draft:
 2. **The judge is a model.** The principal's spot-check of 5 judgements (method) is not done yet.
 3. **Gemma's route** ran on Darkbloom, whose data policy wasn't read in part 1.
 4. **The inputs are synthetic and tidy.** Real buyers write differently (principal, 2026-10-24), which R11 tests.
+5. **The trial run:** `evidence/part2-results-first2.json` holds the first 2 inputs, run before the full 20 to check the set-up (D7). Committed late, after the result.

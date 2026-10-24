@@ -108,6 +108,12 @@ function main() {
     }
     if (project && it.open) { try { gh("project", "item-add", String(project), "--owner", OWNER, "--url", `https://github.com/${REPO}/issues/${number}`) } catch { /* already on the board */ } }
   }
+  // An issue whose map item is gone (a step removed, or steps renumbered to fewer) is closed, so nothing stale stays open.
+  const keys = new Set(want.map((i) => i.key))
+  for (const [key, ex] of byKey) {
+    if (keys.has(key) || ex.state !== "OPEN") continue
+    gh("issue", "close", String(ex.number), "--repo", REPO, "--comment", `No longer in the map (${key}).`); closed++
+  }
   console.log(JSON.stringify({ event: "mirror", repo: REPO, project, items: want.length, open: want.filter((i) => i.open).length, created, updated, closed }))
 }
 
