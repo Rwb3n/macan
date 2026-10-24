@@ -1,4 +1,4 @@
-// Builds: O-lead, O-listing, O-claim
+// Builds: O-lead, O-listing, O-claim, O-brief
 import { sqliteTable, text, integer, primaryKey, index } from "drizzle-orm/sqlite-core"
 import type { Qualification } from "../qualify"
 
@@ -19,6 +19,8 @@ export const firms = sqliteTable("firms", {
   baseRegion: text("base_region"),
   accreditations: text("accreditations", { mode: "json" }).$type<string[]>().notNull().default([]),
   claimedAt: integer("claimed_at", { mode: "timestamp" }),
+  // Set by the firm when booked up (O-listing: paused). Paused firms are offered no briefs.
+  pausedAt: integer("paused_at", { mode: "timestamp" }),
   createdAt: createdAt(),
 })
 
@@ -57,8 +59,25 @@ export const leads = sqliteTable("leads", {
   // new → approved / rejected by the operator.
   review: text("review").notNull().default("new"),
   reviewedAt: integer("reviewed_at", { mode: "timestamp" }),
+  // When the operator routed it to firms (PR2); its routing state is read from its briefs.
+  routedAt: integer("routed_at", { mode: "timestamp" }),
   createdAt: createdAt(),
 }, (t) => [index("leads_grade").on(t.grade, t.review)])
+
+// One lead offered to one firm (O-brief). The buyer's contact is shown only once the brief is unlocked.
+export const briefs = sqliteTable("briefs", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  leadId: integer("lead_id").notNull().references(() => leads.id, { onDelete: "cascade" }),
+  firmId: integer("firm_id").notNull().references(() => firms.id, { onDelete: "cascade" }),
+  state: text("state").notNull().default("offered"),
+  // sha256 of the token in the firm's link; the token itself is never stored.
+  tokenHash: text("token_hash").notNull().unique(),
+  offeredAt: integer("offered_at", { mode: "timestamp" }).notNull(),
+  expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
+  decidedAt: integer("decided_at", { mode: "timestamp" }),
+  // Owed on unlock (M1); how it is settled is open (Q16).
+  feePence: integer("fee_pence"),
+}, (t) => [index("briefs_lead").on(t.leadId), index("briefs_state").on(t.state, t.expiresAt)])
 
 export const claimRequests = sqliteTable("claim_requests", {
   id: integer("id").primaryKey({ autoIncrement: true }),

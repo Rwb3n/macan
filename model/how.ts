@@ -5,10 +5,19 @@ import type { BusinessObject, Process } from "./types"
 export const LEAD_GRADES = ["qualified", "awaiting-confirmation", "needs-info", "not-a-fit"] as const
 export const LEAD_REVIEWS = ["new", "approved", "rejected"] as const
 export const LEAD_CHECKS = ["real", "serious", "timely", "complete"] as const
+export const BRIEF_STATES = ["offered", "unlocked", "declined", "lapsed", "quoted", "won", "lost"] as const
+
+// Routing terms (PR2). Business choices not yet made by the principal: each is a guess with its test (D11: model first).
+export const ROUTING = {
+  firmsPerLead: 3, // Q15: Signed Off offers "quotes from up to 3", Bark shares with up to 5, Worklanded sells to 1 (R1, R2)
+  replyHours: 48, // Q15, Q7: the 48-hour reply promise
+  unlockFeePence: 2600, // Q3: anchor £26 a lead (Worklanded); recorded as owed, not taken (Q16)
+  claimedOnly: true, // Q15: only firms that claimed their listing receive briefs; unclaimed firms are not emailed
+} as const
 
 export const objects: BusinessObject[] = [
   {
-    id: "O-lead", name: "Lead", status: "part", table: "leads", refs: ["D2"], note: "Built to approved; offering is missing",
+    id: "O-lead", name: "Lead", status: "part", table: "leads", refs: ["D2"], note: "offered, closed and expired are read from the lead's briefs (and when it was routed)",
     initial: "received",
     states: ["received", "awaiting-confirmation", "needs-info", "not-a-fit", "qualified", "approved", "rejected", "offered", "closed", "expired"],
     transitions: [
@@ -23,13 +32,14 @@ export const objects: BusinessObject[] = [
       { from: "needs-info", to: "rejected", by: "operator" },
       { from: "not-a-fit", to: "rejected", by: "operator" },
       { from: "awaiting-confirmation", to: "rejected", by: "operator" },
-      { from: "approved", to: "offered", by: "routing (missing)" },
-      { from: "offered", to: "closed" },
-      { from: "offered", to: "expired" },
+      { from: "approved", to: "offered", by: "routing: briefs sent" },
+      { from: "approved", to: "expired", by: "routing: no firm matches" },
+      { from: "offered", to: "closed", by: "a firm unlocks, none still deciding" },
+      { from: "offered", to: "expired", by: "every brief declined or lapsed" },
     ],
   },
   {
-    id: "O-brief", name: "Brief (one lead offered to one firm)", status: "missing", table: "briefs", refs: ["D2", "Q3"], note: "The unit M1 sells",
+    id: "O-brief", name: "Brief (one lead offered to one firm)", status: "part", table: "briefs", refs: ["D2", "Q3"], note: "The unit M1 sells. Built to unlocked, declined and lapsed; quote and outcome missing",
     initial: "offered", states: ["offered", "unlocked", "declined", "lapsed", "quoted", "won", "lost"],
     transitions: [
       { from: "offered", to: "unlocked", by: "firm pays (M1)" }, { from: "offered", to: "declined", by: "firm" },
@@ -38,7 +48,7 @@ export const objects: BusinessObject[] = [
     ],
   },
   {
-    id: "O-listing", name: "Listing (a firm)", status: "part", table: "firms", refs: ["D1"], note: "No states in code yet",
+    id: "O-listing", name: "Listing (a firm)", status: "part", table: "firms", refs: ["D1"], note: "In code: claimed and paused (paused firms get no briefs)",
     initial: "unclaimed", states: ["unclaimed", "claim-pending", "claimed", "paused", "removed"],
     transitions: [
       { from: "unclaimed", to: "claim-pending", by: "firm claims" }, { from: "claim-pending", to: "claimed", by: "email link confirmed" },
@@ -73,12 +83,12 @@ export const processes: Process[] = [
     { actor: "P-buyer", step: "Confirm by email (button press)", status: "built" },
     { actor: "P-directory", step: "Operator approves or rejects", status: "built" },
   ] },
-  { id: "PR2", name: "Route a lead", realises: "U4", status: "missing", refs: ["D2", "Q3"],
-    note: "Open: how many firms, how long to respond, what the buyer hears if nobody takes it", steps: [
-    { actor: "P-directory", step: "Match firms by survey, region, availability", status: "missing" },
-    { actor: "P-directory", step: "Offer briefs, contact hidden", status: "missing" },
-    { actor: "P-firm", step: "Unlock (pay) or pass", status: "missing" },
-    { actor: "P-directory", step: "Chase or lapse; tell the buyer", status: "missing" },
+  { id: "PR2", name: "Route a lead", realises: "U4", status: "part", refs: ["D2", "Q3", "Q15", "Q16"],
+    note: "Terms are guesses (ROUTING: Q15, Q16). The firm's brief page waits on the terms (D11)", steps: [
+    { actor: "P-directory", step: "Match firms by survey, region, availability", status: "built" },
+    { actor: "P-directory", step: "Offer briefs, contact hidden", status: "built" },
+    { actor: "P-firm", step: "Unlock (fee owed) or pass", status: "part" },
+    { actor: "P-directory", step: "Chase or lapse; tell the buyer", status: "part" },
   ] },
   { id: "PR3", name: "Claim a listing", realises: "U5", status: "part", refs: ["D1"], steps: [
     { actor: "P-firm", step: "Claim with an email on the firm's domain", status: "built" },

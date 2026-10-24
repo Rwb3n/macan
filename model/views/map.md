@@ -88,7 +88,7 @@ flowchart LR
 | U1 | Buyers (homeowners, small developers) | Find out which survey I need, and when it can be done | built | R2 |
 | U2 | Buyers (homeowners, small developers) | Get the survey done in time for my application | part | D2, R3 |
 | U3 | Agents (architects, planning consultants) | Get several surveys quoted for one site, quickly *(guess)* | missing | Q1 |
-| U4 | Survey firms | Get the enquiries I want, and not the ones I don't | missing | D2, Q2, Q3 |
+| U4 | Survey firms | Get the enquiries I want, and not the ones I don't | part | D2, Q2, Q3 |
 | U5 | Survey firms | Keep my listing right, or have it removed | part | D1 |
 | U6 | Survey firms | Know where and when demand is coming, so I can plan my season | missing | D5, D6 |
 
@@ -109,8 +109,8 @@ flowchart LR
 | id | stage | outcome | status |
 |---|---|---|---|
 | ST-U4.1 | Be found | Listed, claimed or not | built |
-| ST-U4.2 | Get a brief | Sees survey, area, deadline, site; contact hidden | missing |
-| ST-U4.3 | Decide | Unlocked (pays) or passed; paused when booked up | missing |
+| ST-U4.2 | Get a brief | Sees survey, area, deadline, site; contact hidden | built |
+| ST-U4.3 | Decide | Unlocked (pays) or passed; paused when booked up | part |
 | ST-U4.4 | Quote | Buyer has the firm's quote | outside |
 | ST-U4.5 | Win or lose | We know the outcome | missing |
 
@@ -133,12 +133,13 @@ stateDiagram-v2
   needs_info --> rejected: operator
   not_a_fit --> rejected: operator
   awaiting_confirmation --> rejected: operator
-  approved --> offered: routing (missing)
-  offered --> closed
-  offered --> expired
+  approved --> offered: routing: briefs sent
+  approved --> expired: routing: no firm matches
+  offered --> closed: a firm unlocks, none still deciding
+  offered --> expired: every brief declined or lapsed
 ```
 
-### O-brief Brief (one lead offered to one firm) (missing; rests on D2, Q3)
+### O-brief Brief (one lead offered to one firm) (part; rests on D2, Q3)
 
 ```mermaid
 stateDiagram-v2
@@ -204,7 +205,7 @@ stateDiagram-v2
 | id | process | realises | steps | status | rests on |
 |---|---|---|---|---|---|
 | PR1 | Qualify a lead | U2 | Buyers (homeowners, small developers): Describe the site and the need (built); The directory: Grade on real, serious, timely, complete (built); Buyers (homeowners, small developers): Confirm by email (button press) (built); The directory: Operator approves or rejects (built) | built | D2 |
-| PR2 | Route a lead | U4 | The directory: Match firms by survey, region, availability (missing); The directory: Offer briefs, contact hidden (missing); Survey firms: Unlock (pay) or pass (missing); The directory: Chase or lapse; tell the buyer (missing) | missing | D2, Q3 |
+| PR2 | Route a lead | U4 | The directory: Match firms by survey, region, availability (built); The directory: Offer briefs, contact hidden (built); Survey firms: Unlock (fee owed) or pass (part); The directory: Chase or lapse; tell the buyer (part) | part | D2, Q3, Q15, Q16 |
 | PR3 | Claim a listing | U5 | Survey firms: Claim with an email on the firm's domain (built); The directory: Email a confirmation link (missing); Survey firms: Edit the listing (missing) | part | D1 |
 | PR4 | Add firms | U5 | The directory: Take candidates from vein (missing); The directory: Take candidates from CIEEM's Registered Practice Directory (145 ecology practices); read CIEEM's terms of use before building (missing); The directory: Check the site sells planning surveys (part); The directory: Map surveys and regions (part); The directory: Send the listing notice (missing) | part | R0/S9, R3, R4 |
 | PR5 | Correct or remove a listing | U5 | Survey firms: Ask (missing); The directory: Apply and tombstone (missing) | missing | D1 |

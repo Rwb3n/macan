@@ -10,7 +10,7 @@ import {
   alternatives, builds, channels, decisions, elements, flows, ids, objects, pains, parties, processes, questions,
   researchFolder, researchIds, stages, system, useCases,
 } from "./index"
-import { LEAD_CHECKS, LEAD_GRADES, LEAD_REVIEWS } from "./how"
+import { BRIEF_STATES, LEAD_CHECKS, LEAD_GRADES, LEAD_REVIEWS } from "./how"
 import { html, markdown, openMarkdown, traceMarkdown } from "./render"
 
 const isResearch = (r: string) => /^R\d+$/.test(r) || /^R0\/.+$/.test(r)
@@ -119,6 +119,9 @@ describe("5. the code agrees with the map", () => {
   const lead = objects.find((o) => o.id === "O-lead")!
   it("every lead grade and review outcome is a state of the Lead lifecycle", () => {
     expect([...LEAD_GRADES, ...LEAD_REVIEWS.filter((r) => r !== "new")].filter((s) => !lead.states.includes(s))).toEqual([])
+  })
+  it("the brief states in code are exactly the Brief lifecycle's", () => {
+    expect([...BRIEF_STATES].sort()).toEqual([...objects.find((o) => o.id === "O-brief")!.states].sort())
   })
   it("qualification reports exactly the map's four checks", () => {
     const q = qualify({ survey: "bat-survey", projectType: "loft", planningStage: "preparing", postcode: "OX1 2JD",

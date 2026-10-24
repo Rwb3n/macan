@@ -34,4 +34,8 @@ export const questions: Question[] = [
     note: "some: 8 of 63 sampled applications that filed a survey filed 2+ survey groups, all minor or major, no householders (R3 data, read after the fact)" },
   { id: "Q14", state: "open", name: "Showing a firm's professional registration answers 'whose report will the council accept?'", refs: ["R2", "R4"],
     test: "Read 10 councils' validation guidance for accreditation wording; ask 5 validation officers" },
+  { id: "Q15", state: "open", name: "Routing terms: 3 firms per lead, 48 hours to reply, claimed firms only", refs: ["R1", "R2"],
+    test: "On the calls: how many competitors per lead is acceptable, and how fast can they reply in season? Principal sets the terms" },
+  { id: "Q16", state: "open", name: "How a firm settles an unlocked brief: card at unlock, monthly invoice, prepaid credit, or spare capacity (D6)", refs: ["D2", "D6"],
+    test: "On the calls: which would they accept? Principal decides; until then the fee is recorded as owed" },
 ]

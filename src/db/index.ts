@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS firms (
   website TEXT, phone TEXT, email TEXT, town TEXT, county TEXT, base_region TEXT,
   accreditations TEXT NOT NULL DEFAULT '[]',
   claimed_at INTEGER,
+  paused_at INTEGER,
   created_at INTEGER NOT NULL
 );
 CREATE TABLE IF NOT EXISTS firm_surveys (
@@ -44,9 +45,21 @@ CREATE TABLE IF NOT EXISTS leads (
   qualification TEXT NOT NULL,
   review TEXT NOT NULL DEFAULT 'new',
   reviewed_at INTEGER,
+  routed_at INTEGER,
   created_at INTEGER NOT NULL
 );
 CREATE INDEX IF NOT EXISTS leads_grade ON leads(grade, review);
+CREATE TABLE IF NOT EXISTS briefs (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  lead_id INTEGER NOT NULL REFERENCES leads(id) ON DELETE CASCADE,
+  firm_id INTEGER NOT NULL REFERENCES firms(id) ON DELETE CASCADE,
+  state TEXT NOT NULL DEFAULT 'offered',
+  token_hash TEXT NOT NULL UNIQUE,
+  offered_at INTEGER NOT NULL, expires_at INTEGER NOT NULL, decided_at INTEGER,
+  fee_pence INTEGER
+);
+CREATE INDEX IF NOT EXISTS briefs_lead ON briefs(lead_id);
+CREATE INDEX IF NOT EXISTS briefs_state ON briefs(state, expires_at);
 CREATE TABLE IF NOT EXISTS claim_requests (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   firm_id INTEGER NOT NULL REFERENCES firms(id) ON DELETE CASCADE,
@@ -63,6 +76,10 @@ export function openDb(path: string, { create = false } = {}): Db {
   sqlite.pragma("journal_mode = WAL")
   sqlite.pragma("foreign_keys = ON")
   sqlite.exec(DDL)
+  // Databases made before routing (PR2): add its columns.
+  const has = (table: string, col: string) => (sqlite.prepare(`PRAGMA table_info(${table})`).all() as { name: string }[]).some((c) => c.name === col)
+  if (!has("firms", "paused_at")) sqlite.exec("ALTER TABLE firms ADD COLUMN paused_at INTEGER")
+  if (!has("leads", "routed_at")) sqlite.exec("ALTER TABLE leads ADD COLUMN routed_at INTEGER")
   return drizzle(sqlite, { schema })
 }
 
