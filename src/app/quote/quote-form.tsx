@@ -49,6 +49,8 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
   const [facts, setFacts] = useState<Facts>({})
   const [readFor, setReadFor] = useState<string | null>(null) // the words last sent to be read
   const [reading, setReading] = useState(false)
+  // Whether the AI read the words, or (no key, or it failed) the plain word rules did: the copy must say which.
+  const [readBy, setReadBy] = useState<"model" | "rules" | null>(null)
   const screen = trail.at(-1)!
   const set = (k: keyof Values, val: string) => setV((x) => ({ ...x, [k]: val }))
   const go = (next: Screen) => { setTrail((t) => [...t, returnTo ?? next]); setReturnTo(null) }
@@ -75,7 +77,8 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
   const readWords = (text: string) => {
     if (text === readFor || text.trim().length < 25) return
     setReadFor(text); setReading(true)
-    factsAction(text).then((r) => r.facts).catch(() => ({}) as Facts).then((found) => {
+    factsAction(text).catch(() => ({ facts: {} as Facts, by: "rules" as const })).then(({ facts: found, by }) => {
+      setReadBy(by)
       setFacts((f) => {
         const out: Facts = Object.fromEntries(Object.entries(f).filter(([, x]) => !x.quote))
         for (const [id, x] of Object.entries(found)) if (!out[id]) out[id] = x
@@ -158,8 +161,12 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
       {screen === "problem" ? (
         <Question title={q ? "Tell us a bit more" : "What has the council asked for?"}
           hint="In your own words: what you're planning and what you've been told." error={err.details}>
-          <textarea rows={5} className={input} value={v.details} onChange={(e) => set("details", e.target.value)}
+          <p>{readBy === "rules"
+            ? "We'll pick out the key facts from what you write and fill in the request for you, so the more you tell us, the fewer questions we'll ask."
+            : "Our AI reads what you write and fills in the request for you, so the more you tell us, the fewer questions we'll ask."} A sentence is fine.</p>
+          <textarea rows={7} className={input} value={v.details} onChange={(e) => set("details", e.target.value)}
             placeholder="For example: We're converting our loft. The council says they need a bat survey before they'll look at the application." />
+          <Helps facts={facts} details={v.details} reading={reading} readBy={readBy} />
           <p className="text-muted">Not sure what you need yet? Just describe the work you&apos;re planning.</p>
           <Continue disabled={v.details.trim().length < 10} onClick={() => { readWords(v.details); go("postcode") }} />
         </Question>
@@ -471,6 +478,35 @@ function Answer({ v, survey, guessed, firms, onSurvey, onArea, onQuotes, quotesL
 
 // "in the South East", "in London".
 const inArea = (name: string) => `in ${/^(North|South|East|West)/.test(name) ? "the " : ""}${name}`
+
+// What helps firms price the job, ticked as the reader picks each one up from the buyer's words (D23, D27, R12),
+// and what the reader does and doesn't do. The copy names the AI only when the AI did the reading.
+const SITE_FACTS = ["works", "trees", "tpo", "ponds", "floodZone", "river", "listed", "conservation", "siteNow", "noise", "pastUse"]
+function Helps({ facts, details, reading, readBy }: { facts: Facts; details: string; reading: boolean; readBy: "model" | "rules" | null }) {
+  const items = [
+    ["What you're planning", Boolean(facts.projectType)],
+    ["The building, if there is one: its type and age", Boolean(facts.building)],
+    ["What the council asked for", Boolean(suggestSurvey(details)) || Boolean(facts.planningStage)],
+    ["Anything about the roof, trees, ponds or flooding", SITE_FACTS.some((k) => facts[k])],
+  ] as const
+  return (
+    <div className="rounded-lg border border-line bg-white p-4">
+      <p className="font-semibold">Things that help firms price it {reading ? <span className="font-normal text-moss" role="status">· reading…</span> : null}</p>
+      <ul className="mt-2 space-y-1">
+        {items.map(([l, done]) => (
+          <li key={l} className="flex gap-2">
+            <span aria-hidden="true" className={`mt-1 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border text-[10px] ${done ? "border-moss bg-moss text-white" : "border-ink/30"}`}>{done ? "✓" : ""}</span>
+            <span className={done ? "text-muted" : ""}>{l}<span className="sr-only">{done ? " (picked up)" : ""}</span></span>
+          </li>
+        ))}
+      </ul>
+      <p className="mt-3 text-sm text-muted">{readBy === "rules"
+        ? "Our AI isn't available just now, so we're matching key words instead. "
+        : "What the AI does: it suggests, and you check. "}
+        Everything we pick up shows on the right, where you can change or remove it. We only use your own words: anything we can&apos;t point to in what you wrote is dropped. Nothing is decided for you.</p>
+    </div>
+  )
+}
 
 // Above a question we pre-filled: where the answer came from, so the buyer can confirm or change it.
 function FromWords({ fact, value }: { fact?: { value: string; quote?: string }; value: string }) {
