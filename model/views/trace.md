@@ -17,7 +17,7 @@ Each decision, down to the use cases, processes and objects that rest on it, and
 | D11 Business model first, then design around it for humans | - | - | - | - |
 | D12 Build the product now on the placeholder terms; the calls come later | - | PR2 | - | src/app/actions.ts, src/app/admin/leads/page.tsx, src/app/briefs/[token]/page.tsx, src/routing.ts |
 | D13 M1 at £99,417 a year (5% capture) is acceptable | - | - | - | - |
-| D14 Show the journey on the site; problem first; answer before asking; say why for every detail; Mermaid now, brand skin later | - | - | - | - |
+| D14 Show the journey on the site; problem first; answer before asking; say why for every detail; Mermaid now, brand skin later | - | PR1 | - | src/admin.ts, src/app/actions.ts, src/app/admin/leads/page.tsx, src/app/leads/confirm/[token]/page.tsx, src/app/quote/page.tsx, src/app/quote/quote-form.tsx, src/leads.ts, src/proxy.ts, src/qualify.ts |
 
 ## Code → map
 

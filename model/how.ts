@@ -77,8 +77,9 @@ export const objects: BusinessObject[] = [
 ]
 
 export const processes: Process[] = [
-  { id: "PR1", name: "Qualify a lead", realises: "U2", status: "built", refs: ["D2"], steps: [
+  { id: "PR1", name: "Qualify a lead", realises: "U2", status: "part", refs: ["D2", "D14"], steps: [
     { actor: "P-buyer", step: "Say the problem; see the answer; choose to send, giving contact last", status: "built" },
+    { actor: "P-directory", step: "Work out the area from the postcode, so the buyer isn't asked twice", status: "missing" },
     { actor: "P-directory", step: "Grade on real, serious, timely, complete", status: "built" },
     { actor: "P-buyer", step: "Confirm by email (button press)", status: "built" },
     { actor: "P-directory", step: "Operator approves or rejects", status: "built" },
