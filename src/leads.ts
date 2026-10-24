@@ -17,6 +17,7 @@ export const LeadInput = z.object({
   survey: z.string().refine((s) => SURVEY_SLUGS.includes(s), "Choose a survey"),
   region: z.string().refine((r) => REGION_SLUGS.includes(r), "Choose where the site is"),
   projectType: z.enum(PROJECT_TYPES.map(([v]) => v), "Choose what you're planning"),
+  projectOther: z.preprocess(blankToNull, z.string().trim().max(200).nullable()).default(null),
   planningStage: z.enum(PLANNING_STAGES.map(([v]) => v), "Choose where you are with planning"),
   postcode: z.string().trim().min(2, "Enter the site postcode").max(10),
   council: z.preprocess(blankToNull, z.string().trim().max(80).nullable()).default(null),
@@ -31,7 +32,7 @@ export const LeadInput = z.object({
   // "3" by default; "5", "10", or "all" for every firm covering the area (D24).
   pool: z.enum(["3", "5", "10", "all"]).default("3"),
   firm: z.string().optional(),
-})
+}).refine((l) => l.projectType !== "other" || l.projectOther, { path: ["projectOther"], message: "Tell us what you're planning" })
 
 export type Deps = { db: Db; mailer: Mailer; now: () => Date; baseUrl: string }
 export type Submitted = { ok: true; qualification: Qualification; reference: string } | { ok: false; errors: Record<string, string> }

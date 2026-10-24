@@ -16,7 +16,7 @@ const ALWAYS_ASKED = new Set(["access", "previous", "drawings"])
 // The work and the planning stage are read too, to pre-fill their questions; the buyer still confirms them.
 const READ = [
   { id: "projectType", ask: "What kind of work is planned?", options: PROJECT_TYPES.filter(([k]) => k !== "other") },
-  { id: "planningStage", ask: "How far has the buyer got with planning permission? Only if they say: 'council-asked' needs an application already made or the council asking during validation.",
+  { id: "planningStage", ask: "How far has the buyer got with planning permission? Only if they say which: 'council-asked' needs words saying an application has been made (applied, submitted, validation); the council merely mentioning or wanting a survey is not enough, so leave this out.",
     options: PLANNING_STAGES.filter(([k]) => k !== "not-sure") },
   ...FIELDS.filter((f) => !ALWAYS_ASKED.has(f.id)),
 ]

@@ -35,7 +35,7 @@ DROP TABLE IF EXISTS quote_requests;
 CREATE TABLE IF NOT EXISTS leads (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   survey TEXT NOT NULL, region TEXT NOT NULL, postcode TEXT NOT NULL, council TEXT,
-  project_type TEXT NOT NULL, planning_stage TEXT NOT NULL, council_ref TEXT, deadline TEXT,
+  project_type TEXT NOT NULL, project_other TEXT, planning_stage TEXT NOT NULL, council_ref TEXT, deadline TEXT,
   details TEXT NOT NULL, answer TEXT NOT NULL DEFAULT '', sheet TEXT NOT NULL DEFAULT '{}',
   name TEXT NOT NULL, email TEXT NOT NULL, phone TEXT,
   firm_id INTEGER REFERENCES firms(id) ON DELETE SET NULL,
@@ -87,6 +87,7 @@ export function openDb(path: string, { create = false } = {}): Db {
   if (!has("firms", "paused_at")) sqlite.exec("ALTER TABLE firms ADD COLUMN paused_at INTEGER")
   if (!has("leads", "routed_at")) sqlite.exec("ALTER TABLE leads ADD COLUMN routed_at INTEGER")
   if (!has("leads", "council")) sqlite.exec("ALTER TABLE leads ADD COLUMN council TEXT")
+  if (!has("leads", "project_other")) sqlite.exec("ALTER TABLE leads ADD COLUMN project_other TEXT")
   if (!has("leads", "sheet")) sqlite.exec("ALTER TABLE leads ADD COLUMN sheet TEXT NOT NULL DEFAULT '{}'")
   if (!has("leads", "status_token")) {
     sqlite.exec("ALTER TABLE leads ADD COLUMN status_token TEXT; ALTER TABLE leads ADD COLUMN pool_size INTEGER NOT NULL DEFAULT 3; ALTER TABLE leads ADD COLUMN cancelled_at INTEGER")

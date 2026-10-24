@@ -35,6 +35,12 @@ describe("submitLead", () => {
     expect(deps.mailer.sent[0]?.to).toBe("sam@example.com")
     expect(row?.tokenHash).not.toContain(tokenFromMail())
   })
+  it("asks for a description when the work is 'something else'", async () => {
+    const r = await submitLead(deps, { ...form, projectType: "other" })
+    expect(!r.ok && r.errors.projectOther).toBe("Tell us what you're planning")
+    await submitLead(deps, { ...form, projectType: "other", projectOther: "A garden room" })
+    expect(deps.db.select().from(leads).get()?.projectOther).toBe("A garden room")
+  })
   it("keeps only this survey's well-formed job-sheet answers", async () => {
     await submitLead(deps, form)
     // ponds isn't asked for a bat survey; "maybe" isn't an answer to a yes/no question.

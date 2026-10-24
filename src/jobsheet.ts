@@ -203,7 +203,7 @@ export function trimExcerpt(text: string): { excerpt: string; dropped: number } 
 
 export type JobSheet = { rows: { label: string; value: string; fromWords?: boolean }[]; unknown: string[]; excerpt: string }
 
-type SheetLead = { survey: string; projectType: string; planningStage: string; councilRef: string | null; deadline: string | null; details: string; sheet: unknown }
+type SheetLead = { survey: string; projectType: string; projectOther?: string | null; planningStage: string; councilRef: string | null; deadline: string | null; details: string; sheet: unknown }
 
 // The buyer's planning stage, said to the firm rather than by the buyer.
 export const FIRM_STAGE: Record<string, string> = {
@@ -218,7 +218,7 @@ export function jobSheet(lead: SheetLead): JobSheet {
   const label = (pairs: readonly (readonly [string, string])[], v: string) => pairs.find(([k]) => k === v)?.[1] ?? v
   const facts = cleanFacts(lead.survey, lead.sheet)
   const rows: JobSheet["rows"] = [
-    { label: "Project", value: label(PROJECT_TYPES, lead.projectType) },
+    { label: "Project", value: lead.projectType === "other" && lead.projectOther ? lead.projectOther : label(PROJECT_TYPES, lead.projectType) },
     { label: "Planning", value: `${FIRM_STAGE[lead.planningStage] ?? label(PLANNING_STAGES, lead.planningStage)}${lead.councilRef ? ` (council ref ${lead.councilRef})` : ""}` },
     { label: "Needed by", value: lead.deadline ? new Date(lead.deadline).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }) : "No date given" },
   ]

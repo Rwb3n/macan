@@ -15,12 +15,12 @@ import { ROUTING } from "@model/how"
 import { FIRM_STAGE, NOT_SURE, answerLabel, fieldById, fieldsFor, trimExcerpt, type Facts } from "@/jobsheet"
 import { factsAction, leadAction, postcodeAction, type LeadState } from "../actions"
 
-const BLANK = { pool: "3", survey: "", region: "", council: "", details: "", postcode: "", projectType: "", planningStage: "", deadline: "", councilRef: "", name: "", email: "", phone: "" }
+const BLANK = { pool: "3", survey: "", region: "", council: "", details: "", postcode: "", projectType: "", projectOther: "", planningStage: "", deadline: "", councilRef: "", name: "", email: "", phone: "" }
 type Values = typeof BLANK
 // q:<field> asks one job-sheet question (jobsheet.ts).
 type Screen = "problem" | "postcode" | "area" | "project" | "stage" | "deadline" | "answer" | "pills" | `q:${string}` | "details" | "pool" | "check"
 const SCREEN_OF: Record<string, Screen> = {
-  details: "problem", postcode: "postcode", region: "area", projectType: "project", planningStage: "stage", deadline: "deadline",
+  details: "problem", postcode: "postcode", region: "area", projectType: "project", projectOther: "project", planningStage: "stage", deadline: "deadline",
   councilRef: "deadline", survey: "answer", name: "details", email: "details", phone: "details", pool: "pool",
 }
 const WORDS = ["", "one", "two", "three", "four", "five"]
@@ -31,6 +31,8 @@ const phaseOf = (s: Screen) => PHASE_OF[s] ?? 3
 const POOLS = [["3", "Up to 3 firms (recommended)"], ["5", "Up to 5 firms"], ["10", "Up to 10 firms"], ["all", "Every firm we list that covers the area"]] as const
 const poolWords = (p: string) => (p === "all" ? "every firm we list that covers your area" : `up to ${WORDS[Number(p)] ?? p} firms`)
 const input = "w-full rounded-md border-2 border-ink/30 bg-white px-3 py-2 text-lg focus:border-moss focus:outline-none"
+// The work as the buyer described it: their own words when they chose "Something else".
+const workLabel = (v: { projectType: string; projectOther: string }) => (v.projectType === "other" && v.projectOther.trim() ? v.projectOther.trim() : label(PROJECT_TYPES, v.projectType))
 const label = (pairs: readonly (readonly [string, string])[], v: string) => pairs.find(([k]) => k === v)?.[1] ?? v
 
 type Props = { survey?: string; region?: string; firm?: string; firmName?: string; q?: string; coverage: Record<string, Record<string, number>> }
@@ -39,7 +41,8 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
   const [state, action, pending] = useActionState<LeadState, FormData>(leadAction, null)
   const [v, setV] = useState<Values>({ ...BLANK, survey: survey ?? "", region: region ?? "", details: q ?? "" })
   const [trail, setTrail] = useState<Screen[]>(["problem"])
-  const [checking, setChecking] = useState(false) // came from "check your answers": Continue returns there
+  // Where to come back to after answering a question reached from the panel or the check page; null: carry on in order.
+  const [returnTo, setReturnTo] = useState<Screen | null>(null)
   const [looking, setLooking] = useState(false)
   const [hasDeadline, setHasDeadline] = useState<"" | "yes" | "no">("")
   // Job-sheet answers. Those with a quote were read from the buyer's words; the rest the buyer gave.
@@ -48,9 +51,15 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
   const [reading, setReading] = useState(false)
   const screen = trail.at(-1)!
   const set = (k: keyof Values, val: string) => setV((x) => ({ ...x, [k]: val }))
-  const go = (next: Screen) => { setTrail((t) => [...t, checking && next !== "check" ? "check" : next]); setChecking(false) }
+  const go = (next: Screen) => { setTrail((t) => [...t, returnTo ?? next]); setReturnTo(null) }
   const back = () => setTrail((t) => (t.length > 1 ? t.slice(0, -1) : t))
-  const change = (to: Screen) => { setChecking(true); setTrail((t) => [...t, to]) }
+  // Jump to a question, then come back here. A guessed survey is taken as chosen, so its questions can be reached.
+  const change = (to: Screen) => {
+    if (to === screen) return
+    setReturnTo(screen === "check" || !returnTo ? screen : returnTo)
+    setV((x) => ({ ...x, survey: x.survey || suggestSurvey(x.details) || "" }))
+    setTrail((t) => [...t, to])
+  }
   const s = surveyBySlug(v.survey)
   const many = WORDS[ROUTING.firmsPerLead] ?? String(ROUTING.firmsPerLead)
   const err = state && !state.ok ? state.errors : {}
@@ -58,7 +67,7 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
   // The server found a problem: take the buyer to the screen that asks for it.
   useEffect(() => {
     const first = Object.keys(err).map((k) => SCREEN_OF[k]).find(Boolean)
-    if (first) { setChecking(true); setTrail((t) => [...t, first]) }
+    if (first) { setReturnTo("check"); setTrail((t) => [...t, first]) }
   }, [state]) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { window.scrollTo({ top: 0 }) }, [screen])
 
@@ -94,7 +103,9 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
     const found = await postcodeAction(v.postcode).catch(() => null)
     setLooking(false)
     setV((x) => ({ ...x, region: found?.region ?? x.region, council: found?.council ?? "" }))
-    go(found || v.region ? "project" : "area")
+    // With no area found it must be asked, even when the buyer is coming back to another screen.
+    if (found || v.region) go("project")
+    else setTrail((t) => [...t, "area"])
   }
   const toAnswer = () => {
     setV((x) => ({ ...x, survey: x.survey || suggestSurvey(x.details) || "" }))
@@ -122,7 +133,7 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
   const phase = phaseOf(screen)
   const panel = (
     <RequestPanel v={v} survey={s ?? guess} guessed={!s && Boolean(guess)} facts={facts} reading={reading} trimmed={trimmed}
-      deadlineAsked={visited.has("answer")} onSet={setFact} onRemove={removeFact} onV={set} />
+      deadlineAsked={visited.has("answer")} screen={screen} onGo={change} onSet={setFact} onRemove={removeFact} onV={set} />
   )
 
   return (
@@ -172,7 +183,12 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
         <Question title="What are you planning?" hint="The kind of work changes what the survey involves." error={err.projectType}>
           <FromWords fact={facts.projectType} value={v.projectType} />
           <Radios name="project" value={v.projectType} onChange={(x) => set("projectType", x)} options={PROJECT_TYPES} />
-          <Continue disabled={!v.projectType} onClick={() => go("stage")} />
+          {v.projectType === "other" ? (
+            <Field label="Tell us what you're planning" hint="A few words is enough. Firms will see this." error={err.projectOther}>
+              <input autoFocus className={input} value={v.projectOther} onChange={(e) => set("projectOther", e.target.value)} placeholder="For example: a garden room, or a solar farm" />
+            </Field>
+          ) : null}
+          <Continue disabled={!v.projectType || (v.projectType === "other" && v.projectOther.trim().length < 3)} onClick={() => go("stage")} />
         </Question>
       ) : null}
 
@@ -244,7 +260,7 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
             <Row k="What you told us" val={v.details} onChange={() => change("problem")} />
             <Row k="Postcode" val={`${v.postcode.toUpperCase()}${v.council ? ` (${v.council})` : ""}`} onChange={() => change("postcode")} />
             <Row k="Survey" val={s?.name ?? "Not chosen"} onChange={() => change("answer")} />
-            <Row k="What you're planning" val={label(PROJECT_TYPES, v.projectType)} onChange={() => change("project")} />
+            <Row k="What you're planning" val={workLabel(v)} onChange={() => change("project")} />
             <Row k="Planning permission" val={label(PLANNING_STAGES, v.planningStage)} onChange={() => change("stage")} />
             <Row k="Needed by" val={v.deadline ? new Date(v.deadline).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : "No date"} onChange={() => change("deadline")} />
             {fields.map((f) => <Row key={f.id} k={f.sheet} val={facts[f.id] ? answerLabel(f, facts[f.id]!.value) : "Not answered"} onChange={() => change(`q:${f.id}`)} />)}
@@ -279,58 +295,57 @@ function Progress({ phase }: { phase: number }) {
 }
 
 // The request firms will get, beside every step: the familiar checklist (ticks, how long, nothing about you yet; D20)
-// whose rows fill in as the buyer types and answers (D23, D27). Rows read from their words are green pills they can
-// change or remove there and then; the question screens still show them, pre-filled, to confirm.
-function RequestPanel({ v, survey, guessed, facts, reading, trimmed, deadlineAsked, onSet, onRemove, onV }: {
+// whose rows fill in as the buyer types and answers (D23, D27). Each row's name goes to its question and back; empty
+// rows stay quiet, with "Next" on the first one to come. Rows read from their words are green pills to change or
+// remove in place; the question screens still show them, pre-filled, to confirm.
+type PanelItem = { key: string; k: string; to: Screen; done: boolean; value?: React.ReactNode }
+function RequestPanel({ v, survey, guessed, facts, reading, trimmed, deadlineAsked, screen, onGo, onSet, onRemove, onV }: {
   v: Values; survey?: NonNullable<ReturnType<typeof surveyBySlug>>; guessed: boolean; facts: Facts; reading: boolean
-  trimmed: { excerpt: string; dropped: number }; deadlineAsked: boolean
+  trimmed: { excerpt: string; dropped: number }; deadlineAsked: boolean; screen: Screen; onGo: (to: Screen) => void
   onSet: (id: string, value: string) => void; onRemove: (id: string) => void; onV: (k: "projectType" | "planningStage", value: string) => void
 }) {
-  const ask = reading ? <span className="text-muted">Reading what you wrote…</span> : <span className="text-muted">We&apos;ll ask</span>
   const area = v.postcode.trim().toUpperCase().split(/\s+/)[0]
   const fields = survey ? fieldsFor(survey.slug) : []
   // A value is "from your words" while it still matches what we read.
   const fromWords = (id: string, value: string) => Boolean(value && facts[id]?.quote && facts[id]!.value === value)
   const stage = (k: string) => FIRM_STAGE[k] ?? label(PLANNING_STAGES, k)
-  const rows = [Boolean(v.details.trim()), Boolean(survey), Boolean(area), Boolean(v.projectType), Boolean(v.planningStage), Boolean(v.deadline || deadlineAsked), ...fields.map((f) => Boolean(facts[f.id]))]
+  const job: PanelItem[] = [
+    { key: "words", k: "In your words", to: "problem", done: Boolean(v.details.trim()), value: trimmed.excerpt ? <>
+      <span className="italic">&ldquo;{trimmed.excerpt}&rdquo;</span>
+      {trimmed.dropped ? <span className="block text-xs text-muted">We leave out prices, other firms&apos; quotes and contact details.</span> : null}
+    </> : undefined },
+    { key: "where", k: "Where", to: "postcode", done: Boolean(area), value: area ? <>Near {area}{v.council ? `, ${v.council}` : ""}<span className="block text-xs text-muted">Firms only see the first part of your postcode.</span></> : undefined },
+    { key: "work", k: "The work", to: "project", done: Boolean(v.projectType), value: v.projectType ? <Pill fromWords={fromWords("projectType", v.projectType)} text={workLabel(v)} name="the work"
+      options={PROJECT_TYPES} value={v.projectType} onSet={(x) => onV("projectType", x)} onRemove={() => onV("projectType", "")} /> : undefined },
+    { key: "planning", k: "Planning", to: "stage", done: Boolean(v.planningStage), value: v.planningStage ? <Pill fromWords={fromWords("planningStage", v.planningStage)} text={stage(v.planningStage)} name="planning"
+      options={PLANNING_STAGES.map(([k]) => [k, stage(k)] as const)} value={v.planningStage} onSet={(x) => onV("planningStage", x)} onRemove={() => onV("planningStage", "")} /> : undefined },
+    { key: "needed", k: "Needed by", to: "deadline", done: Boolean(v.deadline || deadlineAsked),
+      value: v.deadline ? new Date(v.deadline).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : deadlineAsked ? "No date" : undefined },
+    { key: "survey", k: "Survey", to: "answer", done: Boolean(survey), value: survey ? <>{survey.name}{guessed ? <span className="block text-xs text-muted">Our guess from what you wrote. You can change it.</span> : null}</> : undefined },
+  ]
+  const site: PanelItem[] = fields.map((f) => {
+    const fact = facts[f.id]
+    return { key: f.id, k: f.sheet, to: `q:${f.id}` as Screen, done: Boolean(fact), value: fact ? <Pill fromWords={Boolean(fact.quote)} text={answerLabel(f, fact.value)} name={f.sheet.toLowerCase()}
+      options={f.options ? [...f.options, [NOT_SURE, "Not sure"] as const] : undefined} value={fact.value} onSet={(x) => onSet(f.id, x)} onRemove={() => onRemove(f.id)} /> : undefined }
+  })
+  const you: PanelItem = { key: "you", k: "Name and email", to: "details", done: Boolean(v.name && v.email), value: v.name && v.email ? `${v.name}, ${v.email}` : undefined }
+  const all = [...job, ...site, you]
+  const now = screen === "area" ? "where" : all.find((i) => i.to === screen)?.key
+  const next = all.find((i) => !i.done && i.key !== now)?.key
+  const row = (i: PanelItem) => <PanelRow key={i.key} k={i.k} done={i.done} now={i.key === now} next={i.key === next} onGo={() => onGo(i.to)}>{i.value}</PanelRow>
   return (
     <div className="mt-1 text-sm">
-      <p className="text-muted">About two minutes. Nothing about you until you choose to get quotes. <span className="text-ink">{rows.filter(Boolean).length} of {rows.length + 1} done.</span></p>
-
-      <PanelGroup title="The job">
-        <PanelRow k="In your words" done={rows[0]!}>
-          {trimmed.excerpt ? <span className="italic">&ldquo;{trimmed.excerpt}&rdquo;</span> : <span className="text-muted">What the council asked for, or what you&apos;re planning</span>}
-          {trimmed.dropped ? <span className="block text-xs text-muted">We leave out prices, other firms&apos; quotes and contact details.</span> : null}
-        </PanelRow>
-        <PanelRow k="Survey" done={rows[1]!}>{survey ? <>{survey.name}{guessed ? <span className="block text-xs text-muted">Our guess from what you wrote. You can change it in a moment.</span> : null}</> : <span className="text-muted">We&apos;ll work it out with you</span>}</PanelRow>
-        <PanelRow k="Where" done={rows[2]!}>{area ? <>Near {area}{v.council ? `, ${v.council}` : ""}<span className="block text-xs text-muted">Firms only see the first part of your postcode.</span></> : <span className="text-muted">We&apos;ll ask</span>}</PanelRow>
-        <PanelRow k="The work" done={rows[3]!}>
-          {v.projectType ? <Pill fromWords={fromWords("projectType", v.projectType)} text={label(PROJECT_TYPES, v.projectType)} name="the work"
-            options={PROJECT_TYPES} value={v.projectType} onSet={(x) => onV("projectType", x)} onRemove={() => onV("projectType", "")} /> : ask}
-        </PanelRow>
-        <PanelRow k="Planning" done={rows[4]!}>
-          {v.planningStage ? <Pill fromWords={fromWords("planningStage", v.planningStage)} text={stage(v.planningStage)} name="planning"
-            options={PLANNING_STAGES.map(([k]) => [k, stage(k)] as const)} value={v.planningStage} onSet={(x) => onV("planningStage", x)} onRemove={() => onV("planningStage", "")} /> : ask}
-        </PanelRow>
-        <PanelRow k="Needed by" done={rows[5]!}>{v.deadline ? new Date(v.deadline).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : deadlineAsked ? "No date" : <span className="text-muted">We&apos;ll ask</span>}</PanelRow>
-      </PanelGroup>
-
+      <p className="text-muted">About two minutes. Nothing about you until you choose to get quotes. <span className="text-ink">{all.filter((i) => i.done).length} of {all.length + (survey ? 0 : 1)} done.</span></p>
+      {reading ? <p className="mt-2 font-medium text-moss" role="status">Reading what you wrote…</p> : null}
+      <PanelGroup title="The job">{job.map(row)}</PanelGroup>
       <PanelGroup title="About the site, if you'd like quotes">
-        {!survey ? <p className="py-1 text-muted">A few questions, picked for your survey.</p> : fields.map((f, i) => {
-          const fact = facts[f.id]
-          return (
-            <PanelRow key={f.id} k={f.sheet} done={rows[6 + i]!}>
-              {fact ? <Pill fromWords={Boolean(fact.quote)} text={answerLabel(f, fact.value)} name={f.sheet.toLowerCase()} options={f.options ? [...f.options, [NOT_SURE, "Not sure"] as const] : undefined}
-                value={fact.value} onSet={(x) => onSet(f.id, x)} onRemove={() => onRemove(f.id)} /> : f.id === "access" || f.id === "previous" || f.id === "drawings" ? <span className="text-muted">We&apos;ll ask</span> : ask}
-            </PanelRow>
-          )
-        })}
+        {survey ? site.map(row) : <p className="py-1 text-muted">A few questions, picked for your survey.</p>}
       </PanelGroup>
-
       <PanelGroup title="You, if you'd like quotes">
-        <PanelRow k="Name and email" done={false}><span className="text-muted">Asked last. Only the firm you choose sees them.</span></PanelRow>
+        {row(you)}
+        <p className="pl-7 text-xs text-muted">Asked last. Only the firm you choose sees them.</p>
       </PanelGroup>
-      <p className="mt-3 text-xs text-muted">Green ones we read from what you wrote: ✎ to change, × to remove and we&apos;ll ask instead. Most survey firms&apos; websites just ask for a message; we gather what surveyors&apos; own guidelines say they need, so firms can price your job straight away.</p>
+      <p className="mt-3 text-xs text-muted">Click any line to fill it in or change it. Green ones we read from what you wrote: ✎ to change, × to remove. Most survey firms&apos; websites just ask for a message; we gather what surveyors&apos; own guidelines say they need, so firms can price your job straight away.</p>
     </div>
   )
 }
@@ -372,12 +387,19 @@ function PanelGroup({ title, children }: { title: string; children: React.ReactN
   )
 }
 
-function PanelRow({ k, done, children }: { k: string; done: boolean; children: React.ReactNode }) {
+// One checklist row. Its name takes the buyer to the question; the row they're on now is highlighted.
+function PanelRow({ k, done, now, next, onGo, children }: {
+  k: string; done: boolean; now: boolean; next: boolean; onGo: () => void; children?: React.ReactNode
+}) {
   return (
-    <div className="grid grid-cols-[1.25rem_6.5rem_1fr] gap-2 py-1">
+    <div className={`-mx-2 grid grid-cols-[1.25rem_6.5rem_1fr] gap-2 rounded px-2 py-1 ${now ? "bg-leaf" : ""}`} aria-current={now ? "step" : undefined}>
       <span aria-hidden="true" className={`mt-0.5 flex h-4 w-4 items-center justify-center rounded-full border text-[10px] ${done ? "border-moss bg-moss text-white" : "border-ink/30"}`}>{done ? "✓" : ""}</span>
-      <dt className="font-medium">{k}{done ? <span className="sr-only"> (done)</span> : null}</dt>
-      <dd>{children}</dd>
+      <dt>
+        <button type="button" onClick={onGo} className="text-left font-medium hover:text-moss hover:underline">
+          {k}<span className="sr-only">{done ? " (done)" : " (not done)"}{now ? ", you are here" : ""}</span>
+        </button>
+      </dt>
+      <dd>{children}{!children && next && !now ? <span className="text-xs font-medium uppercase tracking-wide text-moss">Next</span> : null}</dd>
     </div>
   )
 }
