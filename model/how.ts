@@ -81,10 +81,10 @@ export const objects: BusinessObject[] = [
 ]
 
 export const processes: Process[] = [
-  { id: "PR1", name: "Qualify a lead", realises: "U2", status: "part", refs: ["D2", "D14", "D23", "D27"],
+  { id: "PR1", name: "Qualify a lead", realises: "U2", status: "part", refs: ["D2", "D14", "D23", "D27", "R12"],
     note: "The postcode is looked up with an outside service (postcodes.io, ONS and Ordnance Survey data); the privacy notice must say so (A3). If the lookup fails, the buyer picks the area", steps: [
     { actor: "P-buyer", step: "Say the problem; see the answer; choose to send, giving contact last", status: "built" },
-    { actor: "P-directory", step: "Pull the facts out of the buyer's words as editable pills, ask for what's missing, and build the firm's job sheet plus a trimmed excerpt (D23, D27, Q26)", status: "missing" },
+    { actor: "P-directory", step: "Pull the facts out of the buyer's words as editable pills, ask for what's missing, and build the firm's job sheet plus a trimmed excerpt (D23, D27, Q26); fields per survey from R12", status: "missing" },
     { actor: "P-directory", step: "Work out the area and the council from the postcode, so the buyer isn't asked twice", status: "built" },
     { actor: "P-directory", step: "Grade on real, serious, timely, complete", status: "built" },
     { actor: "P-buyer", step: "Confirm by email (button press); no mail provider in production yet (Q21)", status: "built" },

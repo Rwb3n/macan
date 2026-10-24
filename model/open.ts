@@ -25,7 +25,7 @@ export const questions: Question[] = [
   { id: "Q10", state: "answered", name: "M1 alone clears the business's threshold", refs: ["R3", "D9", "D13"],
     test: "R3: M1 at 5% capture = £99,417 against £100k provisional (D9); principal to set the threshold now reference points exist",
     note: "answered: the principal accepts £99,417 at 5% capture (D13)" },
-  { id: "Q11", state: "open", name: "Firms would rather receive a standard, qualified brief than free-form enquiries", refs: ["R2", "R4", "R6"],
+  { id: "Q11", state: "open", name: "Firms would rather receive a standard, qualified brief than free-form enquiries", refs: ["R2", "R4", "R6", "R12"], note: "R12: firms' own forms ask almost nothing beyond contact details, address and free text; the specifics the standards need are chased after first contact",
     test: "R6 calls: show a sample brief beside a typical free-form enquiry; which would they rather get, and would they pay to unlock it?" },
   { id: "Q12", state: "some", name: "Listing and routing need a firm's offices and licences, not one region", refs: ["R4", "R5", "D11"],
     test: "From R5's practices: share with 2+ offices and licence holders per survey; settle the business model first, then design (D11)",
