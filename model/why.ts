@@ -36,6 +36,8 @@ export const decisions: Decision[] = [
     said: "well do it at the end of this session. im concernw with our work management being lost and collapsing as sessions progress.", refs: ["D3", "D8"] },
   { id: "D16", date: "2026-10-24", name: "Product first: park the legal work (privacy notice, listing notice, removal) until the loop is solid",
     said: "lets focus on the product. park all the legalese bullshit for after we got a solid loop", refs: ["A3"] },
+  { id: "D17", date: "2026-10-24", name: "A piece is done when a layman can use it without help; only the brand skin comes later. The buyer side is not there yet",
+    said: "okay. FYI the buyer side is sorely lacking. it looks like coding genius that has no idea what another living person thinks about when going on online didit", refs: ["D10", "D14"] },
 ]
 
 // The buyer's pains today, synthesised from R2's sources (counted independently). Front and centre (D10).

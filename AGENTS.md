@@ -48,6 +48,7 @@ scripts/    the same rule as src/
 ## Rules
 
 - **Business first.** No technology appears above processes (modelkit, `D:/PROJECTS/modelkit/docs/proposals/modelkit.md`).
+- **Done means a layman can use it (D17).** A page is finished when someone who has never dealt with planning, or with us, can use it without help: they know what it is, why to trust it, what happens next and why each thing is asked. Only the brand skin (colours, fonts, logo) comes later.
 - **Pains front and centre (D10); model before design (D11).** The buyer's pains (`pains` in `model/why.ts`) open the map. Every buyer-facing design names the pain it answers. Settle the business model first, then design around it for humans.
 - **Three to five things per view.** More means: group, then drill down.
 - **Name people by role.** No client or personal data in `model/` or `research/`. Company-level data stays in `D:/data/`.

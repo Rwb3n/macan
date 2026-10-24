@@ -20,6 +20,7 @@ Each decision, down to the use cases, processes and objects that rest on it, and
 | D14 Show the journey on the site; problem first; answer before asking; say why for every detail; Mermaid now, brand skin later | - | PR1 | - | src/admin.ts, src/app/actions.ts, src/app/admin/leads/page.tsx, src/app/leads/confirm/[token]/page.tsx, src/app/quote/page.tsx, src/app/quote/quote-form.tsx, src/leads.ts, src/postcode.ts, src/proxy.ts, src/qualify.ts |
 | D15 Work management must survive sessions: nothing pending lives only in a chat; mirror the map to GitHub at the end of this session | - | - | - | - |
 | D16 Product first: park the legal work (privacy notice, listing notice, removal) until the loop is solid | - | PR5 | - | - |
+| D17 A piece is done when a layman can use it without help; only the brand skin comes later. The buyer side is not there yet | - | - | - | - |
 
 ## Code → map
 
