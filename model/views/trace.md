@@ -29,6 +29,7 @@ Each decision, down to the use cases, processes and objects that rest on it, and
 
 | file | builds |
 |---|---|
+| scripts/mirror.ts | infra |
 | scripts/model-views.ts | infra |
 | scripts/seed.ts | PR4, O-listing |
 | scripts/tick.ts | PR2 |

@@ -45,6 +45,8 @@ scripts/    the same rule as src/
 
    A new session starts from `model/views/open.md` and the `missing` and `part` items in `map.md`, not from memory.
 
+   GitHub (`Rwb3n/macan`) is a one-way mirror of that backlog: `npm run mirror` turns use cases into milestones and missing or part steps, stages, objects and open questions into issues. Change the map and rerun the mirror; edits on GitHub are overwritten.
+
 ## Rules
 
 - **Business first.** No technology appears above processes (modelkit, `D:/PROJECTS/modelkit/docs/proposals/modelkit.md`).
