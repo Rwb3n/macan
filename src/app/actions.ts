@@ -12,6 +12,7 @@ import { confirmLead, reviewLead, submitLead, type Submitted } from "@/leads"
 import { redirect } from "next/navigation"
 import { decideBrief, routeLead, setPausedByToken } from "@/routing"
 import { baseUrl } from "./base-url"
+import { lookupPostcode, type Place } from "@/postcode"
 
 export type FormState = Result | null
 export type LeadState = Submitted | null
@@ -73,4 +74,9 @@ export async function pauseAction(form: FormData): Promise<void> {
   const token = String(form.get("token") ?? "")
   setPausedByToken({ db: db(), now: () => new Date() }, token, form.get("paused") === "1")
   redirect(`/briefs/${encodeURIComponent(token)}`)
+}
+
+// The buyer's area and council from the site postcode (PR1). Runs on our server, so the buyer's browser talks only to us.
+export async function postcodeAction(postcode: string): Promise<Place | null> {
+  return (await lookupPostcode(String(postcode).slice(0, 10))) ?? null
 }

@@ -20,7 +20,7 @@ type Firm = typeof firms.$inferSelect
 
 // What a firm sees before unlocking: survey, area, timing and the site. Never the buyer's name, email or phone.
 export type BriefView = {
-  survey: string; area: string; region: string; projectType: string; planningStage: string
+  survey: string; area: string; region: string; council: string | null; projectType: string; planningStage: string
   deadline: string | null; details: string; answer: string; state: BriefState; expiresAt: Date
   feePence: number | null; firm: { name: string; paused: boolean }
   contact?: { name: string; email: string; phone: string | null }
@@ -57,7 +57,7 @@ export async function routeLead(deps: Deps, leadId: number): Promise<{ routing: 
       to: firm.email!,
       subject: `New ${v.survey.toLowerCase()} brief: ${v.area}`,
       text: [
-        `${v.survey} near ${v.area} (${v.region}).`,
+        `${v.survey} near ${v.area} (${v.region}${v.council ? `, ${v.council} council` : ""}).`,
         `${v.projectType} · ${v.planningStage}${v.deadline ? ` · needed by ${v.deadline}` : ""}`,
         "", v.details, v.answer ? `\n${v.answer}` : "",
         "", `Unlock the buyer's contact or pass, by ${expiresAt.toUTCString()}:`, `${deps.baseUrl}/briefs/${token}`,
@@ -166,6 +166,7 @@ function leadView(lead: Lead) {
     survey: surveyBySlug(lead.survey)?.name ?? lead.survey,
     area: lead.postcode.split(" ")[0]!,
     region: regionBySlug(lead.region)?.name ?? lead.region,
+    council: lead.council,
     projectType: label(PROJECT_TYPES, lead.projectType),
     planningStage: label(PLANNING_STAGES, lead.planningStage),
     deadline: lead.deadline, details: mask(lead.details), answer: mask(lead.answer),

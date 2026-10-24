@@ -22,7 +22,7 @@ export default async function BriefPage({ params }: { params: Promise<{ token: s
     <div className="mx-auto max-w-2xl px-4 py-10">
       <p className="text-sm text-muted">Brief for {b.firm.name}</p>
       <h1 className="mt-1 text-3xl font-semibold tracking-tight">{b.survey} near {b.area}</h1>
-      <p className="mt-1 text-muted">{b.region} · {b.projectType} · {b.planningStage}{b.deadline ? ` · needed by ${b.deadline}` : ""}</p>
+      <p className="mt-1 text-muted">{b.council ? `${b.council} council, ` : ""}{b.region} · {b.projectType} · {b.planningStage}{b.deadline ? ` · needed by ${b.deadline}` : ""}</p>
 
       <div className="mt-6 rounded-lg border border-line bg-white p-5">
         <p className="whitespace-pre-line">{b.details}</p>

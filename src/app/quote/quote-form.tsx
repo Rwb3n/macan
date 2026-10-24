@@ -9,10 +9,10 @@ import { useActionState, useMemo, useState } from "react"
 import { REGIONS, SURVEYS, regionBySlug, suggestSurvey, surveyBySlug } from "@/catalog"
 import { PLANNING_STAGES, PROJECT_TYPES, isoDate, nextWindowStart, type Qualification } from "@/qualify"
 import { ROUTING } from "@model/how"
-import { leadAction, type LeadState } from "../actions"
+import { leadAction, postcodeAction, type LeadState } from "../actions"
 
 const field = "w-full rounded-md border border-line bg-white px-3 py-2"
-const BLANK = { survey: "", region: "", details: "", postcode: "", projectType: "", planningStage: "", deadline: "", councilRef: "", answer: "", name: "", email: "", phone: "" }
+const BLANK = { survey: "", region: "", council: "", details: "", postcode: "", projectType: "", planningStage: "", deadline: "", councilRef: "", answer: "", name: "", email: "", phone: "" }
 type Key = keyof typeof BLANK
 const STEP_OF: Record<string, 1 | 2 | 3> = {
   details: 1, postcode: 1, survey: 2, region: 2, projectType: 2, planningStage: 2, deadline: 2, councilRef: 2, answer: 3, name: 3, email: 3, phone: 3,
@@ -25,6 +25,8 @@ export function QuoteForm({ survey, region, firm, firmName, coverage }: Props) {
   const [state, action, pending] = useActionState<LeadState, FormData>(leadAction, null)
   const [step, setStep] = useState<1 | 2 | 3>(1)
   const [v, setV] = useState<typeof BLANK>({ ...BLANK, survey: survey ?? "", region: region ?? "" })
+  // found: we worked the area out from the postcode; asking: the buyer chose to change it, or we couldn't.
+  const [place, setPlace] = useState<"idle" | "looking" | "found" | "asking">("idle")
   const set = (k: Key) => (e: { target: { value: string } }) => setV((x) => ({ ...x, [k]: e.target.value }))
   const err = state && !state.ok ? state.errors : {}
   const errStep = Math.min(...Object.keys(err).map((k) => STEP_OF[k] ?? 3)) as 1 | 2 | 3
@@ -32,8 +34,11 @@ export function QuoteForm({ survey, region, firm, firmName, coverage }: Props) {
 
   if (state?.ok) return <Received q={state.qualification} firmName={firmName} />
 
-  const goAnswer = () => {
-    setV((x) => ({ ...x, survey: x.survey || suggestSurvey(x.details) || "" }))
+  const goAnswer = async () => {
+    setPlace("looking")
+    const found = await postcodeAction(v.postcode).catch(() => null)
+    setV((x) => ({ ...x, survey: x.survey || suggestSurvey(x.details) || "", region: found?.region ?? x.region, council: found?.council ?? "" }))
+    setPlace(found ? "found" : "asking")
     setStep(2)
   }
   const s = surveyBySlug(v.survey)
@@ -58,8 +63,8 @@ export function QuoteForm({ survey, region, firm, firmName, coverage }: Props) {
           why="We use this to find survey firms that work near the site. Firms will only ever see the first part of it (for example, OX1) unless you choose to share your details with them.">
           <input className={`${field} sm:w-48`} autoComplete="postal-code" value={v.postcode} onChange={set("postcode")} />
         </Field>
-        <button type="button" disabled={v.details.trim().length < 10 || v.postcode.trim().length < 2} onClick={goAnswer}
-          className="rounded-md bg-moss px-5 py-2 text-white hover:bg-moss-dark disabled:opacity-50">Show me what I need</button>
+        <button type="button" disabled={v.details.trim().length < 10 || v.postcode.trim().length < 2 || place === "looking"} onClick={goAnswer}
+          className="rounded-md bg-moss px-5 py-2 text-white hover:bg-moss-dark disabled:opacity-50">{place === "looking" ? "Just a moment…" : "Show me what I need"}</button>
       </Step>
 
       <Step n={2} title="What you need, and when it can be done" open={shown === 2} done={shown > 2} onEdit={() => setStep(2)}
@@ -72,12 +77,21 @@ export function QuoteForm({ survey, region, firm, firmName, coverage }: Props) {
               {SURVEYS.map((x) => <option key={x.slug} value={x.slug}>{x.name}</option>)}
             </select>
           </Field>
-          <Field label="Which part of the UK is the site in?" why="Survey firms usually work in particular parts of the country." error={err.region}>
-            <select className={field} value={v.region} onChange={set("region")}>
-              <option value="">Choose an area</option>
-              {REGIONS.map((r) => <option key={r.slug} value={r.slug}>{r.name}</option>)}
-            </select>
-          </Field>
+          {place === "found" && v.region ? (
+            <div>
+              <p className="font-medium">Where the site is</p>
+              <p className="mt-1">From your postcode, the site is {v.council ? `in ${v.council}, ` : ""}{inArea(regionBySlug(v.region)?.name)}.{" "}
+                <button type="button" onClick={() => setPlace("asking")} className="text-sm text-moss underline">That&apos;s not right</button></p>
+            </div>
+          ) : (
+            <Field label="Which part of the UK is the site in?" error={err.region}
+              why={place === "asking" && !v.council ? "We couldn't work this out from the postcode. Survey firms usually work in particular parts of the country." : "Survey firms usually work in particular parts of the country."}>
+              <select className={field} value={v.region} onChange={(e) => setV((x) => ({ ...x, region: e.target.value, council: "" }))}>
+                <option value="">Choose an area</option>
+                {REGIONS.map((r) => <option key={r.slug} value={r.slug}>{r.name}</option>)}
+              </select>
+            </Field>
+          )}
         </div>
 
         {s ? <Answer survey={s} deadline={v.deadline} firms={firms} region={regionBySlug(v.region)?.name} /> : null}

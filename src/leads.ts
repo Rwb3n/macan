@@ -18,6 +18,7 @@ export const LeadInput = z.object({
   projectType: z.enum(PROJECT_TYPES.map(([v]) => v), "Choose what you're planning"),
   planningStage: z.enum(PLANNING_STAGES.map(([v]) => v), "Choose where you are with planning"),
   postcode: z.string().trim().min(2, "Enter the site postcode").max(10),
+  council: z.preprocess(blankToNull, z.string().trim().max(80).nullable()).default(null),
   councilRef: z.preprocess(blankToNull, z.string().trim().max(40).nullable()),
   deadline: z.preprocess(blankToNull, z.iso.date("Enter a date").nullable()),
   details: z.string().trim().max(2000),

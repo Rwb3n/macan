@@ -39,7 +39,7 @@ export default async function LeadsPage() {
                 {l.review === "approved" ? <span className="text-xs text-muted">· routing: {leadRouting(db(), l.id)}</span> : null}
                 <span className="ml-auto text-xs text-muted">#{l.id} · {l.createdAt.toISOString().slice(0, 16).replace("T", " ")}</span>
               </div>
-              <h2 className="mt-2 font-semibold">{surveyBySlug(l.survey)?.name} · {l.postcode} · {regionBySlug(l.region)?.name}</h2>
+              <h2 className="mt-2 font-semibold">{surveyBySlug(l.survey)?.name} · {l.postcode} · {l.council ? `${l.council}, ` : ""}{regionBySlug(l.region)?.name}</h2>
               <p className="text-sm text-muted">{label(PROJECT_TYPES, l.projectType)} · {label(PLANNING_STAGES, l.planningStage)}{l.councilRef ? ` · ref ${l.councilRef}` : ""}{l.deadline ? ` · by ${l.deadline}` : ""}</p>
               <p className="mt-2 text-sm whitespace-pre-line">{l.details}</p>
               {l.answer ? <p className="mt-1 text-sm text-muted whitespace-pre-line">{l.answer}</p> : null}

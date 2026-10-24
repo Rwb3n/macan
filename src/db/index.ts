@@ -34,7 +34,7 @@ CREATE INDEX IF NOT EXISTS firm_regions_region ON firm_regions(region);
 DROP TABLE IF EXISTS quote_requests;
 CREATE TABLE IF NOT EXISTS leads (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  survey TEXT NOT NULL, region TEXT NOT NULL, postcode TEXT NOT NULL,
+  survey TEXT NOT NULL, region TEXT NOT NULL, postcode TEXT NOT NULL, council TEXT,
   project_type TEXT NOT NULL, planning_stage TEXT NOT NULL, council_ref TEXT, deadline TEXT,
   details TEXT NOT NULL, answer TEXT NOT NULL DEFAULT '',
   name TEXT NOT NULL, email TEXT NOT NULL, phone TEXT,
@@ -82,6 +82,7 @@ export function openDb(path: string, { create = false } = {}): Db {
   const has = (table: string, col: string) => (sqlite.prepare(`PRAGMA table_info(${table})`).all() as { name: string }[]).some((c) => c.name === col)
   if (!has("firms", "paused_at")) sqlite.exec("ALTER TABLE firms ADD COLUMN paused_at INTEGER")
   if (!has("leads", "routed_at")) sqlite.exec("ALTER TABLE leads ADD COLUMN routed_at INTEGER")
+  if (!has("leads", "council")) sqlite.exec("ALTER TABLE leads ADD COLUMN council TEXT")
   if (!has("claim_requests", "token_hash")) {
     sqlite.exec("ALTER TABLE claim_requests ADD COLUMN token_hash TEXT; ALTER TABLE claim_requests ADD COLUMN confirmed_at INTEGER")
     sqlite.exec("CREATE UNIQUE INDEX IF NOT EXISTS claim_requests_token ON claim_requests(token_hash)")

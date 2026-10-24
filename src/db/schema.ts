@@ -41,6 +41,8 @@ export const leads = sqliteTable("leads", {
   survey: text("survey").notNull(),
   region: text("region").notNull(),
   postcode: text("postcode").notNull(),
+  // The local council for the site, looked up from the postcode (PR1); null if the lookup failed.
+  council: text("council"),
   projectType: text("project_type").notNull(),
   planningStage: text("planning_stage").notNull(),
   councilRef: text("council_ref"),
