@@ -26,7 +26,7 @@ function contextMermaid(): string {
 
 function lifecycleMermaid(o: BusinessObject): string {
   return ["stateDiagram-v2", "  direction LR", `  [*] --> ${sid(o.initial)}`,
-    ...o.transitions.map((t) => `  ${sid(t.from)} --> ${sid(t.to)}${t.by ? `: ${t.by}` : ""}`)].join("\n")
+    ...o.transitions.map((t) => `  ${sid(t.from)} --> ${sid(t.to)}${t.by ? `: ${t.by.replace(/:/g, " -")}` : ""}`)].join("\n")
 }
 
 export function markdown(): string {

@@ -135,8 +135,8 @@ stateDiagram-v2
   needs_info --> rejected: operator
   not_a_fit --> rejected: operator
   awaiting_confirmation --> rejected: operator
-  approved --> offered: routing: briefs sent
-  approved --> expired: routing: no firm matches
+  approved --> offered: routing - briefs sent
+  approved --> expired: routing - no firm matches
   offered --> closed: a firm unlocks, none still deciding
   offered --> expired: every brief declined or lapsed
 ```
