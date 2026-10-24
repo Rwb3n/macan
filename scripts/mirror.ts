@@ -10,7 +10,11 @@ const OWNER = REPO.split("/")[0]!
 const PROJECT_TITLE = "macan backlog (mirrored from the map)"
 const MAP = "Generated from `model/` by `npm run mirror`. Change the map, not this issue; edits here are overwritten."
 
-const gh = (...args: string[]) => execFileSync("gh", args, { encoding: "utf8", maxBuffer: 32 * 1024 * 1024 })
+// One retry: GitHub sometimes refuses a call in a burst; a second try a moment later usually goes through.
+const gh = (...args: string[]): string => {
+  const run = () => execFileSync("gh", args, { encoding: "utf8", maxBuffer: 32 * 1024 * 1024 })
+  try { return run() } catch { execFileSync(process.execPath, ["-e", "setTimeout(() => {}, 3000)"]); return run() }
+}
 const ghJson = <T,>(...args: string[]) => JSON.parse(gh(...args)) as T
 const api = <T,>(method: string, path: string, fields: Record<string, string> = {}) =>
   ghJson<T>("api", "-X", method, path, ...Object.entries(fields).flatMap(([k, v]) => ["-f", `${k}=${v}`]))
@@ -24,6 +28,12 @@ const ucTitle = (id: string) => { const u = useCases.find((x) => x.id === id); r
 // What the map says is still to do.
 function items(): Item[] {
   const out: Item[] = []
+  // Use cases not started at all: their stages and processes don't exist yet, so the use case itself is the item.
+  for (const u of useCases) out.push({
+    key: u.id, title: `[${u.id}] ${u.name}`, open: u.status === "missing", labels: [`status:${u.status}`, "use-case"], milestone: ucTitle(u.id),
+    body: [`**Use case for ${u.party}:** ${u.name}`, `**Status:** ${u.status}`, u.guess ? "**This is a guess** (see its open question)." : "",
+      `**Rests on:** ${rests(u.refs)}`, "", MAP].filter(Boolean).join("\n\n"),
+  })
   for (const p of processes) p.steps.forEach((s, i) => {
     const key = `${p.id}.${i + 1}`
     const parked = /parked/i.test(s.step)
