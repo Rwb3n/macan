@@ -1,4 +1,4 @@
-// Builds: PR2, O-brief, ST-U4.2, ST-U4.3, O-listing
+// Builds: PR2, O-brief, ST-U4.2, ST-U4.3, O-listing, PN3
 // Route an approved lead to firms as briefs, contact hidden; firms unlock or pass; briefs lapse; the buyer is told (map: PR2, O-brief; D2).
 // The terms (how many firms, how long, the fee) are guesses in the map (ROUTING: Q15, Q16, Q3).
 import { createHash, randomBytes } from "node:crypto"
@@ -22,6 +22,7 @@ type Firm = typeof firms.$inferSelect
 export type BriefView = {
   survey: string; area: string; region: string; projectType: string; planningStage: string
   deadline: string | null; details: string; answer: string; state: BriefState; expiresAt: Date
+  feePence: number | null; firm: { name: string; paused: boolean }
   contact?: { name: string; email: string; phone: string | null }
 }
 
@@ -51,7 +52,7 @@ export async function routeLead(deps: Deps, leadId: number): Promise<{ routing: 
   for (const firm of matched) {
     const token = randomBytes(24).toString("base64url")
     deps.db.insert(briefs).values({ leadId, firmId: firm.id, tokenHash: hash(token), offeredAt: now, expiresAt }).run()
-    const v = view(lead, "offered", expiresAt)
+    const v = leadView(lead)
     await deps.mailer.send({
       to: firm.email!,
       subject: `New ${v.survey.toLowerCase()} brief: ${v.area}`,
@@ -69,8 +70,24 @@ export async function routeLead(deps: Deps, leadId: number): Promise<{ routing: 
 export function briefByToken(db: Db, token: string): BriefView | undefined {
   const b = db.select().from(briefs).where(eq(briefs.tokenHash, hash(token))).get()
   if (!b) return undefined
-  const lead = db.select().from(leads).where(eq(leads.id, b.leadId)).get()!
-  return view(lead, b.state as BriefState, b.expiresAt)
+  return viewOf(db, b)
+}
+
+// The firm behind a brief link pauses or resumes new briefs (booked up in season, Q2).
+export function setPausedByToken(deps: Pick<Deps, "db" | "now">, token: string, paused: boolean): boolean {
+  const b = deps.db.select({ firmId: briefs.firmId }).from(briefs).where(eq(briefs.tokenHash, hash(token))).get()
+  if (!b) return false
+  setPaused(deps, b.firmId, paused)
+  return true
+}
+
+// The briefs on each lead, for the operator.
+export function briefsByLead(db: Db): Map<number, { firm: string; state: BriefState; expiresAt: Date }[]> {
+  const rows = db.select({ leadId: briefs.leadId, state: briefs.state, expiresAt: briefs.expiresAt, firm: firms.name })
+    .from(briefs).innerJoin(firms, eq(firms.id, briefs.firmId)).all()
+  const out = new Map<number, { firm: string; state: BriefState; expiresAt: Date }[]>()
+  for (const r of rows) out.set(r.leadId, [...(out.get(r.leadId) ?? []), { firm: r.firm, state: r.state as BriefState, expiresAt: r.expiresAt }])
+  return out
 }
 
 // The firm unlocks (the fee is recorded as owed, Q16) or passes. Only an offered brief that has not lapsed can be decided.
@@ -96,7 +113,7 @@ export async function decideBrief(deps: Deps, token: string, decision: "unlock" 
   } else {
     await afterDecision(deps, lead)
   }
-  return view(lead, unlocked ? "unlocked" : "declined", b.expiresAt)
+  return viewOf(deps.db, deps.db.select().from(briefs).where(eq(briefs.id, b.id)).get()!)
 }
 
 // Lapses every offered brief past its time; tells buyers whose leads end with no firm. Run on a schedule.
@@ -142,7 +159,8 @@ async function tellBuyerNoFirm(deps: Deps, lead: Lead): Promise<void> {
   })
 }
 
-function view(lead: Lead, state: BriefState, expiresAt: Date): BriefView {
+// What any firm may see of a lead before unlocking.
+function leadView(lead: Lead) {
   const label = (pairs: readonly (readonly [string, string])[], v: string) => pairs.find(([k]) => k === v)?.[1] ?? v
   return {
     survey: surveyBySlug(lead.survey)?.name ?? lead.survey,
@@ -150,8 +168,18 @@ function view(lead: Lead, state: BriefState, expiresAt: Date): BriefView {
     region: regionBySlug(lead.region)?.name ?? lead.region,
     projectType: label(PROJECT_TYPES, lead.projectType),
     planningStage: label(PLANNING_STAGES, lead.planningStage),
-    deadline: lead.deadline, details: mask(lead.details), answer: mask(lead.answer), state, expiresAt,
-    ...(state === "unlocked" ? { contact: { name: lead.name, email: lead.email, phone: lead.phone } } : {}),
+    deadline: lead.deadline, details: mask(lead.details), answer: mask(lead.answer),
+  }
+}
+
+function viewOf(db: Db, b: typeof briefs.$inferSelect): BriefView {
+  const lead = db.select().from(leads).where(eq(leads.id, b.leadId)).get()!
+  const firm = db.select({ name: firms.name, pausedAt: firms.pausedAt }).from(firms).where(eq(firms.id, b.firmId)).get()!
+  const state = b.state as BriefState
+  return {
+    ...leadView(lead), state, expiresAt: b.expiresAt, feePence: b.feePence, firm: { name: firm.name, paused: Boolean(firm.pausedAt) },
+    // Once unlocked, the firm has paid to see everything the buyer wrote.
+    ...(state === "unlocked" ? { details: lead.details, answer: lead.answer, contact: { name: lead.name, email: lead.email, phone: lead.phone } } : {}),
   }
 }
 

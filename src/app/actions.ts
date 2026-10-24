@@ -1,6 +1,6 @@
 "use server"
 
-// Builds: PR1, PR3, O-lead, O-claim
+// Builds: PR1, PR2, PR3, O-lead, O-claim, O-brief
 
 import { headers } from "next/headers"
 import { revalidatePath } from "next/cache"
@@ -10,19 +10,12 @@ import { mailer } from "@/mailer"
 import { confirmClaim, submitClaim, type Result } from "@/requests"
 import { confirmLead, reviewLead, submitLead, type Submitted } from "@/leads"
 import { redirect } from "next/navigation"
+import { decideBrief, routeLead, setPausedByToken } from "@/routing"
+import { baseUrl } from "./base-url"
 
 export type FormState = Result | null
 export type LeadState = Submitted | null
 
-// Links in emails must not come from request headers in production: a forged Host would send the token elsewhere.
-async function baseUrl(): Promise<string> {
-  if (process.env.BASE_URL) return process.env.BASE_URL.replace(/\/$/, "")
-  if (process.env.NODE_ENV === "production" && !process.env.LOCAL_DEMO) throw new Error("BASE_URL is not configured")
-  const h = await headers()
-  const host = h.get("x-forwarded-host") ?? h.get("host")
-  if (!host) throw new Error("No host header")
-  return `${h.get("x-forwarded-proto") ?? "http"}://${host}`
-}
 
 export async function leadAction(_prev: LeadState, form: FormData): Promise<LeadState> {
   return submitLead({ db: db(), mailer: mailer(), now: () => new Date(), baseUrl: await baseUrl() }, Object.fromEntries(form))
@@ -52,4 +45,32 @@ export async function reviewAction(form: FormData): Promise<void> {
   if (!Number.isInteger(id) || (decision !== "approved" && decision !== "rejected")) throw new Error("Bad review")
   reviewLead({ db: db(), now: () => new Date() }, id, decision)
   revalidatePath("/admin/leads")
+}
+
+// Operator only: send an approved lead to matching firms (PR2).
+export async function routeAction(form: FormData): Promise<void> {
+  if (!isAdmin((await headers()).get("authorization"))) throw new Error("Not authorised")
+  const id = Number(form.get("id"))
+  if (!Number.isInteger(id)) throw new Error("Bad lead")
+  await routeLead({ db: db(), mailer: mailer(), now: () => new Date(), baseUrl: await baseUrl() }, id)
+  revalidatePath("/admin/leads")
+}
+
+// The firm behind a brief link: unlock or pass. The token is the firm's proof, as in the emailed link.
+export async function briefAction(form: FormData): Promise<void> {
+  const token = String(form.get("token") ?? "")
+  const decision = form.get("decision")
+  if (decision !== "unlock" && decision !== "decline") throw new Error("Bad decision")
+  try {
+    await decideBrief({ db: db(), mailer: mailer(), now: () => new Date(), baseUrl: await baseUrl() }, token, decision)
+  } catch {
+    // Already decided or lapsed: the page shows the brief's state.
+  }
+  redirect(`/briefs/${encodeURIComponent(token)}`)
+}
+
+export async function pauseAction(form: FormData): Promise<void> {
+  const token = String(form.get("token") ?? "")
+  setPausedByToken({ db: db(), now: () => new Date() }, token, form.get("paused") === "1")
+  redirect(`/briefs/${encodeURIComponent(token)}`)
 }

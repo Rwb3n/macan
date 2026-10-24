@@ -92,6 +92,7 @@ describe("decideBrief", () => {
     const [t1, t2] = tokens()
     const v = await decideBrief(deps, t1!, "unlock")
     expect(v.contact?.email).toBe("sam@example.com")
+    expect(v.details).not.toContain("hidden")
     expect(deps.db.select().from(briefs).all().find((b) => b.state === "unlocked")?.feePence).toBe(ROUTING.unlockFeePence)
     expect(deps.mailer.sent.at(-1)?.subject).toContain("Firm a")
     expect(leadRouting(deps.db, id)).toBe("offered")

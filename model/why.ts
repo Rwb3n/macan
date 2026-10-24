@@ -25,6 +25,10 @@ export const decisions: Decision[] = [
     said: "1. and on that note we need to hold those buyer pain points front and centre. but synthesized. add that to our design plans and model ideas.", refs: ["R2", "R4"] },
   { id: "D11", date: "2026-10-24", name: "Business model first, then design around it for humans",
     said: "q12 yep - first we think about our business model then we design around it for humans.", refs: ["R4"] },
+  { id: "D12", date: "2026-10-24", name: "Build the product now on the placeholder terms; the calls come later",
+    said: "calls later. we build the product regardless. its not rocket science what we're building.", refs: ["R6", "Q15", "Q16"] },
+  { id: "D13", date: "2026-10-24", name: "M1 at £99,417 a year (5% capture) is acceptable",
+    said: "99,417 is acceptable", refs: ["R3", "D9", "Q10"] },
 ]
 
 // The buyer's pains today, synthesised from R2's sources (counted independently). Front and centre (D10).

@@ -83,12 +83,12 @@ export const processes: Process[] = [
     { actor: "P-buyer", step: "Confirm by email (button press)", status: "built" },
     { actor: "P-directory", step: "Operator approves or rejects", status: "built" },
   ] },
-  { id: "PR2", name: "Route a lead", realises: "U4", status: "part", refs: ["D2", "Q3", "Q15", "Q16"],
-    note: "Terms are guesses (ROUTING: Q15, Q16). Briefs go to claimed firms' business inboxes; claims are confirmed by link (PR3). Next: the firm's brief page and the operator's route button, once the terms are set (D11)", steps: [
+  { id: "PR2", name: "Route a lead", realises: "U4", status: "part", refs: ["D2", "D12", "Q3", "Q15", "Q16"],
+    note: "Terms are guesses (ROUTING: Q15, Q16). Briefs go to claimed firms' business inboxes; claims are confirmed by link (PR3). Built on the placeholder terms (D12); the calls (R6) may change them", steps: [
     { actor: "P-directory", step: "Match firms by survey, region, availability", status: "built" },
     { actor: "P-directory", step: "Offer briefs, contact hidden", status: "built" },
-    { actor: "P-firm", step: "Unlock (fee owed) or pass", status: "part" },
-    { actor: "P-directory", step: "Chase or lapse; tell the buyer", status: "part" },
+    { actor: "P-firm", step: "Unlock (fee owed) or pass; pause when booked up", status: "built" },
+    { actor: "P-directory", step: "Lapse and tell the buyer (built); chase firms before lapse (missing)", status: "part" },
   ] },
   { id: "PR3", name: "Claim a listing", realises: "U5", status: "part", refs: ["D1"], steps: [
     { actor: "P-firm", step: "Claim with an email on the firm's domain", status: "built" },
