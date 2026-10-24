@@ -89,7 +89,7 @@ describe("jobSheet", () => {
       { label: "Project", value: "Loft or roof conversion" },
       { label: "Planning", value: "Applied; the council has asked for this survey (council ref 26/AP/1)" },
       { label: "Needed by", value: "No date given" },
-      { label: "Work touches", value: "Yes, the roof or loft", fromWords: true },
+      { label: "Roof, loft or walls", value: "Yes, the roof or loft", fromWords: true },
       { label: "Earlier surveys", value: "No", fromWords: false },
     ])
     expect(s.unknown).toEqual(["Building", "Access", "Drawings"])

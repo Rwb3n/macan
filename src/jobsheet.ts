@@ -24,7 +24,7 @@ const YES_NO = [["yes", "Yes"], ["no", "No"]] as const
 // The R12 standard each field rests on is named in its comment.
 export const FIELDS: readonly SheetField[] = [
   // BCT guidelines: demolition or modification of a structure; type and scale of works.
-  { id: "works", sheet: "Work touches", ask: "Will the work touch the roof, loft or walls, or knock anything down?",
+  { id: "works", sheet: "Roof, loft or walls", ask: "Will the work touch the roof, loft or walls, or knock anything down?",
     why: "Bats live in roofs, lofts and walls, so this decides how much the survey involves.",
     options: [["roof", "Yes, the roof or loft"], ["walls", "Yes, the walls"], ["demolish", "Yes, a building is being knocked down"], ["none", "No"]] },
   // BCT: building type; Historic England AN12: the nature of the building (core for heritage in R12).
@@ -200,7 +200,7 @@ export type JobSheet = { rows: { label: string; value: string; fromWords?: boole
 type SheetLead = { survey: string; projectType: string; planningStage: string; councilRef: string | null; deadline: string | null; details: string; sheet: unknown }
 
 // The buyer's planning stage, said to the firm rather than by the buyer.
-const FIRM_STAGE: Record<string, string> = {
+export const FIRM_STAGE: Record<string, string> = {
   "council-asked": "Applied; the council has asked for this survey",
   preparing: "Getting ready to apply",
   "pre-app": "Pre-application advice says it's needed",

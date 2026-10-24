@@ -10,8 +10,9 @@ import { FIELDS, inText, spotFacts, stripContact, type Facts } from "./jobsheet"
 const MODEL = "claude-haiku-5-5"
 const TIMEOUT_MS = 10_000
 
-// Earlier surveys and drawings are always asked: in testing, the model guessed them from unrelated words.
-const READ = FIELDS.filter((f) => f.id !== "previous" && f.id !== "drawings")
+// Access, earlier surveys and drawings are always asked: in testing, the model filled them from unrelated words.
+const ALWAYS_ASKED = new Set(["access", "previous", "drawings"])
+const READ = FIELDS.filter((f) => !ALWAYS_ASKED.has(f.id))
 
 const Out = z.object({
   facts: z.array(z.object({

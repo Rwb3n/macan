@@ -12,7 +12,7 @@ import { useActionState, useEffect, useMemo, useState } from "react"
 import { SURVEYS, SURVEY_GROUPS, REGIONS, regionBySlug, suggestSurvey, surveyBySlug } from "@/catalog"
 import { PLANNING_STAGES, PROJECT_TYPES, isoDate, nextWindowStart, type Qualification } from "@/qualify"
 import { ROUTING } from "@model/how"
-import { NOT_SURE, answerLabel, fieldById, fieldsFor, trimExcerpt, type Facts } from "@/jobsheet"
+import { FIRM_STAGE, NOT_SURE, answerLabel, fieldById, fieldsFor, trimExcerpt, type Facts } from "@/jobsheet"
 import { factsAction, leadAction, postcodeAction, type LeadState } from "../actions"
 
 const BLANK = { pool: "3", survey: "", region: "", council: "", details: "", postcode: "", projectType: "", planningStage: "", deadline: "", councilRef: "", name: "", email: "", phone: "" }
@@ -46,7 +46,6 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
   const [facts, setFacts] = useState<Facts>({})
   const [readFor, setReadFor] = useState<string | null>(null) // the words last sent to be read
   const [reading, setReading] = useState(false)
-  const [removed, setRemoved] = useState<Set<string>>(new Set())
   const screen = trail.at(-1)!
   const set = (k: keyof Values, val: string) => setV((x) => ({ ...x, [k]: val }))
   const go = (next: Screen) => { setTrail((t) => [...t, checking && next !== "check" ? "check" : next]); setChecking(false) }
@@ -63,6 +62,25 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
   }, [state]) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { window.scrollTo({ top: 0 }) }, [screen])
 
+  // Read the buyer's words a moment after they stop typing (D23). New words replace the old pills, never the buyer's own answers.
+  const readWords = (text: string) => {
+    if (text === readFor || text.trim().length < 25) return
+    setReadFor(text); setReading(true)
+    factsAction(text).then((r) => r.facts).catch(() => ({}) as Facts).then((found) => {
+      setFacts((f) => {
+        const out: Facts = Object.fromEntries(Object.entries(f).filter(([, x]) => !x.quote))
+        for (const [id, x] of Object.entries(found)) if (!out[id]) out[id] = x
+        return out
+      })
+      setReading(false)
+    })
+  }
+  useEffect(() => {
+    if (screen !== "problem") return
+    const t = setTimeout(() => readWords(v.details), 1200)
+    return () => clearTimeout(t)
+  }, [v.details, screen]) // eslint-disable-line react-hooks/exhaustive-deps
+
   if (state?.ok) return <Received q={state.qualification} firmName={firmName} reference={state.reference} />
 
   const afterPostcode = async () => {
@@ -78,63 +96,39 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
   }
   const deadlineChoice = hasDeadline || (v.deadline ? "yes" : "")
 
-  // Read the buyer's words while they answer the next questions. New words replace the old pills, never the buyer's own answers.
-  const readWords = () => {
-    const text = v.details
-    if (text === readFor) return
-    setReadFor(text); setReading(true); setRemoved(new Set())
-    factsAction(text).then((r) => r.facts).catch(() => ({}) as Facts).then((found) => {
-      setFacts((f) => {
-        const out: Facts = Object.fromEntries(Object.entries(f).filter(([, x]) => !x.quote))
-        for (const [id, x] of Object.entries(found)) if (!out[id]) out[id] = x
-        return out
-      })
-      setReading(false)
-    })
-  }
   const fields = fieldsFor(v.survey)
-  const pills = fields.filter((f) => facts[f.id]?.quote)
-  const unanswered = fields.filter((f) => !facts[f.id]).length
+  // Until the buyer has seen the answer, the panel shows our guess at the survey from their words.
+  const guess = v.survey ? undefined : surveyBySlug(suggestSurvey(v.details) ?? "")
   const setFact = (id: string, value: string) => setFacts((f) => ({ ...f, [id]: { value } }))
-  const removePill = (id: string) => { setFacts(({ [id]: _, ...rest }) => rest); setRemoved((r) => new Set(r).add(id)) }
+  const removeFact = (id: string) => setFacts(({ [id]: _, ...rest }) => rest)
   // The next question with no answer after `id` (or the first), else the contact details.
   const nextAfter = (id?: string): Screen => {
     const from = id ? fields.findIndex((f) => f.id === id) + 1 : 0
     const next = fields.slice(from).find((f) => !facts[f.id])
     return next ? `q:${next.id}` : "details"
   }
-  const toSite = () => go(reading || pills.length ? "pills" : nextAfter())
+  const toSite = () => go(nextAfter())
   const sheet = JSON.stringify(Object.fromEntries(fields.filter((f) => facts[f.id]).map((f) => [f.id, facts[f.id]])))
   const asking = screen.startsWith("q:") ? fieldById(screen.slice(2)) : undefined
   const trimmed = trimExcerpt(v.details)
 
   const visited = new Set(trail)
-  const needed: Item[] = [
-    { label: "What the council has asked for, or what you're planning", done: visited.has("postcode") },
-    { label: "The postcode of the site", done: visited.has("project") },
-    { label: "What kind of work it is", done: Boolean(v.projectType) && visited.has("stage") },
-    { label: "How far you've got with planning permission", done: Boolean(v.planningStage) && visited.has("deadline") },
-    { label: "When you need the report by, if there's a date", done: visited.has("answer") },
-  ]
-  const ifQuotes: Item[] = [
-    { label: "A few questions about the site, picked for this survey", done: visited.has("details") },
-    { label: "Your name and email address", done: visited.has("check") },
-    { label: "A phone number, only if you'd like calls", done: Boolean(v.phone) || visited.has("check"), optional: true },
-  ]
   const phase = phaseOf(screen)
-  const doneCount = [...needed, ...ifQuotes].filter((i) => i.done).length
+  const panel = (
+    <RequestPanel v={v} survey={s ?? guess} guessed={!s && Boolean(guess)} facts={facts} reading={reading} trimmed={trimmed}
+      deadlineAsked={visited.has("answer")} onSet={setFact} onRemove={removeFact} />
+  )
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1fr_20rem] lg:items-start">
+    <div className="grid gap-8 lg:grid-cols-[1fr_24rem] lg:items-start">
     <div className="lg:order-2 lg:sticky lg:top-6">
-      <details open={screen === "problem" || undefined} className="rounded-lg border border-line bg-white p-4 lg:hidden">
-        <summary className="cursor-pointer font-semibold">What we&apos;ll ask you <span className="font-normal text-muted">({doneCount} of {needed.length + ifQuotes.length} done)</span></summary>
-        <Checklist needed={needed} ifQuotes={ifQuotes} />
+      <details open={screen === "problem" || undefined} className="rounded-lg border-2 border-moss/40 bg-white p-4 lg:hidden">
+        <summary className="cursor-pointer font-semibold">What firms will get</summary>
+        {panel}
       </details>
-      <div className="hidden rounded-lg border border-line bg-white p-5 lg:block">
-        <p className="font-semibold">What we&apos;ll ask you</p>
-        <p className="mt-1 text-sm text-muted">About two minutes. Nothing about you until you choose to get quotes.</p>
-        <Checklist needed={needed} ifQuotes={ifQuotes} />
+      <div className="hidden rounded-lg border-2 border-moss/40 bg-white p-5 lg:block">
+        <p className="text-lg font-semibold">What firms will get</p>
+        {panel}
       </div>
     </div>
     <form action={action} className="max-w-2xl lg:order-1">
@@ -150,7 +144,7 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
           <textarea rows={5} className={input} value={v.details} onChange={(e) => set("details", e.target.value)}
             placeholder="For example: We're converting our loft. The council says they need a bat survey before they'll look at the application." />
           <p className="text-muted">Not sure what you need yet? Just describe the work you&apos;re planning.</p>
-          <Continue disabled={v.details.trim().length < 10} onClick={() => { readWords(); go("postcode") }} />
+          <Continue disabled={v.details.trim().length < 10} onClick={() => { readWords(v.details); go("postcode") }} />
         </Question>
       ) : null}
 
@@ -202,29 +196,6 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
           onSurvey={(x) => set("survey", x)} onArea={() => change("area")} err={err.survey}
           quotesLabel={firmName ? `Get a quote from ${firmName}` : `Get quotes from up to ${many} local firms`}
           onQuotes={toSite} />
-      ) : null}
-
-      {screen === "pills" ? (
-        <Question title={reading ? "Reading what you wrote…" : pills.length ? "Here's what we picked up from what you wrote" : "A few quick questions about the site"}
-          hint={reading ? "Just a moment." : pills.length ? "Firms will see these. If one is wrong, change it, or remove it and we'll ask you instead." : "We couldn't find these in what you wrote. “Not sure” is always a fine answer."}>
-          {pills.length ? (
-            <ul className="flex flex-wrap gap-3">
-              {pills.map((f) => (
-                <li key={f.id} className="rounded-lg border-2 border-moss bg-leaf px-4 py-3">
-                  <p className="text-lg"><span className="font-semibold">{f.sheet}:</span> {answerLabel(f, facts[f.id]!.value)}</p>
-                  <p className="text-sm text-muted">You wrote &ldquo;{facts[f.id]!.quote}&rdquo;</p>
-                  <p className="mt-2 flex gap-4 text-sm">
-                    <button type="button" onClick={() => go(`q:${f.id}`)} className="text-moss underline">Change<span className="sr-only"> {f.sheet.toLowerCase()}</span></button>
-                    <button type="button" onClick={() => removePill(f.id)} className="text-moss underline">Remove<span className="sr-only"> {f.sheet.toLowerCase()}</span></button>
-                  </p>
-                </li>
-              ))}
-            </ul>
-          ) : null}
-          {removed.size ? <p className="text-muted">Removed: {[...removed].map((id) => fieldById(id)?.sheet).join(", ")}. We&apos;ll ask you instead.</p> : null}
-          {!reading ? <p className="text-muted">{unanswered ? `Next, ${unanswered === 1 ? "one short question" : `${WORDS[unanswered] ?? unanswered} short questions`} firms need to price the job.` : "That's everything firms need to price the job."}</p> : null}
-          <Continue disabled={reading} onClick={() => go(nextAfter())} />
-        </Question>
       ) : null}
 
       {asking ? (
@@ -288,8 +259,6 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
   )
 }
 
-type Item = { label: string; done: boolean; optional?: boolean }
-
 function Progress({ phase }: { phase: number }) {
   return (
     <div className="mb-8" aria-label={`Step ${phase + 1} of ${PHASES.length}: ${PHASES[phase]}`}>
@@ -301,18 +270,87 @@ function Progress({ phase }: { phase: number }) {
   )
 }
 
-function Checklist({ needed, ifQuotes }: { needed: Item[]; ifQuotes: Item[] }) {
-  const row = (i: Item) => (
-    <li key={i.label} className="flex gap-2">
-      <span aria-hidden="true" className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs ${i.done ? "border-moss bg-moss text-white" : "border-ink/30"}`}>{i.done ? "✓" : ""}</span>
-      <span className={i.done ? "text-muted" : ""}>{i.label}{i.done ? <span className="sr-only"> (done)</span> : null}</span>
-    </li>
-  )
+// The request firms will get, beside every step, filling in as the buyer types and answers (D23, D27). Rows read from the
+// buyer's words can be changed or removed there and then; empty rows say we'll ask. It replaces the checklist (D20).
+function RequestPanel({ v, survey, guessed, facts, reading, trimmed, deadlineAsked, onSet, onRemove }: {
+  v: Values; survey?: NonNullable<ReturnType<typeof surveyBySlug>>; guessed: boolean; facts: Facts; reading: boolean
+  trimmed: { excerpt: string; dropped: number }; deadlineAsked: boolean
+  onSet: (id: string, value: string) => void; onRemove: (id: string) => void
+}) {
+  const [editing, setEditing] = useState<string | null>(null)
+  const ask = <span className="text-muted">We&apos;ll ask</span>
+  const area = v.postcode.trim().toUpperCase().split(/\s+/)[0]
+  const fields = survey ? fieldsFor(survey.slug) : []
   return (
-    <div className="mt-4 text-sm">
-      <ul className="space-y-2">{needed.map(row)}</ul>
-      <p className="mt-4 font-semibold">Only if you&apos;d like quotes</p>
-      <ul className="mt-2 space-y-2">{ifQuotes.map(row)}</ul>
+    <div className="mt-2 text-sm">
+      <p className="text-muted">Most survey firms&apos; websites just ask you to write a message. We gather what surveyors&apos; own guidelines say they need, so firms can price your job straight away.</p>
+
+      <PanelGroup title="The job">
+        <PanelRow k="Survey">{survey ? <>{survey.name}{guessed ? <span className="block text-xs text-muted">Our guess from what you wrote. You&apos;ll see it and can change it.</span> : null}</> : <span className="text-muted">We&apos;ll work it out with you</span>}</PanelRow>
+        <PanelRow k="Where">{area ? <>Near {area}{v.council ? `, ${v.council}` : ""}<span className="block text-xs text-muted">Firms only see the first part of your postcode.</span></> : ask}</PanelRow>
+        <PanelRow k="The work">{v.projectType ? label(PROJECT_TYPES, v.projectType) : ask}</PanelRow>
+        <PanelRow k="Planning">{v.planningStage ? FIRM_STAGE[v.planningStage] ?? label(PLANNING_STAGES, v.planningStage) : ask}</PanelRow>
+        <PanelRow k="Needed by">{v.deadline ? new Date(v.deadline).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : deadlineAsked ? "No date" : ask}</PanelRow>
+      </PanelGroup>
+
+      <PanelGroup title="About the site">
+        {!survey ? <p className="py-1 text-muted">A few questions, picked for your survey.</p> : fields.map((f) => {
+          const fact = facts[f.id]
+          return (
+            <PanelRow key={f.id} k={f.sheet}>
+              {editing === f.id ? (
+                f.options ? (
+                  <select autoFocus className="w-full rounded border border-line bg-white px-1 py-1" value={fact?.value ?? ""}
+                    onChange={(e) => { onSet(f.id, e.target.value); setEditing(null) }} onBlur={() => setEditing(null)}>
+                    <option value="" disabled>Choose…</option>
+                    {[...f.options, [NOT_SURE, "Not sure"] as const].map(([k, l]) => <option key={k} value={k}>{l}</option>)}
+                  </select>
+                ) : (
+                  <input autoFocus className="w-full rounded border border-line bg-white px-1 py-1" defaultValue={fact?.value === NOT_SURE ? "" : fact?.value ?? ""}
+                    onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); e.currentTarget.blur() } }}
+                    onBlur={(e) => { const x = e.currentTarget.value.trim(); if (x) onSet(f.id, x); setEditing(null) }} />
+                )
+              ) : fact ? (
+                <span className={fact.quote ? "inline-block rounded-md border border-moss bg-leaf px-2 py-0.5" : ""}>
+                  {answerLabel(f, fact.value)}
+                  {fact.quote ? <>
+                    <button type="button" onClick={() => setEditing(f.id)} className="ml-2 text-moss" aria-label={`Change ${f.sheet.toLowerCase()}`} title="Change">✎</button>
+                    <button type="button" onClick={() => onRemove(f.id)} className="ml-1 text-moss" aria-label={`Remove ${f.sheet.toLowerCase()}`} title="Remove">×</button>
+                  </> : null}
+                </span>
+              ) : reading ? <span className="text-muted">Reading what you wrote…</span> : ask}
+            </PanelRow>
+          )
+        })}
+        {fields.some((f) => facts[f.id]?.quote) ? <p className="mt-2 text-xs text-muted">Green ones we read from what you wrote. ✎ to change, × to remove and we&apos;ll ask instead.</p> : null}
+      </PanelGroup>
+
+      <PanelGroup title="In your words">
+        <p className="py-1 italic">{trimmed.excerpt ? `“${trimmed.excerpt}”` : <span className="not-italic text-muted">What you write goes here.</span>}</p>
+        {trimmed.dropped ? <p className="text-xs text-muted">We leave out prices, other firms&apos; quotes and contact details.</p> : null}
+      </PanelGroup>
+
+      <PanelGroup title="You">
+        <p className="py-1 text-muted">Your name, email and phone. Only the firm you choose sees them, and we ask for them last.</p>
+      </PanelGroup>
+    </div>
+  )
+}
+
+function PanelGroup({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <section className="mt-4 border-t border-line pt-3">
+      <h2 className="text-xs font-semibold uppercase tracking-wide text-muted">{title}</h2>
+      <dl className="mt-1">{children}</dl>
+    </section>
+  )
+}
+
+function PanelRow({ k, children }: { k: string; children: React.ReactNode }) {
+  return (
+    <div className="grid grid-cols-[7.5rem_1fr] gap-2 py-1">
+      <dt className="font-medium">{k}</dt>
+      <dd>{children}</dd>
     </div>
   )
 }
