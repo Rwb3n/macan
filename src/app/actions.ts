@@ -8,7 +8,7 @@ import { db } from "@/db"
 import { isAdmin } from "@/admin"
 import { mailer } from "@/mailer"
 import { confirmClaim, submitClaim, type Result } from "@/requests"
-import { confirmLead, reviewLead, submitLead, type Submitted } from "@/leads"
+import { cancelLead, confirmLead, reviewLead, submitLead, type Submitted } from "@/leads"
 import { redirect } from "next/navigation"
 import { decideBrief, recordOutcome, routeLead, setPausedByToken } from "@/routing"
 import { baseUrl } from "./base-url"
@@ -92,4 +92,11 @@ export async function outcomeAction(form: FormData): Promise<void> {
     // Not a move the brief can make: the page shows its state.
   }
   redirect(`/briefs/${encodeURIComponent(token)}`)
+}
+
+// The buyer cancels from their status link (D22). Opening the link changes nothing; this needs the button.
+export async function cancelRequestAction(form: FormData): Promise<void> {
+  const token = String(form.get("token") ?? "")
+  cancelLead({ db: db(), now: () => new Date() }, token)
+  redirect(`/requests/${encodeURIComponent(token)}`)
 }

@@ -63,6 +63,12 @@ export const leads = sqliteTable("leads", {
   reviewedAt: integer("reviewed_at", { mode: "timestamp" }),
   // When the operator routed it to firms (PR2); its routing state is read from its briefs.
   routedAt: integer("routed_at", { mode: "timestamp" }),
+  // The buyer's private status link (D22). Kept as issued, not hashed, so later emails can repeat it; it shows only
+  // this request, which already holds the buyer's own details in this row.
+  statusToken: text("status_token").unique(),
+  // How many firms see it: 3 by default, or the buyer's choice of 5, 10 or 0 = every firm covering the area (D24).
+  poolSize: integer("pool_size").notNull().default(3),
+  cancelledAt: integer("cancelled_at", { mode: "timestamp" }),
   createdAt: createdAt(),
 }, (t) => [index("leads_grade").on(t.grade, t.review)])
 

@@ -152,6 +152,10 @@ stateDiagram-v2
   approved --> expired: routing - no firm matches
   offered --> closed: a firm unlocks, none still deciding
   offered --> expired: every brief declined or lapsed
+  awaiting_confirmation --> cancelled: buyer cancels (D22)
+  qualified --> cancelled: buyer cancels (D22)
+  approved --> cancelled: buyer cancels (D22)
+  offered --> cancelled: buyer cancels; open briefs are withdrawn (D22)
 ```
 
 ### O-brief Brief (one lead offered to one firm) (part; rests on D2, Q3)
@@ -163,6 +167,7 @@ stateDiagram-v2
   offered --> unlocked: firm pays (M1)
   offered --> declined: firm
   offered --> lapsed: time
+  offered --> withdrawn: buyer cancels (D22)
   unlocked --> quoted: firm
   quoted --> won
   quoted --> lost
@@ -220,7 +225,7 @@ stateDiagram-v2
 | id | process | realises | steps | status | rests on |
 |---|---|---|---|---|---|
 | PR1 | Qualify a lead | U2 | Buyers (homeowners, small developers): Say the problem; see the answer; choose to send, giving contact last (built); The directory: Draft the request live from the buyer's words: key facts as editable pills, and the message the firm will get (D23, Q26) (missing); The directory: Work out the area and the council from the postcode, so the buyer isn't asked twice (built); The directory: Grade on real, serious, timely, complete (built); Buyers (homeowners, small developers): Confirm by email (button press); no mail provider in production yet (Q21) (built); The directory: Operator approves or rejects (built); The directory: Tell buyers, in a privacy notice, what we keep, who sees it, the postcode lookup and how long we keep it (parked, D16) (missing) | part | D2, D14, D23 |
-| PR2 | Route a lead | U4 | The directory: Match firms by survey, region, availability (built); The directory: Offer briefs, contact hidden (built); Survey firms: Unlock (fee owed) or pass; pause when booked up (built); The directory: Chase firms once, halfway through their time; lapse and tell the buyer (built); Survey firms: Record that they quoted, then whether they won or lost (built); Buyers (homeowners, small developers): Keep a private status link, emailed as things change; after a firm takes the job it shows the final state; it stops on cancelling or expiry (D22, D26) (missing); Buyers (homeowners, small developers): Choose a bigger pool than three firms if they want: 5, 10 or every firm that covers the area (D24) (missing); The directory: Free for firms at first; the fee is set to nothing until firms are happy (D25) (missing); The directory: Ask the buyer whether they booked a survey (missing) | part | D2, D12, D22, D24, D25, D26, Q3, Q15, Q16 |
+| PR2 | Route a lead | U4 | The directory: Match firms by survey, region, availability (built); The directory: Offer briefs, contact hidden (built); Survey firms: Unlock (fee owed) or pass; pause when booked up (built); The directory: Chase firms once, halfway through their time; lapse and tell the buyer (built); Survey firms: Record that they quoted, then whether they won or lost (built); Buyers (homeowners, small developers): Keep a private status link, emailed as things change; after a firm takes the job it shows the final state; it stops on cancelling or expiry (D22, D26) (built); Buyers (homeowners, small developers): Choose a bigger pool than three firms if they want: 5, 10 or every firm that covers the area (D24) (built); The directory: Free for firms at first; the fee is set to nothing until firms are happy (D25) (built); The directory: Ask the buyer whether they booked a survey (missing) | part | D2, D12, D22, D24, D25, D26, Q3, Q15, Q16 |
 | PR3 | Claim a listing | U5 | Survey firms: Claim with an email on the firm's domain (built); The directory: Email a confirmation link (built); Survey firms: Edit the listing (missing) | part | D1 |
 | PR4 | Add firms | U5 | The directory: Check candidates exist and are active in vein (Companies House) (missing); The directory: Take candidates from CIEEM's Registered Practice Directory (145 ecology practices), once CIEEM gives written permission (missing); The directory: Check the site sells planning surveys (part); The directory: Map surveys and regions (part); The directory: Send the listing notice (parked, D16) (missing) | part | R0/S9, R3, R4, R5 |
 | PR5 | Correct or remove a listing | U5 | Survey firms: Ask (missing); The directory: Apply and tombstone (missing) | missing | D1, D16 |

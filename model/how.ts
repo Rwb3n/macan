@@ -5,13 +5,13 @@ import type { BusinessObject, Process } from "./types"
 export const LEAD_GRADES = ["qualified", "awaiting-confirmation", "needs-info", "not-a-fit"] as const
 export const LEAD_REVIEWS = ["new", "approved", "rejected"] as const
 export const LEAD_CHECKS = ["real", "serious", "timely", "complete"] as const
-export const BRIEF_STATES = ["offered", "unlocked", "declined", "lapsed", "quoted", "won", "lost"] as const
+export const BRIEF_STATES = ["offered", "unlocked", "declined", "lapsed", "withdrawn", "quoted", "won", "lost"] as const
 
 // Routing terms (PR2). Business choices not yet made by the principal: each is a guess with its test (D11: model first).
 export const ROUTING = {
-  firmsPerLead: 3, // Q15: Signed Off offers "quotes from up to 3", Bark shares with up to 5, Worklanded sells to 1 (R1, R2)
+  firmsPerLead: 3, // the default; the buyer can choose 5, 10 or every firm covering the area (D24). Q15: Signed Off offers "quotes from up to 3", Bark shares with up to 5, Worklanded sells to 1 (R1, R2)
   replyHours: 48, // Q15, Q7: the 48-hour reply promise
-  unlockFeePence: 2600, // Q3: anchor £26 a lead (Worklanded); recorded as owed, not taken (Q16)
+  unlockFeePence: 0, // free for firms at first (D25); the anchor when charging starts is £26 a lead (Q3, Q16)
   claimedOnly: true, // Q15: only firms that claimed their listing receive briefs; unclaimed firms are not emailed
 } as const
 
@@ -19,7 +19,7 @@ export const objects: BusinessObject[] = [
   {
     id: "O-lead", name: "Lead", status: "part", table: "leads", refs: ["D2"], note: "offered, closed and expired are read from the lead's briefs (and when it was routed)",
     initial: "received",
-    states: ["received", "awaiting-confirmation", "needs-info", "not-a-fit", "qualified", "approved", "rejected", "offered", "closed", "expired"],
+    states: ["received", "awaiting-confirmation", "needs-info", "not-a-fit", "qualified", "approved", "rejected", "offered", "closed", "expired", "cancelled"],
     transitions: [
       { from: "received", to: "awaiting-confirmation", by: "graded at intake" },
       { from: "received", to: "needs-info", by: "graded at intake" },
@@ -36,14 +36,18 @@ export const objects: BusinessObject[] = [
       { from: "approved", to: "expired", by: "routing: no firm matches" },
       { from: "offered", to: "closed", by: "a firm unlocks, none still deciding" },
       { from: "offered", to: "expired", by: "every brief declined or lapsed" },
+      { from: "awaiting-confirmation", to: "cancelled", by: "buyer cancels (D22)" },
+      { from: "qualified", to: "cancelled", by: "buyer cancels (D22)" },
+      { from: "approved", to: "cancelled", by: "buyer cancels (D22)" },
+      { from: "offered", to: "cancelled", by: "buyer cancels; open briefs are withdrawn (D22)" },
     ],
   },
   {
     id: "O-brief", name: "Brief (one lead offered to one firm)", status: "part", table: "briefs", refs: ["D2", "Q3"], note: "The unit M1 sells. The firm records quoted, won and lost; the buyer's side of the outcome is missing",
-    initial: "offered", states: ["offered", "unlocked", "declined", "lapsed", "quoted", "won", "lost"],
+    initial: "offered", states: ["offered", "unlocked", "declined", "lapsed", "withdrawn", "quoted", "won", "lost"],
     transitions: [
       { from: "offered", to: "unlocked", by: "firm pays (M1)" }, { from: "offered", to: "declined", by: "firm" },
-      { from: "offered", to: "lapsed", by: "time" }, { from: "unlocked", to: "quoted", by: "firm" },
+      { from: "offered", to: "lapsed", by: "time" }, { from: "offered", to: "withdrawn", by: "buyer cancels (D22)" }, { from: "unlocked", to: "quoted", by: "firm" },
       { from: "quoted", to: "won" }, { from: "quoted", to: "lost" },
     ],
   },
@@ -94,9 +98,9 @@ export const processes: Process[] = [
     { actor: "P-firm", step: "Unlock (fee owed) or pass; pause when booked up", status: "built" },
     { actor: "P-directory", step: "Chase firms once, halfway through their time; lapse and tell the buyer", status: "built" },
     { actor: "P-firm", step: "Record that they quoted, then whether they won or lost", status: "built" },
-    { actor: "P-buyer", step: "Keep a private status link, emailed as things change; after a firm takes the job it shows the final state; it stops on cancelling or expiry (D22, D26)", status: "missing" },
-    { actor: "P-buyer", step: "Choose a bigger pool than three firms if they want: 5, 10 or every firm that covers the area (D24)", status: "missing" },
-    { actor: "P-directory", step: "Free for firms at first; the fee is set to nothing until firms are happy (D25)", status: "missing" },
+    { actor: "P-buyer", step: "Keep a private status link, emailed as things change; after a firm takes the job it shows the final state; it stops on cancelling or expiry (D22, D26)", status: "built" },
+    { actor: "P-buyer", step: "Choose a bigger pool than three firms if they want: 5, 10 or every firm that covers the area (D24)", status: "built" },
+    { actor: "P-directory", step: "Free for firms at first; the fee is set to nothing until firms are happy (D25)", status: "built" },
     { actor: "P-directory", step: "Ask the buyer whether they booked a survey", status: "missing" },
   ] },
   { id: "PR3", name: "Claim a listing", realises: "U5", status: "part", refs: ["D1"], steps: [

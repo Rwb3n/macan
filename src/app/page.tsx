@@ -67,7 +67,7 @@ export default function Home() {
 
       <section className="border-y border-line bg-white">
         <ul className="mx-auto max-w-5xl px-4 py-8 grid gap-6 sm:grid-cols-3">
-          <Proof title="Free for you">Firms pay us a small fee, and only when they take your job on.</Proof>
+          <Proof title="Free for you">There&apos;s nothing to pay us, and no obligation to book.</Proof>
           <Proof title="Your details stay private">Firms see the job and the area, not your name or contact details, until one takes it on.</Proof>
           <Proof title="Checked firms">Every firm we send your job to is a registered company that does the survey and has confirmed its details with us.</Proof>
         </ul>

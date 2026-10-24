@@ -12,16 +12,19 @@ import { PLANNING_STAGES, PROJECT_TYPES, isoDate, nextWindowStart, type Qualific
 import { ROUTING } from "@model/how"
 import { leadAction, postcodeAction, type LeadState } from "../actions"
 
-const BLANK = { survey: "", region: "", council: "", details: "", postcode: "", projectType: "", planningStage: "", deadline: "", councilRef: "", answer: "", name: "", email: "", phone: "" }
+const BLANK = { pool: "3", survey: "", region: "", council: "", details: "", postcode: "", projectType: "", planningStage: "", deadline: "", councilRef: "", answer: "", name: "", email: "", phone: "" }
 type Values = typeof BLANK
-type Screen = "problem" | "postcode" | "area" | "project" | "stage" | "deadline" | "answer" | "ask" | "details" | "check"
+type Screen = "problem" | "postcode" | "area" | "project" | "stage" | "deadline" | "answer" | "ask" | "details" | "pool" | "check"
 const SCREEN_OF: Record<string, Screen> = {
   details: "problem", postcode: "postcode", region: "area", projectType: "project", planningStage: "stage", deadline: "deadline",
-  councilRef: "deadline", survey: "answer", answer: "ask", name: "details", email: "details", phone: "details",
+  councilRef: "deadline", survey: "answer", answer: "ask", name: "details", email: "details", phone: "details", pool: "pool",
 }
 const WORDS = ["", "one", "two", "three", "four", "five"]
 const PHASES = ["The job", "About the work", "What you need", "Your details", "Check and send"] as const
-const PHASE_OF: Record<Screen, number> = { problem: 0, postcode: 0, area: 0, project: 1, stage: 1, deadline: 1, answer: 2, ask: 3, details: 3, check: 4 }
+const PHASE_OF: Record<Screen, number> = { problem: 0, postcode: 0, area: 0, project: 1, stage: 1, deadline: 1, answer: 2, ask: 3, details: 3, pool: 4, check: 4 }
+// How many firms see the job: three unless the buyer chooses more (D24).
+const POOLS = [["3", "Up to 3 firms (recommended)"], ["5", "Up to 5 firms"], ["10", "Up to 10 firms"], ["all", "Every firm we list that covers the area"]] as const
+const poolWords = (p: string) => (p === "all" ? "every firm we list that covers your area" : `up to ${WORDS[Number(p)] ?? p} firms`)
 const input = "w-full rounded-md border-2 border-ink/30 bg-white px-3 py-2 text-lg focus:border-moss focus:outline-none"
 const label = (pairs: readonly (readonly [string, string])[], v: string) => pairs.find(([k]) => k === v)?.[1] ?? v
 
@@ -50,7 +53,7 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
   }, [state]) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { window.scrollTo({ top: 0 }) }, [screen])
 
-  if (state?.ok) return <Received q={state.qualification} firmName={firmName} />
+  if (state?.ok) return <Received q={state.qualification} firmName={firmName} reference={state.reference} />
 
   const afterPostcode = async () => {
     setLooking(true)
@@ -176,6 +179,13 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
         </Question>
       ) : null}
 
+      {screen === "pool" ? (
+        <Question title="How many firms should see your job?" hint="More firms can mean more quotes, but also more people getting in touch." error={err.pool}>
+          <Radios name="pool" value={v.pool} onChange={(x) => set("pool", x)} options={POOLS} />
+          <Continue onClick={() => go("check")} />
+        </Question>
+      ) : null}
+
       {screen === "check" ? (
         <div>
           <h1 className="text-3xl font-semibold tracking-tight">Check your answers before sending</h1>
@@ -188,11 +198,12 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
             <Row k="Needed by" val={v.deadline ? new Date(v.deadline).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : "No date"} onChange={() => change("deadline")} />
             {s?.ask ? <Row k="About the building" val={v.answer} onChange={() => change("ask")} /> : null}
             <Row k="Your details" val={[v.name, v.email, v.phone].filter(Boolean).join("\n")} onChange={() => change("details")} />
+            {firm ? null : <Row k="How many firms" val={POOLS.find(([k]) => k === v.pool)?.[1] ?? v.pool} onChange={() => change("pool")} />}
           </dl>
           <h2 className="mt-8 text-xl font-semibold">What happens next</h2>
           <ol className="mt-3 space-y-2 list-decimal pl-5 text-lg">
             <li>We email you a link. Nothing goes to any firm until you click it.</li>
-            <li>{firmName ?? `Up to ${many} firms near you`} see the job and the first part of your postcode, not your details.</li>
+            <li>{firmName ?? `${poolWords(v.pool).replace(/^u/, "U")} near you`} see the job and the first part of your postcode, not your details.</li>
             <li>A firm that wants the job gets your details and contacts you. Firms have {ROUTING.replyHours} hours, and we&apos;ll tell you if none can take it on.</li>
           </ol>
           <button disabled={pending} className="mt-8 rounded-md bg-moss px-6 py-3 text-lg text-white hover:bg-moss-dark disabled:opacity-60">{pending ? "Sending…" : "Send my request"}</button>
@@ -358,12 +369,20 @@ function Row({ k, val, onChange }: { k: string; val: string; onChange: () => voi
   )
 }
 
-function Received({ q, firmName }: { q: Qualification; firmName?: string }) {
+function Received({ q, firmName, reference }: { q: Qualification; firmName?: string; reference: string }) {
   return (
     <div className="max-w-2xl">
-      <h1 className="text-3xl font-semibold tracking-tight">Nearly done: please check your email</h1>
+      <p className="text-muted">Reference {reference}</p>
+      <h1 className="mt-1 text-3xl font-semibold tracking-tight">Nearly done: please check your email</h1>
       <p className="mt-3 text-lg">We&apos;ve sent you a link. Click it to confirm, and we&apos;ll send your request to {firmName ?? "local firms"}.</p>
       <p className="mt-2 text-muted">It can take a minute or two to arrive. Check your junk folder if you can&apos;t see it.</p>
+      <h2 className="mt-8 text-xl font-semibold">What happens next</h2>
+      <ol className="mt-3 list-decimal space-y-2 pl-5">
+        <li>You click the link in our email to confirm.</li>
+        <li>We check your request and send it on, and email you when we have.</li>
+        <li>Firms have {ROUTING.replyHours} hours to say whether they can do it. We email you as soon as one takes it on, or if none can.</li>
+      </ol>
+      <p className="mt-4">The same email has a private link where you can see where your request is, or cancel it, at any time.</p>
       {q.grade === "not-a-fit" ? <p className="mt-6 rounded-lg border border-amber/40 bg-amber/5 p-4">{q.checks.real.note}. The firms we list do surveys for planning applications, so we may not be able to help with this one.</p> : null}
       {q.missing.length ? <p className="mt-6 rounded-lg border border-amber/40 bg-amber/5 p-4">Firms will also need {q.missing.join(", and ")}. Reply to our email with it.</p> : null}
     </div>

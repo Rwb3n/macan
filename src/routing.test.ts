@@ -3,7 +3,8 @@ import { eq } from "drizzle-orm"
 import { openDb, type Db } from "./db"
 import { briefs, firmRegions, firmSurveys, firms, leads } from "./db/schema"
 import { memoryMailer } from "./mailer"
-import { briefByToken, canMove, chaseBriefs, decideBrief, lapseBriefs, leadRouting, matchFirms, recordOutcome, routeLead, setPaused, tick, type Deps } from "./routing"
+import { briefByToken, canMove, chaseBriefs, decideBrief, lapseBriefs, leadRouting, matchFirms, recordOutcome, requestStatus, routeLead, setPaused, tick, type Deps } from "./routing"
+import { cancelLead, leadByStatusToken } from "./leads"
 import { ROUTING } from "@model/how"
 
 let deps: Deps & { mailer: ReturnType<typeof memoryMailer> }
@@ -188,5 +189,47 @@ describe("recordOutcome", () => {
     expect(canMove("unlocked", "quoted")).toBe(true)
     expect(canMove("quoted", "lost")).toBe(true)
     expect(canMove("offered", "won")).toBe(false)
+  })
+})
+
+describe("buyer's pool, status link and cancelling (D22, D24)", () => {
+  const withStatus = (id: number, poolSize = 3) => { deps.db.update(leads).set({ statusToken: `st-${id}`, poolSize }).where(eq(leads.id, id)).run(); return `st-${id}` }
+  it("sends to as many firms as the buyer chose: 3 by default, more on request, or every firm covering the area", () => {
+    for (const s of ["a", "b", "c", "d", "e", "f"]) firm(s)
+    const pick = (poolSize: number) => { const id = lead(); withStatus(id, poolSize); return matchFirms(deps.db, deps.db.select().from(leads).where(eq(leads.id, id)).get()!).length }
+    expect(pick(3)).toBe(3)
+    expect(pick(5)).toBe(5)
+    expect(pick(0)).toBe(6)
+  })
+  it("emails the buyer when the request goes out, with their status link", async () => {
+    firm("a")
+    const id = lead(); const st = withStatus(id)
+    await routeLead(deps, id)
+    const mail = deps.mailer.sent.find((m) => m.to === "sam@example.com")!
+    expect(mail.subject).toContain("has gone to a firm")
+    expect(mail.text).toContain(`/requests/${st}`)
+  })
+  it("cancelling withdraws open briefs, stops firms taking it on, and it can't be sent again", async () => {
+    firm("a"); firm("b")
+    const id = lead(); const st = withStatus(id)
+    await routeLead(deps, id)
+    const [t1] = tokens()
+    expect(cancelLead(deps, st)).toBe(true)
+    expect(deps.db.select().from(briefs).all().every((b) => b.state === "withdrawn")).toBe(true)
+    expect(leadRouting(deps.db, id)).toBe("cancelled")
+    await expect(decideBrief(deps, t1!, "unlock")).rejects.toThrow("withdrawn")
+    expect(requestStatus(deps.db, deps.db.select().from(leads).where(eq(leads.id, id)).get()!).state).toBe("cancelled")
+  })
+  it("shows the firm once one takes it on, and the link stops working after 90 days", async () => {
+    firm("a")
+    const id = lead(); const st = withStatus(id)
+    await routeLead(deps, id)
+    await decideBrief(deps, tokens()[0]!, "unlock")
+    const status = requestStatus(deps.db, deps.db.select().from(leads).where(eq(leads.id, id)).get()!)
+    expect(status.state).toBe("taken")
+    expect(status.firm?.name).toBe("Firm a")
+    expect(leadByStatusToken(deps, st)?.expired).toBe(false)
+    clock = new Date(oct.getTime() + 91 * 86_400_000)
+    expect(leadByStatusToken(deps, st)?.expired).toBe(true)
   })
 })

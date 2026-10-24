@@ -13,7 +13,7 @@ import { BRIEF_STATES, ROUTING, objects } from "@model/how"
 
 export type Deps = { db: Db; mailer: Mailer; now: () => Date; baseUrl: string }
 export type BriefState = (typeof BRIEF_STATES)[number]
-export type LeadRouting = "unrouted" | "offered" | "closed" | "expired"
+export type LeadRouting = "unrouted" | "offered" | "closed" | "expired" | "cancelled"
 
 type Lead = typeof leads.$inferSelect
 type Firm = typeof firms.$inferSelect
@@ -32,7 +32,9 @@ export function matchFirms(db: Db, lead: Lead): Firm[] {
   const fits = findFirms(db, { survey: lead.survey, region: lead.region })
     .filter((f) => f.email && !f.pausedAt && (!ROUTING.claimedOnly || f.claimedAt))
   const picked = fits.filter((f) => f.id === lead.firmId)
-  return [...picked, ...fits.filter((f) => f.id !== lead.firmId)].slice(0, ROUTING.firmsPerLead)
+  const ordered = [...picked, ...fits.filter((f) => f.id !== lead.firmId)]
+  // The buyer chose how many: 3 by default, 5, 10, or 0 for every firm covering the area (D24).
+  return lead.poolSize > 0 ? ordered.slice(0, lead.poolSize) : ordered
 }
 
 // Offers an approved lead to the matching firms. With no match the lead expires and the buyer is told at once.
@@ -40,6 +42,7 @@ export async function routeLead(deps: Deps, leadId: number): Promise<{ routing: 
   const lead = deps.db.select().from(leads).where(eq(leads.id, leadId)).get()
   if (!lead) throw new Error(`Lead ${leadId} not found`)
   if (lead.review !== "approved") throw new Error(`Lead ${leadId} is ${lead.review}; only approved leads are routed`)
+  if (lead.cancelledAt) throw new Error(`Lead ${leadId} was cancelled by the buyer`)
   if (leadRouting(deps.db, leadId) !== "unrouted") throw new Error(`Lead ${leadId} has already been routed`)
   const matched = matchFirms(deps.db, lead)
   deps.db.update(leads).set({ routedAt: deps.now() }).where(eq(leads.id, leadId)).run()
@@ -64,6 +67,11 @@ export async function routeLead(deps: Deps, leadId: number): Promise<{ routing: 
       ].join("\n"),
     })
   }
+  await deps.mailer.send({
+    to: lead.email,
+    subject: `Your ${surveyBySlug(lead.survey)?.name.toLowerCase()} request has gone to ${matched.length === 1 ? "a firm" : `${matched.length} firms`}`,
+    text: `Hello ${lead.name},\n\nWe've checked your request and sent it to ${matched.length === 1 ? "a firm that covers" : `${matched.length} firms that cover`} ${lead.postcode}. They have ${ROUTING.replyHours} hours to say whether they can do it. We'll email you as soon as one takes it on, or if none can.\n\n${statusLine(deps, lead)}`,
+  })
   return { routing: "offered", offered: matched.length }
 }
 
@@ -108,7 +116,7 @@ export async function decideBrief(deps: Deps, token: string, decision: "unlock" 
     await deps.mailer.send({
       to: lead.email,
       subject: `${firm.name} has your ${surveyBySlug(lead.survey)?.name.toLowerCase()} request`,
-      text: `Hello ${lead.name},\n\n${firm.name} has taken your request for ${lead.postcode} and will contact you.${firm.website ? `\n${firm.website}` : ""}`,
+      text: `Hello ${lead.name},\n\n${firm.name} has taken your request for ${lead.postcode} and will contact you.${firm.website ? `\n${firm.website}` : ""}\n\n${statusLine(deps, lead)}`,
     })
   } else {
     await afterDecision(deps, lead)
@@ -172,6 +180,8 @@ export async function lapseBriefs(deps: Deps): Promise<number> {
 // The lead's routing state, read from its briefs (O-lead: offered, closed, expired).
 export function leadRouting(db: Db, leadId: number): LeadRouting {
   const states = db.select({ state: briefs.state }).from(briefs).where(eq(briefs.leadId, leadId)).all().map((b) => b.state)
+  const cancelled = db.select({ at: leads.cancelledAt }).from(leads).where(eq(leads.id, leadId)).get()?.at
+  if (cancelled) return "cancelled"
   if (states.length === 0) {
     const lead = db.select({ routedAt: leads.routedAt }).from(leads).where(eq(leads.id, leadId)).get()
     return lead?.routedAt ? "expired" : "unrouted"
@@ -201,7 +211,7 @@ async function tellBuyerNoFirm(deps: Deps, lead: Lead): Promise<void> {
   await deps.mailer.send({
     to: lead.email,
     subject: `No firm could take your ${surveyBySlug(lead.survey)?.name.toLowerCase()} request yet`,
-    text: `Hello ${lead.name},\n\nNo firm covering ${lead.postcode} could take your request this time. Firms listed for the area are on ${deps.baseUrl}/search?survey=${lead.survey}&region=${lead.region}`,
+    text: `Hello ${lead.name},\n\nNo firm covering ${lead.postcode} could take your request this time. Firms listed for the area are on ${deps.baseUrl}/search?survey=${lead.survey}&region=${lead.region}\n\n${statusLine(deps, lead)}`,
   })
 }
 
@@ -251,6 +261,44 @@ function findBrief(db: Db, token: string) {
   return db.select().from(briefs).where(or(eq(briefs.tokenHash, h), eq(briefs.chaseTokenHash, h))).get()
 }
 
+// The line every buyer email ends with: their private status link (D22).
+function statusLine(deps: Pick<Deps, "baseUrl">, lead: Lead): string {
+  return lead.statusToken ? `Check on your request, or cancel it, at any time: ${deps.baseUrl}/requests/${lead.statusToken}` : ""
+}
+
 function hash(token: string): string {
   return createHash("sha256").update(token).digest("hex")
+}
+
+// What the buyer's status link shows (D22): each step so far, and the firm once one has taken it on.
+export type StatusStep = { label: string; done: boolean; detail?: string }
+export type RequestStatus = {
+  steps: StatusStep[]
+  state: "waiting-confirmation" | "checking" | "rejected" | "with-firms" | "taken" | "no-firm" | "cancelled"
+  firm?: { name: string; website: string | null; phone: string | null; email: string | null; slug: string }
+  offeredTo: number
+  expiresAt?: Date
+}
+
+export function requestStatus(db: Db, lead: Lead): RequestStatus {
+  const rows = db.select({ state: briefs.state, expiresAt: briefs.expiresAt, firmId: briefs.firmId }).from(briefs).where(eq(briefs.leadId, lead.id)).all()
+  const taken = rows.find((r) => PAID.has(r.state))
+  const firm = taken ? db.select().from(firms).where(eq(firms.id, taken.firmId)).get() : undefined
+  const routing = leadRouting(db, lead.id)
+  const open = rows.filter((r) => r.state === "offered")
+  const state: RequestStatus["state"] = lead.cancelledAt ? "cancelled" : firm ? "taken" : routing === "expired" ? "no-firm"
+    : routing === "offered" ? "with-firms" : lead.review === "rejected" ? "rejected" : lead.confirmedAt ? "checking" : "waiting-confirmation"
+  const steps: StatusStep[] = [
+    { label: "You sent your request", done: true },
+    { label: "You confirmed it by email", done: Boolean(lead.confirmedAt), detail: lead.confirmedAt ? undefined : "Click the link in the email we sent you." },
+    { label: "We checked it", done: lead.review === "approved", detail: lead.review === "rejected" ? "We couldn't pass this one on to firms." : undefined },
+    { label: rows.length ? `Sent to ${rows.length === 1 ? "a firm" : `${rows.length} firms`} near you` : "Sent to firms near you", done: rows.length > 0 || routing === "expired",
+      detail: open.length ? `They have until ${open[0]!.expiresAt.toLocaleString("en-GB", { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit", timeZone: "Europe/London" })} to say whether they can do it.` : undefined },
+    { label: firm ? `${firm.name} has taken it on` : "A firm takes it on", done: Boolean(firm),
+      detail: state === "no-firm" ? "No firm could take it on this time." : undefined },
+  ]
+  return {
+    steps, state, offeredTo: rows.length, expiresAt: open[0]?.expiresAt,
+    firm: firm ? { name: firm.name, website: firm.website, phone: firm.phone, email: firm.email, slug: firm.slug } : undefined,
+  }
 }

@@ -32,11 +32,11 @@ export default async function BriefPage({ params }: { params: Promise<{ token: s
 
       {b.state === "offered" ? (
         <div className="mt-6 rounded-lg border border-line bg-leaf p-5">
-          <p className="font-medium">Unlock the buyer&apos;s name, email and phone for {pounds(b.feePence ?? 2600)}, or pass. Open until {by}.</p>
-          <p className="mt-1 text-sm text-muted">Nothing is charged now; we&apos;ll be in touch about how to pay. If you pass, the buyer goes to another firm.</p>
+          <p className="font-medium">See the buyer&apos;s name, email and phone{b.feePence ? ` for ${pounds(b.feePence)}` : ""}, or pass. Open until {by}.</p>
+          <p className="mt-1 text-sm text-muted">{b.feePence ? "Nothing is charged now; we'll be in touch about how to pay." : "Free while we're getting started: there's nothing to pay."} If you pass, the buyer goes to another firm.</p>
           <form action={briefAction} className="mt-4 flex gap-2">
             <input type="hidden" name="token" value={token} />
-            <button name="decision" value="unlock" className="rounded-md bg-moss px-5 py-2 text-white hover:bg-moss-dark">Unlock contact</button>
+            <button name="decision" value="unlock" className="rounded-md bg-moss px-5 py-2 text-white hover:bg-moss-dark">Take this job on</button>
             <button name="decision" value="decline" className="rounded-md border border-line bg-white px-5 py-2">Pass</button>
           </form>
         </div>
@@ -66,7 +66,7 @@ export default async function BriefPage({ params }: { params: Promise<{ token: s
           </form>
         </div>
       ) : (
-        <p className="mt-6 text-muted">{b.state === "declined" ? "You passed on this brief." : b.state === "lapsed" ? "This brief closed before anyone answered it." : `This brief is ${b.state}.`}</p>
+        <p className="mt-6 text-muted">{b.state === "declined" ? "You passed on this brief." : b.state === "lapsed" ? "This brief closed before anyone answered it." : b.state === "withdrawn" ? "The buyer has cancelled this request, so it can no longer be taken on." : `This brief is ${b.state}.`}</p>
       )}
 
       <form action={pauseAction} className="mt-8 border-t border-line pt-4 text-sm">

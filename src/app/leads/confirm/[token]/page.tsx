@@ -26,10 +26,11 @@ export default async function ConfirmPage({ params, searchParams }: { params: Pr
     return (
       <Shell title="Confirmed, thank you">
         {q.grade === "qualified"
-          ? "We'll check your request and pass it to firms that cover your area. They'll reply to you by email."
+          ? "We'll check your request and pass it to firms that cover your area, and email you as things happen."
           : q.grade === "needs-info"
             ? `Firms will need ${q.missing.join(", and ")}. Reply to our email with it and we'll pass your request on.`
             : "We'll be in touch about whether we can help with this one."}
+        {lead.statusToken ? <p className="mt-4"><Link href={`/requests/${lead.statusToken}`} className="text-moss underline">See where your request is</Link> (we&apos;ve emailed you this link too).</p> : null}
       </Shell>
     )
   }
