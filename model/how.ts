@@ -77,13 +77,14 @@ export const objects: BusinessObject[] = [
 ]
 
 export const processes: Process[] = [
-  { id: "PR1", name: "Qualify a lead", realises: "U2", status: "built", refs: ["D2", "D14"],
+  { id: "PR1", name: "Qualify a lead", realises: "U2", status: "part", refs: ["D2", "D14"],
     note: "The postcode is looked up with an outside service (postcodes.io, ONS and Ordnance Survey data); the privacy notice must say so (A3). If the lookup fails, the buyer picks the area", steps: [
     { actor: "P-buyer", step: "Say the problem; see the answer; choose to send, giving contact last", status: "built" },
     { actor: "P-directory", step: "Work out the area and the council from the postcode, so the buyer isn't asked twice", status: "built" },
     { actor: "P-directory", step: "Grade on real, serious, timely, complete", status: "built" },
     { actor: "P-buyer", step: "Confirm by email (button press); no mail provider in production yet (Q21)", status: "built" },
     { actor: "P-directory", step: "Operator approves or rejects", status: "built" },
+    { actor: "P-directory", step: "Tell buyers, in a privacy notice, what we keep, who sees it, the postcode lookup and how long we keep it", status: "missing" },
   ] },
   { id: "PR2", name: "Route a lead", realises: "U4", status: "part", refs: ["D2", "D12", "Q3", "Q15", "Q16"],
     note: "Terms are guesses (ROUTING: Q15, Q16). Briefs go to claimed firms' business inboxes; claims are confirmed by link (PR3). Built on the placeholder terms (D12); the calls (R6) may change them", steps: [
