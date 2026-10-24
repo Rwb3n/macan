@@ -38,6 +38,12 @@ scripts/    the same rule as src/
    - a view is stale.
 4. **Regenerate the views:** `npm run model:views` writes `model/views/` (`map.md`, `trace.md`, `open.md`, `map.html`).
 5. **When the code teaches us something,** update the map in the same commit.
+6. **Nothing pending lives only in a conversation (D15).** Every decision, deferral, next step and open choice goes into the map in the same turn:
+   - a step with status `missing` or `part`;
+   - a note on the element it affects;
+   - or a Q, including choices waiting on the principal.
+
+   A new session starts from `model/views/open.md` and the `missing` and `part` items in `map.md`, not from memory.
 
 ## Rules
 

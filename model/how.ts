@@ -81,7 +81,7 @@ export const processes: Process[] = [
     { actor: "P-buyer", step: "Say the problem; see the answer; choose to send, giving contact last", status: "built" },
     { actor: "P-directory", step: "Work out the area from the postcode, so the buyer isn't asked twice", status: "missing" },
     { actor: "P-directory", step: "Grade on real, serious, timely, complete", status: "built" },
-    { actor: "P-buyer", step: "Confirm by email (button press)", status: "built" },
+    { actor: "P-buyer", step: "Confirm by email (button press); no mail provider in production yet (Q21)", status: "built" },
     { actor: "P-directory", step: "Operator approves or rejects", status: "built" },
   ] },
   { id: "PR2", name: "Route a lead", realises: "U4", status: "part", refs: ["D2", "D12", "Q3", "Q15", "Q16"],
@@ -97,7 +97,7 @@ export const processes: Process[] = [
     { actor: "P-firm", step: "Edit the listing", status: "missing" },
   ] },
   { id: "PR4", name: "Add firms", realises: "U5", status: "part", refs: ["R0/S9", "R3", "R4", "R5"],
-    note: "By hand: 10 firms. CIEEM's terms (cl. 2.3, https://cieem.net/terms-of-use/, modified 2024-12-18) forbid storing its content in another website or retrieval system without written permission: its listings are not copied until CIEEM agrees", steps: [
+    note: "By hand: 10 firms. Research copies of CIEEM listings sit in D:/data/macan/r4 and r5 under its own-use clause (cl. 2.1); the principal may have them deleted. CIEEM's terms (cl. 2.3, https://cieem.net/terms-of-use/, modified 2024-12-18) forbid storing its content in another website or retrieval system without written permission: its listings are not copied until CIEEM agrees", steps: [
     { actor: "P-directory", step: "Check candidates exist and are active in vein (Companies House)", status: "missing" },
     { actor: "P-directory", step: "Take candidates from CIEEM's Registered Practice Directory (145 ecology practices), once CIEEM gives written permission", status: "missing" },
     { actor: "P-directory", step: "Check the site sells planning surveys", status: "part" },
