@@ -95,8 +95,8 @@ export const processes: Process[] = [
     { actor: "P-directory", step: "Email a confirmation link", status: "missing" },
     { actor: "P-firm", step: "Edit the listing", status: "missing" },
   ] },
-  { id: "PR4", name: "Add firms", realises: "U5", status: "part", refs: ["R0/S9", "R3", "R4"], note: "By hand: 10 firms", steps: [
-    { actor: "P-directory", step: "Take candidates from vein", status: "missing" },
+  { id: "PR4", name: "Add firms", realises: "U5", status: "part", refs: ["R0/S9", "R3", "R4", "R5"], note: "By hand: 10 firms", steps: [
+    { actor: "P-directory", step: "Check candidates exist and are active in vein (Companies House)", status: "missing" },
     { actor: "P-directory", step: "Take candidates from CIEEM's Registered Practice Directory (145 ecology practices); read CIEEM's terms of use before building", status: "missing" },
     { actor: "P-directory", step: "Check the site sells planning surveys", status: "part" },
     { actor: "P-directory", step: "Map surveys and regions", status: "part" },
