@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest"
 import { openDb, type Db } from "./db"
 import { firms, firmRegions, firmSurveys, claimRequests } from "./db/schema"
-import { findFirms, firmBySlug, surveyCounts } from "./directory"
+import { coverageCounts, findFirms, firmBySlug, surveyCounts } from "./directory"
 import { claimByToken, confirmClaim, submitClaim } from "./requests"
 import { memoryMailer } from "./mailer"
 
@@ -36,6 +36,16 @@ describe("findFirms", () => {
   })
   it("counts firms per survey", () => {
     expect(surveyCounts(db).get("bat-survey")).toBe(2)
+  })
+})
+
+describe("coverageCounts", () => {
+  it("counts firms per survey and region, uk-wide firms in every region", () => {
+    const c = coverageCounts(db)
+    expect(c["bat-survey"]?.["north-west"]).toBe(2)
+    expect(c["bat-survey"]?.["scotland"]).toBe(1)
+    expect(c["flood-risk-assessment"]?.["north-west"]).toBe(2)
+    expect(c["flood-risk-assessment"]?.["south-east"]).toBe(1)
   })
 })
 

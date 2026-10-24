@@ -35,6 +35,8 @@ export const questions: Question[] = [
     note: "some: 8 of 63 sampled applications that filed a survey filed 2+ survey groups, all minor or major, no householders (R3 data, read after the fact)" },
   { id: "Q14", state: "open", name: "Showing a firm's professional registration answers 'whose report will the council accept?'", refs: ["R2", "R4"],
     test: "Read 10 councils' validation guidance for accreditation wording; ask 5 validation officers" },
+  { id: "Q17", state: "open", name: "Asking for contact details last, after the answer, means more finished requests and fewer that drop off", refs: ["D14"],
+    test: "Once there is traffic: share of buyers who reach the answer and then send, against the old one-form share; and the drop-off at each step" },
   { id: "Q15", state: "open", name: "Routing terms: 3 firms per lead, 48 hours to reply, claimed firms only", refs: ["R1", "R2", "R6", "D12"],
     test: "R6 calls: how many competitors per lead is acceptable, and how fast can they reply in season? Principal sets the terms" },
   { id: "Q16", state: "open", name: "How a firm settles an unlocked brief: card at unlock, monthly invoice, prepaid credit, or spare capacity (D6)", refs: ["D2", "D6", "R6"],

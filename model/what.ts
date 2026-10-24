@@ -11,9 +11,9 @@ export const useCases: UseCase[] = [
 ]
 
 export const stages: Stage[] = [
-  { id: "ST-U2.1", useCase: "U2", name: "Learn what's needed", outcome: "Knows the survey and its season", status: "built", refs: ["D1"] },
-  { id: "ST-U2.2", useCase: "U2", name: "Find who covers it", outcome: "Has firms for the survey and region", status: "built", refs: ["D1"] },
-  { id: "ST-U2.3", useCase: "U2", name: "Ask once", outcome: "Request described, confirmed, qualified and sent to firms", status: "built", refs: ["D2"], note: "The operator approves and sends (PR1, PR2)" },
+  { id: "ST-U2.1", useCase: "U2", name: "Say the problem", outcome: "The problem in my own words, and where the site is", status: "built", refs: ["D14"] },
+  { id: "ST-U2.2", useCase: "U2", name: "See what's needed and when", outcome: "Knows the survey, its season, a typical price and how many firms cover the area", status: "built", refs: ["D1", "D14", "R3"] },
+  { id: "ST-U2.3", useCase: "U2", name: "Choose to send it to firms", outcome: "Contact given knowing why; confirmed, checked and sent to up to 3 firms", status: "built", refs: ["D2", "D14"], note: "The operator approves and sends (PR1, PR2)" },
   { id: "ST-U2.4", useCase: "U2", name: "Choose and book", outcome: "A firm is booked", status: "outside", refs: ["R2"] },
   { id: "ST-U2.5", useCase: "U2", name: "Survey and report", outcome: "Has the report for the council", status: "outside", refs: ["R2"] },
   { id: "ST-U4.1", useCase: "U4", name: "Be found", outcome: "Listed, claimed or not", status: "built", refs: ["D1"] },

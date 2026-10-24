@@ -19,6 +19,7 @@ Read top-down: **why** (D, PN) → **who** (P, CH, ALT) → **what** (U, ST) →
 | D11 | Business model first, then design around it for humans | "q12 yep - first we think about our business model then we design around it for humans." (2026-10-24) | R4 |
 | D12 | Build the product now on the placeholder terms; the calls come later | "calls later. we build the product regardless. its not rocket science what we're building." (2026-10-24) | R6, Q15, Q16 |
 | D13 | M1 at £99,417 a year (5% capture) is acceptable | "99,417 is acceptable" (2026-10-24) | R3, D9, Q10 |
+| D14 | Show the journey on the site; problem first; answer before asking; say why for every detail; Mermaid now, brand skin later | "the user journey should be illustrated on the site. one annoyance from my point of view as a buyer is i dont know wtf im filling information for. they ask me for my name, why? my email and phone number, why?, address, why? what comes after? why cant i know now? why cant i say what my problem is first? its all annoying and backwardsa and breadcrumbed like im being tricked into a trap. can we like, use mermaid and later on stick on a visual skin tuned to our branding? (then, on the requirements read back: yes)" (2026-10-24) | D10, Q17 |
 
 ## Why: buyer pains (D10)
 
@@ -27,8 +28,8 @@ What buyers suffer today, synthesised from the sources; every design answers one
 | id | pain | sources | receipt | answered by |
 |---|---|---|---|---|
 | PN1 | A cheap first survey led to a large or doubtful follow-on bill | 14 (About 10 of the 14 are one national firm's reviews) | £1,306.80 first survey, then a £28,726.80 follow-on quote; an independent did it for £3,924 (R2) | Q4 |
-| PN2 | The season cost me months, or a year | 8 | 'wait a year'; the 12-month wait used as a sales lever (R2) | U1, ST-U2.1, Q5 |
-| PN3 | I couldn't find, book or hear back from a surveyor | 8 | 'the planning officer doesn't recommend anyone, so I'm at the mercy of Google' (R2); the professional body's directory leaves the buyer to contact practices one by one (R4) | ST-U2.3, PR2, Q7, Q11 |
+| PN2 | The season cost me months, or a year | 8 | 'wait a year'; the 12-month wait used as a sales lever (R2) | U1, ST-U2.2, Q5 |
+| PN3 | I can't find or hear back from a surveyor, or tell why they want my details and what happens next | 9 (The details-and-next-step half has one source, the principal; Q17 tests it) | 'the planning officer doesn't recommend anyone, so I'm at the mercy of Google' (R2); the professional body's directory leaves the buyer to contact practices one by one (R4); 'they ask me for my name, why? ... what comes after?' (the principal as a buyer, D14) | ST-U2.1, ST-U2.2, ST-U2.3, PR2, Q7, Q11, Q17 |
 | PN4 | I found out at validation that I needed a survey | 7 | 'Only to be told I needed a bat survey' (R2) | U1, CH-validation, Q6 |
 | PN5 | I didn't know whose report the council would accept | 4 | 'ask the council who they accept surveys from' (R2) | Q14 |
 
@@ -100,9 +101,9 @@ flowchart LR
 
 | id | stage | outcome | status |
 |---|---|---|---|
-| ST-U2.1 | Learn what's needed | Knows the survey and its season | built |
-| ST-U2.2 | Find who covers it | Has firms for the survey and region | built |
-| ST-U2.3 | Ask once | Request described, confirmed, qualified and sent to firms | built |
+| ST-U2.1 | Say the problem | The problem in my own words, and where the site is | built |
+| ST-U2.2 | See what's needed and when | Knows the survey, its season, a typical price and how many firms cover the area | built |
+| ST-U2.3 | Choose to send it to firms | Contact given knowing why; confirmed, checked and sent to up to 3 firms | built |
 | ST-U2.4 | Choose and book | A firm is booked | outside |
 | ST-U2.5 | Survey and report | Has the report for the council | outside |
 
@@ -206,7 +207,7 @@ stateDiagram-v2
 
 | id | process | realises | steps | status | rests on |
 |---|---|---|---|---|---|
-| PR1 | Qualify a lead | U2 | Buyers (homeowners, small developers): Describe the site and the need (built); The directory: Grade on real, serious, timely, complete (built); Buyers (homeowners, small developers): Confirm by email (button press) (built); The directory: Operator approves or rejects (built) | built | D2 |
+| PR1 | Qualify a lead | U2 | Buyers (homeowners, small developers): Say the problem; see the answer; choose to send, giving contact last (built); The directory: Grade on real, serious, timely, complete (built); Buyers (homeowners, small developers): Confirm by email (button press) (built); The directory: Operator approves or rejects (built) | built | D2 |
 | PR2 | Route a lead | U4 | The directory: Match firms by survey, region, availability (built); The directory: Offer briefs, contact hidden (built); Survey firms: Unlock (fee owed) or pass; pause when booked up (built); The directory: Lapse and tell the buyer (built); chase firms before lapse (missing) (part) | part | D2, D12, Q3, Q15, Q16 |
 | PR3 | Claim a listing | U5 | Survey firms: Claim with an email on the firm's domain (built); The directory: Email a confirmation link (built); Survey firms: Edit the listing (missing) | part | D1 |
 | PR4 | Add firms | U5 | The directory: Check candidates exist and are active in vein (Companies House) (missing); The directory: Take candidates from CIEEM's Registered Practice Directory (145 ecology practices), once CIEEM gives written permission (missing); The directory: Check the site sells planning surveys (part); The directory: Map surveys and regions (part); The directory: Send the listing notice (missing) | part | R0/S9, R3, R4, R5 |

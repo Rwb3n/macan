@@ -2,7 +2,7 @@
 import { and, asc, eq, inArray, sql } from "drizzle-orm"
 import type { Db } from "./db"
 import { firms, firmRegions, firmSurveys } from "./db/schema"
-import { UK_WIDE } from "./catalog"
+import { REGION_SLUGS, UK_WIDE } from "./catalog"
 
 export type FirmCard = typeof firms.$inferSelect & { surveys: string[]; regions: string[] }
 
@@ -46,4 +46,16 @@ function withTags(db: Db, rows: (typeof firms.$inferSelect)[]): FirmCard[] {
     surveys: surveys.filter((s) => s.firmId === r.id).map((s) => s.survey),
     regions: regions.filter((g) => g.firmId === r.id).map((g) => g.region),
   }))
+}
+
+// Firms per survey and region (uk-wide firms count in every region), for the buyer's instant answer (ST-U2.2).
+export function coverageCounts(db: Db): Record<string, Record<string, number>> {
+  const rows = db.select({ survey: firmSurveys.survey, region: firmRegions.region, firmId: firms.id }).from(firms)
+    .innerJoin(firmSurveys, eq(firmSurveys.firmId, firms.id)).innerJoin(firmRegions, eq(firmRegions.firmId, firms.id)).all()
+  const seen: Record<string, Record<string, Set<number>>> = {}
+  for (const r of rows) {
+    const regions = r.region === UK_WIDE ? REGION_SLUGS : [r.region]
+    for (const g of regions) ((seen[r.survey] ??= {})[g] ??= new Set()).add(r.firmId)
+  }
+  return Object.fromEntries(Object.entries(seen).map(([s, byRegion]) => [s, Object.fromEntries(Object.entries(byRegion).map(([g, ids]) => [g, ids.size]))]))
 }

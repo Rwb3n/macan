@@ -29,6 +29,9 @@ export const decisions: Decision[] = [
     said: "calls later. we build the product regardless. its not rocket science what we're building.", refs: ["R6", "Q15", "Q16"] },
   { id: "D13", date: "2026-10-24", name: "M1 at £99,417 a year (5% capture) is acceptable",
     said: "99,417 is acceptable", refs: ["R3", "D9", "Q10"] },
+  { id: "D14", date: "2026-10-24", name: "Show the journey on the site; problem first; answer before asking; say why for every detail; Mermaid now, brand skin later",
+    said: "the user journey should be illustrated on the site. one annoyance from my point of view as a buyer is i dont know wtf im filling information for. they ask me for my name, why? my email and phone number, why?, address, why? what comes after? why cant i know now? why cant i say what my problem is first? its all annoying and backwardsa and breadcrumbed like im being tricked into a trap. can we like, use mermaid and later on stick on a visual skin tuned to our branding? (then, on the requirements read back: yes)",
+    refs: ["D10", "Q17"] },
 ]
 
 // The buyer's pains today, synthesised from R2's sources (counted independently). Front and centre (D10).
@@ -37,10 +40,10 @@ export const pains: Pain[] = [
     receipt: "£1,306.80 first survey, then a £28,726.80 follow-on quote; an independent did it for £3,924 (R2)",
     note: "About 10 of the 14 are one national firm's reviews", answeredBy: ["Q4"] },
   { id: "PN2", party: "P-buyer", sources: 8, name: "The season cost me months, or a year", refs: ["D10", "R2"],
-    receipt: "'wait a year'; the 12-month wait used as a sales lever (R2)", answeredBy: ["U1", "ST-U2.1", "Q5"] },
-  { id: "PN3", party: "P-buyer", sources: 8, name: "I couldn't find, book or hear back from a surveyor", refs: ["D10", "R2", "R4"],
-    receipt: "'the planning officer doesn't recommend anyone, so I'm at the mercy of Google' (R2); the professional body's directory leaves the buyer to contact practices one by one (R4)",
-    answeredBy: ["ST-U2.3", "PR2", "Q7", "Q11"] },
+    receipt: "'wait a year'; the 12-month wait used as a sales lever (R2)", answeredBy: ["U1", "ST-U2.2", "Q5"] },
+  { id: "PN3", party: "P-buyer", sources: 9, name: "I can't find or hear back from a surveyor, or tell why they want my details and what happens next", refs: ["D10", "D14", "R2", "R4"],
+    receipt: "'the planning officer doesn't recommend anyone, so I'm at the mercy of Google' (R2); the professional body's directory leaves the buyer to contact practices one by one (R4); 'they ask me for my name, why? ... what comes after?' (the principal as a buyer, D14)",
+    note: "The details-and-next-step half has one source, the principal; Q17 tests it", answeredBy: ["ST-U2.1", "ST-U2.2", "ST-U2.3", "PR2", "Q7", "Q11", "Q17"] },
   { id: "PN4", party: "P-buyer", sources: 7, name: "I found out at validation that I needed a survey", refs: ["D10", "R2"],
     receipt: "'Only to be told I needed a bat survey' (R2)", answeredBy: ["U1", "CH-validation", "Q6"] },
   { id: "PN5", party: "P-buyer", sources: 4, name: "I didn't know whose report the council would accept", refs: ["D10", "R2"],

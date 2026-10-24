@@ -1,4 +1,4 @@
-// Builds: U1, ST-U2.1
+// Builds: U1, ST-U2.1, ST-U2.2
 // The fixed catalogue: survey types, regions and counties. No imports, safe everywhere.
 // Survey list from S7's buyer terms (callsheet docs/screens/s7-env-buyer-demand) plus the species surveys a PEA leads to.
 
@@ -13,6 +13,8 @@ export type Survey = {
   window?: readonly number[]
   // What a firm needs to know to price it, beyond the site description.
   ask?: string
+  // Median of 3+ published prices, ex VAT (R3, A3), for the first visit only; follow-on surveys cost more (PN1).
+  typicalPrice?: { pounds: number; covers: string }
 }
 
 export const SURVEY_GROUPS = ["Ecology", "Water and flooding", "Noise and air", "Ground", "Trees", "Major projects"] as const
@@ -21,6 +23,7 @@ export type SurveyGroup = (typeof SURVEY_GROUPS)[number]
 export const SURVEYS: readonly Survey[] = [
   {
     slug: "preliminary-ecological-appraisal", name: "Preliminary ecological appraisal", group: "Ecology",
+    typicalPrice: { pounds: 725, covers: "the appraisal" },
     what: "A first ecology visit and desk study that says which habitats and protected species could be affected, and which further surveys you need.",
     when: "Usually the first ecology step for a planning application on land with any wildlife value.",
     season: "Possible all year; best April to September.",
@@ -28,6 +31,7 @@ export const SURVEYS: readonly Survey[] = [
   },
   {
     slug: "bat-survey", name: "Bat survey", group: "Ecology",
+    typicalPrice: { pounds: 362, covers: "the first roost assessment" },
     what: "Checks a building or tree for signs of roosting bats, then, if needed, watches at dusk or dawn to confirm.",
     when: "Often asked for when you alter a roof or loft, convert a barn or demolish an older building.",
     season: "The first inspection can happen all year. Follow-up dusk and dawn surveys only run from May to September.",
@@ -88,6 +92,7 @@ export const SURVEYS: readonly Survey[] = [
   },
   {
     slug: "flood-risk-assessment", name: "Flood risk assessment", group: "Water and flooding",
+    typicalPrice: { pounds: 599, covers: "the assessment" },
     what: "Shows how the site floods, whether the development is safe, and that it won't make flooding worse elsewhere.",
     when: "Required for development in Flood Zones 2 and 3, and for sites over 1 hectare in Flood Zone 1.",
     ask: "Which flood zone is the site in, if you know, and how big is it?",
@@ -146,6 +151,29 @@ export const REGION_SLUGS: readonly string[] = REGIONS.map((r) => r.slug)
 
 export function surveyBySlug(slug: string): Survey | undefined {
   return SURVEYS.find((s) => s.slug === slug)
+}
+
+// A first guess at the survey from the buyer's own words (ST-U2.1). Most specific words first; the buyer can change it.
+const SUGGEST: readonly [RegExp, string][] = [
+  [/\b(bats?|roost)/i, "bat-survey"],
+  [/\b(newts?|gcn)\b/i, "great-crested-newt-survey"],
+  [/\bbadger/i, "badger-survey"],
+  [/\b(reptiles?|slow ?worms?|lizards?|snakes?)\b/i, "reptile-survey"],
+  [/\b(water ?voles?|otters?)\b/i, "water-vole-otter-survey"],
+  [/\bdormi?ouse|dormice/i, "dormouse-survey"],
+  [/\b(nesting|breeding) birds?|bird survey/i, "bird-survey"],
+  [/biodiversity net gain|\bbng\b/i, "biodiversity-net-gain"],
+  [/\bflood|\bfra\b|flood zone/i, "flood-risk-assessment"],
+  [/\bnoise|acoustic/i, "noise-impact-assessment"],
+  [/air quality/i, "air-quality-assessment"],
+  [/contaminat|ground investigation|phase (1|one) (desk|geo)/i, "contaminated-land-assessment"],
+  [/\btrees?\b|arboricult|\btpo\b/i, "arboricultural-survey"],
+  [/environmental impact assessment|\beia\b/i, "environmental-impact-assessment"],
+  [/ecological impact|\becia\b/i, "ecological-impact-assessment"],
+  [/ecolog|\bpea\b|wildlife|habitat|protected species/i, "preliminary-ecological-appraisal"],
+]
+export function suggestSurvey(text: string): string | undefined {
+  return SUGGEST.find(([re]) => re.test(text))?.[1]
 }
 
 export function regionBySlug(slug: string): (typeof REGIONS)[number] | undefined {

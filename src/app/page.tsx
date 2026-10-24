@@ -1,10 +1,12 @@
-// Builds: U1, U2
+// Builds: U1, U2, ST-U2.1, ST-U2.2, ST-U2.3
 import Link from "next/link"
 import { SURVEYS, SURVEY_GROUPS } from "@/catalog"
 import { db } from "@/db"
 import { surveyCounts } from "@/directory"
 import { SITE, routes } from "@/site"
 import { SearchForm } from "@/components/search-form"
+import { Journey } from "@/components/journey"
+import { buyerJourney } from "@/journey-stages"
 
 export const dynamic = "force-dynamic"
 
@@ -20,6 +22,13 @@ export default function Home() {
             <SearchForm />
           </div>
         </div>
+      </section>
+
+      <section className="mx-auto max-w-5xl px-4 pt-12">
+        <h2 className="text-xl font-semibold">How it works</h2>
+        <p className="mt-1 text-muted">You tell us the problem first and see the answer straight away. We only ask about you if you choose to send it to firms.</p>
+        <div className="mt-6"><Journey stages={buyerJourney()} /></div>
+        <Link href={routes.quote()} className="mt-6 inline-block rounded-md bg-moss px-5 py-2 text-white hover:bg-moss-dark">Start with your problem</Link>
       </section>
 
       <section className="mx-auto max-w-5xl px-4 py-12">
