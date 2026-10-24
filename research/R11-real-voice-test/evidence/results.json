@@ -1,0 +1,644 @@
+[
+  {
+    "id": 1,
+    "A1": {
+      "out": {
+        "survey": "bat-survey",
+        "pills": [
+          {
+            "label": "Survey",
+            "value": "Bat survey before roof replacement"
+          },
+          {
+            "label": "Building",
+            "value": "Empty, listed, leaking house"
+          },
+          {
+            "label": "Location",
+            "value": "Countryside"
+          },
+          {
+            "label": "Council",
+            "value": "Council requires bat survey"
+          },
+          {
+            "label": "Budget",
+            "value": "Preliminary survey quoted £540"
+          },
+          {
+            "label": "Budget",
+            "value": "Full survey estimate £1200-£1800"
+          },
+          {
+            "label": "Other",
+            "value": "Floor plans and photos already sent"
+          },
+          {
+            "label": "Other",
+            "value": "Bats possibly present"
+          }
+        ],
+        "draft": "A buyer needs a bat survey for an empty, listed, leaking house in the countryside, where the council requires one before the roof is replaced. The buyer has already sent floor plans and photos to an ecologist, who quoted £540 for a preliminary survey and estimated £1200-£1800 for the full survey, with costs possibly varying above that. The buyer asks whether a full survey can go ahead directly, given that bats are considered likely, and whether mitigation could proceed without surveys. It is not known yet which later surveys would be needed, as this depends on the preliminary survey findings. Please advise on the scope, timing and cost of the surveys required."
+      },
+      "valid": true,
+      "ms": 2878,
+      "cost": 0.00043610000000000003,
+      "invented": []
+    },
+    "A2": {
+      "out": {
+        "survey": "bat-survey",
+        "pills": [
+          {
+            "label": "Survey",
+            "value": "Bat survey, council asked for it"
+          },
+          {
+            "label": "Project",
+            "value": "Replace roof before buying dilapidated house"
+          },
+          {
+            "label": "Building",
+            "value": "Empty, listed, dilapidated house"
+          },
+          {
+            "label": "Roof",
+            "value": "Leaking, needs replacing"
+          },
+          {
+            "label": "Location",
+            "value": "Countryside, full of holes"
+          },
+          {
+            "label": "Council",
+            "value": "Council says bat survey needed before roof work"
+          },
+          {
+            "label": "Budget",
+            "value": "Preliminary survey quoted £540; full survey estimated £1200-£1800"
+          },
+          {
+            "label": "Other",
+            "value": "Ecologist has floor plans and photos; buyer wants bat boxes regardless"
+          }
+        ],
+        "draft": "A buyer is replacing the roof of a dilapidated, empty, listed house they are buying, and the council says a bat survey is needed before work starts. The buyer thinks bats are quite likely present. Your colleague quoted £540 for a preliminary survey and an estimate of £1200-£1800 for the full survey, which could vary. The buyer asks for a clear explanation of why the full survey can't go ahead directly and whether mitigation alone could be agreed. They want bat boxes and wildlife protection included either way. Floor plans and photos have been sent."
+      },
+      "valid": true,
+      "ms": 6513,
+      "cost": 0.0007157999999999999,
+      "invented": [
+        "Replace roof before buying dilapidated house",
+        "Your colleague quoted £540"
+      ]
+    },
+    "C2": {
+      "out": {
+        "survey": "bat-survey",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "replace the roof"
+          },
+          {
+            "label": "Building",
+            "value": "dilapidated, empty, listed, leaking house"
+          },
+          {
+            "label": "Council",
+            "value": "says we need a bat survey"
+          },
+          {
+            "label": "Survey",
+            "value": "bat survey"
+          },
+          {
+            "label": "Survey",
+            "value": "preliminary ecological appraisal"
+          }
+        ],
+        "draft": "A buyer is looking for a bat survey for a listed, dilapidated, and empty house that is leaking. The buyer believes the council asked for a bat survey before the roof can be replaced. The buyer has received a quote for a preliminary ecological appraisal, but is asking for an estimate for a full bat survey instead. The buyer is questioning the necessity and cost of the survey process versus direct mitigation."
+      },
+      "valid": true,
+      "ms": 3566,
+      "cost": 0.000115296,
+      "provider": "Darkbloom",
+      "invented": [
+        "Survey: preliminary ecological appraisal",
+        "quote for a preliminary ecological appraisal"
+      ]
+    },
+    "P": {
+      "survey": "bat-survey",
+      "confidence": 0.99,
+      "ms": 447,
+      "cost": 0.00008883
+    }
+  },
+  {
+    "id": 2,
+    "A1": {
+      "out": {
+        "survey": "bat-survey",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "Planning permission and listed building consent"
+          },
+          {
+            "label": "Building",
+            "value": "Grade II listed farmhouse"
+          },
+          {
+            "label": "Building",
+            "value": "Unlived in for 15 years"
+          },
+          {
+            "label": "Roof",
+            "value": "Holes and structural issues"
+          },
+          {
+            "label": "Location",
+            "value": "Gloucestershire"
+          },
+          {
+            "label": "Survey",
+            "value": "Audio survey over 5 nights"
+          },
+          {
+            "label": "Survey",
+            "value": "3 nocturnal visual surveys"
+          },
+          {
+            "label": "Other",
+            "value": "4 common bats entering or emerging"
+          },
+          {
+            "label": "Other",
+            "value": "Disused old bird nests, no recent use"
+          },
+          {
+            "label": "Budget",
+            "value": "Ecologist charge c.£2000 for licence work"
+          }
+        ],
+        "draft": "A buyer needs a clear explanation of the requirements in your final bat report for a grade II listed farmhouse in Gloucestershire, unoccupied for 15 years, with roof holes and structural issues. Five nights of audio survey and three nocturnal visual surveys recorded common bats, with 4 entering or emerging over three nights. It is not yet known whether a bat licence needs more than the form and report, whether a pre-construction survey is necessary given survey validity, why contractors need briefing, why roofing needs ecologist supervision, or why work must avoid February to August given disused nests with no recent use. Please confirm what each condition requires, the scope of supervision, and whether it could be reduced."
+      },
+      "valid": true,
+      "ms": 6484,
+      "cost": 0.0008995,
+      "invented": []
+    },
+    "A2": {
+      "out": {
+        "survey": "bat-survey",
+        "pills": [
+          {
+            "label": "Survey",
+            "value": "bat surveys (completed)"
+          },
+          {
+            "label": "Project",
+            "value": "renovation of listed farmhouse"
+          },
+          {
+            "label": "Building",
+            "value": "grade II listed farmhouse, unoccupied 15 years"
+          },
+          {
+            "label": "Roof",
+            "value": "roof and walls have holes and structural issues"
+          },
+          {
+            "label": "Location",
+            "value": "Gloucestershire"
+          },
+          {
+            "label": "Other",
+            "value": "planning permission and listed building consent in progress"
+          },
+          {
+            "label": "Other",
+            "value": "4 common bats entering or emerging"
+          },
+          {
+            "label": "Other",
+            "value": "disused bird nests, no recent use"
+          },
+          {
+            "label": "Other",
+            "value": "ecologist quoted c.£2000 for bat licence"
+          }
+        ],
+        "draft": "A buyer is renovating a grade II listed farmhouse in Gloucestershire, unoccupied for 15 years, with planning permission and listed building consent in progress. Bat surveys recorded 4 common bats entering or emerging, plus commuting and foraging. The final report recommends a bat licence, a survey immediately before construction, contractor briefings, ecologist supervision of roofing work, and no works from February to August, despite disused nests with no recent use. The buyer asks what a bat licence involves beyond the form and report, whether another survey is needed when results are normally valid for a year, whether the supervision requirements are proportionate, and whether the nesting season restriction is necessary. Please advise and explain your fees."
+      },
+      "valid": true,
+      "ms": 6413,
+      "cost": 0.0009157000000000001,
+      "invented": [
+        "results are normally valid for a year"
+      ]
+    },
+    "C2": {
+      "out": {
+        "survey": "bat-survey",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "renovation"
+          },
+          {
+            "label": "Council",
+            "value": "planning permission and listed building consent"
+          },
+          {
+            "label": "Building",
+            "value": "grade II listed farmhouse"
+          },
+          {
+            "label": "Location",
+            "value": "Gloucestershire"
+          },
+          {
+            "label": "Other",
+            "value": "dilapidated, unliveable"
+          },
+          {
+            "label": "Other",
+            "value": "roof/walls have holes and structural issues"
+          }
+        ],
+        "draft": "A buyer is seeking a bat survey. They are renovating a Grade II listed farmhouse in Gloucestershire and have already completed audio and visual surveys. The ecologist has recommended several follow-up requirements, including a bat licence, a survey immediately prior to construction, briefing contractors, and supervision of roofing works by a licensed ecologist. The ecologist also recommended avoiding construction during nesting season (February to August) unless another survey is conducted, due to disused and degraded bird nests found on site."
+      },
+      "valid": true,
+      "ms": 5477,
+      "cost": 0.000132736,
+      "provider": "Darkbloom",
+      "invented": []
+    },
+    "P": {
+      "survey": "bat-survey",
+      "confidence": 1,
+      "ms": 210,
+      "cost": 0.000097146
+    }
+  },
+  {
+    "id": 3,
+    "A1": {
+      "out": {
+        "survey": "archaeology-assessment",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "Convert and restore to residential"
+          },
+          {
+            "label": "Building",
+            "value": "Dilapidated early Victorian building"
+          },
+          {
+            "label": "Location",
+            "value": "North Wales"
+          },
+          {
+            "label": "Survey",
+            "value": "Historic buildings survey report with drawings"
+          },
+          {
+            "label": "Other",
+            "value": "Planning department requires report by suitably qualified archaeologist"
+          },
+          {
+            "label": "Other",
+            "value": "Not an excavation; traces history and building phases"
+          },
+          {
+            "label": "Other",
+            "value": "Buyer concerned it may delay the project"
+          }
+        ],
+        "draft": "A buyer needs a historic buildings survey report with drawings for an early Victorian building in North Wales, which is dilapidated and being converted and restored to residential use. The planning department has advised that a suitably qualified archaeologist prepare the report. This is not an excavation. The report should trace the building's history and its different phases. The buyer would like to see a sample copy of a similar report so they know what to request. The buyer also asks what this typically costs. Council, deadline and budget are not known yet. The buyer is worried this may hold up the project, so a clear scope and timeline would help."
+      },
+      "valid": true,
+      "ms": 5877,
+      "cost": 0.0006012999999999999,
+      "invented": []
+    },
+    "A2": {
+      "out": {
+        "survey": "archaeology-assessment",
+        "pills": [
+          {
+            "label": "Survey",
+            "value": "historic buildings survey report"
+          },
+          {
+            "label": "Project",
+            "value": "convert and restore to residential"
+          },
+          {
+            "label": "Building",
+            "value": "dilapidated early Victorian building"
+          },
+          {
+            "label": "Location",
+            "value": "North Wales"
+          },
+          {
+            "label": "Council",
+            "value": "planning dept advised a report is needed"
+          },
+          {
+            "label": "Other",
+            "value": "not an excavation, report with drawings"
+          }
+        ],
+        "draft": "A buyer is converting and restoring a dilapidated early Victorian building to residential use in North Wales. The buyer says the planning department was advised they need a historic buildings survey report by a suitably qualified archaeologist. They understand this is not an excavation but a report with drawings that traces the history and different phases of the building. The buyer would like to see an example copy of such a report so they know what to ask for, and asks what the typical price is. They are concerned this could hold up the project. Deadlines and budget are not yet known."
+      },
+      "valid": true,
+      "ms": 5256,
+      "cost": 0.0006955,
+      "invented": []
+    },
+    "C2": {
+      "out": {
+        "survey": "archaeology-assessment",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "convert and restore dilapidated early Victorian building back to residential"
+          },
+          {
+            "label": "Location",
+            "value": "North Wales"
+          },
+          {
+            "label": "Council",
+            "value": "planning dept advised"
+          },
+          {
+            "label": "Other",
+            "value": "not an excavation but a report along with drawings"
+          }
+        ],
+        "draft": "A buyer is planning to convert and restore a dilapidated early Victorian building back to residential use in North Wales. The buyer says the planning department has advised that they need a historic buildings survey report done by a suitably qualified archaeologist. They specify this should be a report and drawings tracing the history and different phases of the building, rather than an excavation. The buyer is not sure what the price will be."
+      },
+      "valid": true,
+      "ms": 7927,
+      "cost": 0.000098538,
+      "provider": "Darkbloom",
+      "invented": []
+    },
+    "P": {
+      "survey": "heritage-statement",
+      "confidence": 0.56,
+      "ms": 205,
+      "cost": 0.000076902
+    }
+  },
+  {
+    "id": 4,
+    "A1": {
+      "out": {
+        "survey": "bat-survey",
+        "pills": [
+          {
+            "label": "Survey",
+            "value": "Phase 2 bat survey"
+          },
+          {
+            "label": "Project",
+            "value": "Add porch to house"
+          },
+          {
+            "label": "Building",
+            "value": "Single-storey, two bed house"
+          },
+          {
+            "label": "Roof",
+            "value": "Section of roof tiles removed and reinstated"
+          },
+          {
+            "label": "Budget",
+            "value": "Quoted £2750"
+          },
+          {
+            "label": "Other",
+            "value": "Team of 3 people quoted"
+          },
+          {
+            "label": "Other",
+            "value": "Porch footprint outside permitted development"
+          },
+          {
+            "label": "Other",
+            "value": "Initial bat survey recommends phase 2"
+          }
+        ],
+        "draft": "A buyer needs a phase 2 bat survey for a planning application to add a porch to their single-storey, two bed house. The porch footprint is outside permitted development. A section of roof tiles on one elevation must be removed for the work and then reinstated, with matching tiles added to the porch. The initial bat survey concluded that a phase 2 survey is needed. The buyer has been quoted £2750 and told a team of 3 people is needed. The buyer asks whether the scope and team size are proportionate to this modest project. Location, roof type and the initial survey findings are not known yet."
+      },
+      "valid": true,
+      "ms": 2455,
+      "cost": 0.00039380000000000003,
+      "invented": []
+    },
+    "A2": {
+      "out": {
+        "survey": "bat-survey",
+        "pills": [
+          {
+            "label": "Survey",
+            "value": "Phase 2 bat survey"
+          },
+          {
+            "label": "Project",
+            "value": "Porch extension outside permitted development"
+          },
+          {
+            "label": "Building",
+            "value": "Single-storey, two bed house"
+          },
+          {
+            "label": "Roof",
+            "value": "Section of tiles removed from one elevation, then reinstated with matching tiles"
+          },
+          {
+            "label": "Budget",
+            "value": "Quoted £2750"
+          },
+          {
+            "label": "Other",
+            "value": "Quote says a team of 3 people needed; initial bat survey says phase 2 needed"
+          }
+        ],
+        "draft": "A buyer is applying for planning permission to add a porch to their single-storey, two bed house. The porch footprint will be outside permitted development. An initial bat survey concluded a phase 2 survey is needed because roof tiles on one elevation must be removed and then reinstated with matching tiles. The buyer has been quoted £2750 and told a team of 3 people is needed. They want to protect any bats but feel the cost is out of proportion to the modest project. Please explain what the phase 2 survey involves, why three people are needed, and whether the scope or cost can be reviewed. Any experience with similar projects would be welcome."
+      },
+      "valid": true,
+      "ms": 3896,
+      "cost": 0.0005855,
+      "invented": []
+    },
+    "C2": {
+      "out": {
+        "survey": "bat-survey",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "add a porch"
+          },
+          {
+            "label": "Building",
+            "value": "single-storey, two bed house"
+          },
+          {
+            "label": "Roof",
+            "value": "section of roof tiles will need to be removed"
+          },
+          {
+            "label": "Budget",
+            "value": "£2750"
+          },
+          {
+            "label": "Other",
+            "value": "team of 3 people needed"
+          }
+        ],
+        "draft": "A buyer is planning to add a porch to their single-storey, two-bedroom house. The work involves removing and reinstating roof tiles. The buyer says they had an initial bat survey and the results concluded that a phase 2 survey is required. They are looking for experience with this type of survey."
+      },
+      "valid": true,
+      "ms": 5741,
+      "cost": 0.000102606,
+      "provider": "Darkbloom",
+      "invented": [
+        "Budget: £2750"
+      ]
+    },
+    "P": {
+      "survey": "bat-survey",
+      "confidence": 1,
+      "ms": 244,
+      "cost": 0.00007812
+    }
+  },
+  {
+    "id": 5,
+    "A1": {
+      "out": {
+        "survey": "flood-risk-assessment",
+        "pills": [
+          {
+            "label": "Survey",
+            "value": "Revised Flood Risk Assessment"
+          },
+          {
+            "label": "Project",
+            "value": "Planning application refused"
+          },
+          {
+            "label": "Deadline",
+            "value": "Decision 29 April 2025"
+          },
+          {
+            "label": "Location",
+            "value": "Flood zones 3a and 3b"
+          },
+          {
+            "label": "Council",
+            "value": "Requested revised FRA 25 April 2025"
+          },
+          {
+            "label": "Other",
+            "value": "Drainage objection after March 2025 Environment Agency data update"
+          }
+        ],
+        "draft": "A buyer needs a revised Flood Risk Assessment for a planning application refused on 29 April 2025. The refusal followed a Drainage objection after the Environment Agency updated its surface water flooding data in March 2025, and the site now falls within flood zones 3a and 3b. The council requested a more technical FRA on 25 April 2025, two working days before the decision date. The buyer needs the revised FRA to support either an appeal or a resubmission. The building details, site address and council name are not known yet. Please confirm your scope, availability and fee."
+      },
+      "valid": true,
+      "ms": 4891,
+      "cost": 0.000662,
+      "invented": []
+    },
+    "A2": {
+      "out": {
+        "survey": "flood-risk-assessment",
+        "pills": [
+          {
+            "label": "Survey",
+            "value": "Revised Flood Risk Assessment"
+          },
+          {
+            "label": "Project",
+            "value": "Planning application, recently rejected"
+          },
+          {
+            "label": "Location",
+            "value": "Site shown in flood zones 3a and 3b"
+          },
+          {
+            "label": "Deadline",
+            "value": "Decision date 29 April 2025"
+          },
+          {
+            "label": "Council",
+            "value": "Planners requested revised FRA on 25 April 2025"
+          },
+          {
+            "label": "Other",
+            "value": "Drainage objection after Environment Agency surface water data update (March 2025)"
+          }
+        ],
+        "draft": "A buyer is seeking a revised Flood Risk Assessment for a planning application that was rejected on 29 April 2025. The buyer says the planners raised a Drainage objection after the Environment Agency updated its surface water flooding data in March 2025, and that the site is now shown within flood zones 3a and 3b. The buyer says the council asked for a revised, more technical FRA, but the request arrived on 25 April 2025, two working days before the decision. The buyer is considering whether to appeal or resubmit and would like advice on the scope of the revised FRA and how long it would take. It is not yet known whether the buyer will appeal or resubmit. The buyer is under financial pressure and wants to move forward quickly."
+      },
+      "valid": true,
+      "ms": 5424,
+      "cost": 0.0007542,
+      "invented": [
+        "would like advice on the scope of the revised FRA and how long it would take"
+      ]
+    },
+    "C2": {
+      "out": {
+        "survey": "flood-risk-assessment",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "planning application rejected"
+          },
+          {
+            "label": "Council",
+            "value": "requested a revised, more technical version of FRA"
+          },
+          {
+            "label": "Location",
+            "value": "shown within flood zones 3a and 3b"
+          },
+          {
+            "label": "Deadline",
+            "value": "29th April 2025"
+          },
+          {
+            "label": "Other",
+            "value": "considering appeal or resubmission"
+          },
+          {
+            "label": "Other",
+            "value": "keen to move forward quickly"
+          }
+        ],
+        "draft": "A buyer has had a planning application rejected. The council requested a revised, more technical version of a Flood Risk Assessment following an update to surface water flooding data. The site is located within flood zones 3a and 3b. The buyer is considering whether to appeal the decision or resubmit the application with the revised assessment and is looking for advice on which route might be quicker to move the project forward."
+      },
+      "valid": true,
+      "ms": 8269,
+      "cost": 0.000123622,
+      "provider": "Darkbloom",
+      "invented": []
+    },
+    "P": {
+      "survey": "flood-risk-assessment",
+      "confidence": 1,
+      "ms": 294,
+      "cost": 0.00008736
+    }
+  }
+]
