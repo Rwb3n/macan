@@ -38,6 +38,10 @@ export const decisions: Decision[] = [
     said: "lets focus on the product. park all the legalese bullshit for after we got a solid loop", refs: ["A3"] },
   { id: "D17", date: "2026-10-24", name: "A piece is done when a layman can use it without help; only the brand skin comes later. The buyer side is not there yet",
     said: "okay. FYI the buyer side is sorely lacking. it looks like coding genius that has no idea what another living person thinks about when going on online didit", refs: ["D10", "D14"] },
+  { id: "D18", date: "2026-10-24", name: "Open the way people already know (trust headline, one plain question, proof, free, three steps), then open into what we've learned (normal? cost? time? season, follow-ons, one thing per screen)",
+    said: "almost. start witht he conventional, then open into what we'e learned.", refs: ["R7", "D17", "Q22"] },
+  { id: "D19", date: "2026-10-24", name: "Say how we're paid and what we check; show three plain steps on the site, Mermaid stays for the map",
+    said: "(chose: Say how we're paid; Three plain steps)", refs: ["D2", "D14", "R7"] },
 ]
 
 // The buyer's pains today, synthesised from R2's sources (counted independently). Front and centre (D10).

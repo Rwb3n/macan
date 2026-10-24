@@ -23,6 +23,8 @@ Read top-down: **why** (D, PN) → **who** (P, CH, ALT) → **what** (U, ST) →
 | D15 | Work management must survive sessions: nothing pending lives only in a chat; mirror the map to GitHub at the end of this session | "well do it at the end of this session. im concernw with our work management being lost and collapsing as sessions progress." (2026-10-24) | D3, D8 |
 | D16 | Product first: park the legal work (privacy notice, listing notice, removal) until the loop is solid | "lets focus on the product. park all the legalese bullshit for after we got a solid loop" (2026-10-24) | A3 |
 | D17 | A piece is done when a layman can use it without help; only the brand skin comes later. The buyer side is not there yet | "okay. FYI the buyer side is sorely lacking. it looks like coding genius that has no idea what another living person thinks about when going on online didit" (2026-10-24) | D10, D14 |
+| D18 | Open the way people already know (trust headline, one plain question, proof, free, three steps), then open into what we've learned (normal? cost? time? season, follow-ons, one thing per screen) | "almost. start witht he conventional, then open into what we'e learned." (2026-10-24) | R7, D17, Q22 |
+| D19 | Say how we're paid and what we check; show three plain steps on the site, Mermaid stays for the map | "(chose: Say how we're paid; Three plain steps)" (2026-10-24) | D2, D14, R7 |
 
 ## Why: buyer pains (D10)
 

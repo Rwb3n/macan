@@ -5,7 +5,7 @@ Each decision, down to the use cases, processes and objects that rest on it, and
 | decision | use cases | processes | objects | code |
 |---|---|---|---|---|
 | D1 Domain: a UK directory of planning-survey firms, built lean in its own repo | U5 | PR3, PR5, PR4 | O-listing, O-claim, O-notice | scripts/seed.ts, src/app/actions.ts, src/app/briefs/[token]/page.tsx, src/app/claims/confirm/[token]/page.tsx, src/app/firms/[slug]/claim/claim-form.tsx, src/app/firms/[slug]/claim/page.tsx, src/app/firms/[slug]/page.tsx, src/claim.ts, src/components/firm-card.tsx, src/db/schema.ts, src/directory.ts, src/requests.ts, src/routing.ts |
-| D2 Business model M1: firms pay per brief they unlock; every lead is qualified first | U2, U4 | PR1, PR2 | O-lead, O-brief | scripts/tick.ts, src/admin.ts, src/app/actions.ts, src/app/admin/leads/page.tsx, src/app/briefs/[token]/page.tsx, src/app/firms/[slug]/page.tsx, src/app/for-firms/page.tsx, src/app/leads/confirm/[token]/page.tsx, src/app/page.tsx, src/app/quote/page.tsx, src/app/quote/quote-form.tsx, src/app/search/page.tsx, src/components/firm-card.tsx, src/components/journey.tsx, src/components/search-form.tsx, src/db/schema.ts, src/directory.ts, src/journey-stages.ts, src/leads.ts, src/postcode.ts, src/proxy.ts, src/qualify.ts, src/routing.ts |
+| D2 Business model M1: firms pay per brief they unlock; every lead is qualified first | U2, U4 | PR1, PR2 | O-lead, O-brief | scripts/tick.ts, src/admin.ts, src/app/actions.ts, src/app/admin/leads/page.tsx, src/app/briefs/[token]/page.tsx, src/app/firms/[slug]/page.tsx, src/app/for-firms/page.tsx, src/app/leads/confirm/[token]/page.tsx, src/app/page.tsx, src/app/quote/page.tsx, src/app/quote/quote-form.tsx, src/app/search/page.tsx, src/components/firm-card.tsx, src/components/search-form.tsx, src/db/schema.ts, src/directory.ts, src/leads.ts, src/postcode.ts, src/proxy.ts, src/qualify.ts, src/routing.ts |
 | D3 We work from models: map first, territory follows, map updated | - | - | - | - |
 | D4 Claims need receipts; a map is not evidence | - | - | - | - |
 | D5 Sell firms intelligence on where and when demand is coming | U6 | - | - | src/app/for-firms/page.tsx |
@@ -21,6 +21,8 @@ Each decision, down to the use cases, processes and objects that rest on it, and
 | D15 Work management must survive sessions: nothing pending lives only in a chat; mirror the map to GitHub at the end of this session | - | - | - | - |
 | D16 Product first: park the legal work (privacy notice, listing notice, removal) until the loop is solid | - | PR5 | - | - |
 | D17 A piece is done when a layman can use it without help; only the brand skin comes later. The buyer side is not there yet | - | - | - | - |
+| D18 Open the way people already know (trust headline, one plain question, proof, free, three steps), then open into what we've learned (normal? cost? time? season, follow-ons, one thing per screen) | - | - | - | - |
+| D19 Say how we're paid and what we check; show three plain steps on the site, Mermaid stays for the map | - | - | - | - |
 
 ## Code → map
 
@@ -41,22 +43,21 @@ Each decision, down to the use cases, processes and objects that rest on it, and
 | src/app/for-firms/page.tsx | U4, U6 |
 | src/app/layout.tsx | infra |
 | src/app/leads/confirm/[token]/page.tsx | PR1, O-lead |
-| src/app/page.tsx | U1, U2, ST-U2.1, ST-U2.2, ST-U2.3 |
+| src/app/page.tsx | U1, U2, ST-U2.1, ST-U2.2, PN1, PN2, PN3, PN4 |
 | src/app/quote/page.tsx | U2, PR1, ST-U2.1, ST-U2.2, ST-U2.3 |
-| src/app/quote/quote-form.tsx | U2, ST-U2.1, ST-U2.2, ST-U2.3, PR1, O-lead, PN3 |
+| src/app/quote/quote-form.tsx | U2, ST-U2.1, ST-U2.2, ST-U2.3, PR1, O-lead, PN1, PN2, PN3, PN4 |
 | src/app/search/page.tsx | U2, ST-U2.2 |
 | src/app/surveys/[survey]/[region]/page.tsx | U1, ST-U2.1, ST-U2.2 |
 | src/app/surveys/[survey]/page.tsx | U1, ST-U2.1 |
+| src/app/surveys/page.tsx | U1, ST-U2.2 |
 | src/catalog.ts | U1, ST-U2.1, ST-U2.2 |
 | src/claim.ts | PR3 |
 | src/components/firm-card.tsx | U2, O-listing |
-| src/components/journey.tsx | U2, ST-U2.1, ST-U2.2, ST-U2.3, PN3 |
 | src/components/search-form.tsx | U2, ST-U2.2 |
 | src/components/survey-facts.tsx | U1 |
 | src/db/index.ts | infra |
 | src/db/schema.ts | O-lead, O-listing, O-claim, O-brief |
 | src/directory.ts | U2, ST-U2.2, O-listing |
-| src/journey-stages.ts | U2, ST-U2.1, ST-U2.2, ST-U2.3 |
 | src/leads.ts | PR1, O-lead |
 | src/mailer.ts | infra |
 | src/postcode.ts | PR1, ST-U2.2, PN3 |

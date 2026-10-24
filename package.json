@@ -17,7 +17,6 @@
   "dependencies": {
     "better-sqlite3": "^12.6.2",
     "drizzle-orm": "^0.45.1",
-    "mermaid": "12.1.0",
     "next": "^16.1.6",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
@@ -35,8 +34,5 @@
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vitest": "^4.0.18"
-  },
-  "overrides": {
-    "katex": "0.18.11"
   }
 }

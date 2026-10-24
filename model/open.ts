@@ -42,7 +42,7 @@ export const questions: Question[] = [
   { id: "Q19", state: "open", name: "Firms that pay to be found (CIEEM, Bark, Worklanded, Signed Off) have pains we can answer", refs: ["R4"],
     test: "Read what firms say about those services (reviews, forums), or ask on the R6 calls (question 3); a method first" },
   { id: "Q20", state: "open", name: "The brand: name, colours and fonts ('Survey Finder' is a working title)", refs: ["D14"],
-    test: "Principal chooses; the skin is the colour and font tokens in globals.css, which the site and the journey diagram read" },
+    test: "Principal chooses; the skin is the colour and font tokens in globals.css, which the whole site reads" },
   { id: "Q21", state: "open", name: "How we send email and where we host, so the product can go live", refs: ["D12"],
     test: "Principal chooses a mail provider and a host; until then production refuses to send email, so buyers and firms get nothing" },
   { id: "Q22", state: "open", name: "Buyers understand, trust and finish a site that meets them at the council's letter: it answers 'is this normal, what will it cost, how long' before asking anything, shows why to trust it, and asks one thing per screen", refs: ["R7", "D17"],

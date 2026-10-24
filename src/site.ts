@@ -11,11 +11,12 @@ export const routes = {
     const p = new URLSearchParams(Object.entries(q).filter((e): e is [string, string] => Boolean(e[1])))
     return p.size ? `/search?${p}` : "/search"
   },
+  surveys: "/surveys",
   survey: (survey: string) => `/surveys/${survey}`,
   surveyRegion: (survey: string, region: string) => `/surveys/${survey}/${region}`,
   firm: (slug: string) => `/firms/${slug}`,
   claim: (slug: string) => `/firms/${slug}/claim`,
-  quote: (q: { survey?: string; region?: string; firm?: string } = {}) => {
+  quote: (q: { survey?: string; region?: string; firm?: string; q?: string } = {}) => {
     const p = new URLSearchParams(Object.entries(q).filter((e): e is [string, string] => Boolean(e[1])))
     return p.size ? `/quote?${p}` : "/quote"
   },
