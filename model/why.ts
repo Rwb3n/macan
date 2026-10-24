@@ -34,6 +34,8 @@ export const decisions: Decision[] = [
     refs: ["D10", "Q17"] },
   { id: "D15", date: "2026-10-24", name: "Work management must survive sessions: nothing pending lives only in a chat; mirror the map to GitHub at the end of this session",
     said: "well do it at the end of this session. im concernw with our work management being lost and collapsing as sessions progress.", refs: ["D3", "D8"] },
+  { id: "D16", date: "2026-10-24", name: "Product first: park the legal work (privacy notice, listing notice, removal) until the loop is solid",
+    said: "lets focus on the product. park all the legalese bullshit for after we got a solid loop", refs: ["A3"] },
 ]
 
 // The buyer's pains today, synthesised from R2's sources (counted independently). Front and centre (D10).

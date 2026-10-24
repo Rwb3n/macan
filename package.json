@@ -11,7 +11,8 @@
     "test": "vitest run",
     "db:seed": "tsx scripts/seed.ts",
     "check": "npm run typecheck && npm test",
-    "model:views": "tsx scripts/model-views.ts"
+    "model:views": "tsx scripts/model-views.ts",
+    "tick": "tsx scripts/tick.ts"
   },
   "dependencies": {
     "better-sqlite3": "^12.6.2",

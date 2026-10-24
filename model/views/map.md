@@ -21,6 +21,7 @@ Read top-down: **why** (D, PN) → **who** (P, CH, ALT) → **what** (U, ST) →
 | D13 | M1 at £99,417 a year (5% capture) is acceptable | "99,417 is acceptable" (2026-10-24) | R3, D9, Q10 |
 | D14 | Show the journey on the site; problem first; answer before asking; say why for every detail; Mermaid now, brand skin later | "the user journey should be illustrated on the site. one annoyance from my point of view as a buyer is i dont know wtf im filling information for. they ask me for my name, why? my email and phone number, why?, address, why? what comes after? why cant i know now? why cant i say what my problem is first? its all annoying and backwardsa and breadcrumbed like im being tricked into a trap. can we like, use mermaid and later on stick on a visual skin tuned to our branding? (then, on the requirements read back: yes)" (2026-10-24) | D10, Q17 |
 | D15 | Work management must survive sessions: nothing pending lives only in a chat; mirror the map to GitHub at the end of this session | "well do it at the end of this session. im concernw with our work management being lost and collapsing as sessions progress." (2026-10-24) | D3, D8 |
+| D16 | Product first: park the legal work (privacy notice, listing notice, removal) until the loop is solid | "lets focus on the product. park all the legalese bullshit for after we got a solid loop" (2026-10-24) | A3 |
 
 ## Why: buyer pains (D10)
 
@@ -116,7 +117,7 @@ flowchart LR
 | ST-U4.2 | Get a brief | Sees survey, area, deadline, site; contact hidden | built |
 | ST-U4.3 | Decide | Unlocked (pays) or passed; paused when booked up | part |
 | ST-U4.4 | Quote | Buyer has the firm's quote | outside |
-| ST-U4.5 | Win or lose | We know the outcome | missing |
+| ST-U4.5 | Win or lose | We know the outcome | part |
 
 ## How: objects
 
@@ -208,8 +209,8 @@ stateDiagram-v2
 
 | id | process | realises | steps | status | rests on |
 |---|---|---|---|---|---|
-| PR1 | Qualify a lead | U2 | Buyers (homeowners, small developers): Say the problem; see the answer; choose to send, giving contact last (built); The directory: Work out the area and the council from the postcode, so the buyer isn't asked twice (built); The directory: Grade on real, serious, timely, complete (built); Buyers (homeowners, small developers): Confirm by email (button press); no mail provider in production yet (Q21) (built); The directory: Operator approves or rejects (built); The directory: Tell buyers, in a privacy notice, what we keep, who sees it, the postcode lookup and how long we keep it (missing) | part | D2, D14 |
-| PR2 | Route a lead | U4 | The directory: Match firms by survey, region, availability (built); The directory: Offer briefs, contact hidden (built); Survey firms: Unlock (fee owed) or pass; pause when booked up (built); The directory: Lapse and tell the buyer (built); chase firms before lapse (missing) (part) | part | D2, D12, Q3, Q15, Q16 |
+| PR1 | Qualify a lead | U2 | Buyers (homeowners, small developers): Say the problem; see the answer; choose to send, giving contact last (built); The directory: Work out the area and the council from the postcode, so the buyer isn't asked twice (built); The directory: Grade on real, serious, timely, complete (built); Buyers (homeowners, small developers): Confirm by email (button press); no mail provider in production yet (Q21) (built); The directory: Operator approves or rejects (built); The directory: Tell buyers, in a privacy notice, what we keep, who sees it, the postcode lookup and how long we keep it (parked, D16) (missing) | part | D2, D14 |
+| PR2 | Route a lead | U4 | The directory: Match firms by survey, region, availability (built); The directory: Offer briefs, contact hidden (built); Survey firms: Unlock (fee owed) or pass; pause when booked up (built); The directory: Chase firms once, halfway through their time; lapse and tell the buyer (built); Survey firms: Record that they quoted, then whether they won or lost (built); The directory: Ask the buyer whether they booked a survey (missing) | part | D2, D12, Q3, Q15, Q16 |
 | PR3 | Claim a listing | U5 | Survey firms: Claim with an email on the firm's domain (built); The directory: Email a confirmation link (built); Survey firms: Edit the listing (missing) | part | D1 |
-| PR4 | Add firms | U5 | The directory: Check candidates exist and are active in vein (Companies House) (missing); The directory: Take candidates from CIEEM's Registered Practice Directory (145 ecology practices), once CIEEM gives written permission (missing); The directory: Check the site sells planning surveys (part); The directory: Map surveys and regions (part); The directory: Send the listing notice (missing) | part | R0/S9, R3, R4, R5 |
-| PR5 | Correct or remove a listing | U5 | Survey firms: Ask (missing); The directory: Apply and tombstone (missing) | missing | D1 |
+| PR4 | Add firms | U5 | The directory: Check candidates exist and are active in vein (Companies House) (missing); The directory: Take candidates from CIEEM's Registered Practice Directory (145 ecology practices), once CIEEM gives written permission (missing); The directory: Check the site sells planning surveys (part); The directory: Map surveys and regions (part); The directory: Send the listing notice (parked, D16) (missing) | part | R0/S9, R3, R4, R5 |
+| PR5 | Correct or remove a listing | U5 | Survey firms: Ask (missing); The directory: Apply and tombstone (missing) | missing | D1, D16 |

@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm"
 import { openDb, type Db } from "./db"
 import { briefs, firmRegions, firmSurveys, firms, leads } from "./db/schema"
 import { memoryMailer } from "./mailer"
-import { briefByToken, decideBrief, lapseBriefs, leadRouting, matchFirms, routeLead, setPaused, type Deps } from "./routing"
+import { briefByToken, canMove, chaseBriefs, decideBrief, lapseBriefs, leadRouting, matchFirms, recordOutcome, routeLead, setPaused, tick, type Deps } from "./routing"
 import { ROUTING } from "@model/how"
 
 let deps: Deps & { mailer: ReturnType<typeof memoryMailer> }
@@ -128,5 +128,65 @@ describe("lapseBriefs", () => {
     expect(await lapseBriefs(deps)).toBe(2)
     expect(leadRouting(deps.db, id)).toBe("expired")
     expect(deps.mailer.sent.at(-1)?.to).toBe("sam@example.com")
+  })
+})
+
+const hours = (h: number) => new Date(oct.getTime() + h * 3600_000)
+
+describe("chaseBriefs", () => {
+  it("reminds each undecided firm once, after half its time, with a link that opens the same brief", async () => {
+    firm("a")
+    await routeLead(deps, lead())
+    clock = hours(ROUTING.replyHours / 2 - 1)
+    expect(await chaseBriefs(deps)).toBe(0)
+    clock = hours(ROUTING.replyHours / 2 + 1)
+    expect(await chaseBriefs(deps)).toBe(1)
+    expect(await chaseBriefs(deps)).toBe(0)
+    const reminder = deps.mailer.sent.at(-1)!
+    expect(reminder.subject).toContain("Reminder")
+    const [first, second] = tokens()
+    expect(second).not.toBe(first)
+    expect(briefByToken(deps.db, second!)?.state).toBe("offered")
+    expect((await decideBrief(deps, second!, "unlock")).contact?.email).toBe("sam@example.com")
+  })
+  it("doesn't chase a firm that has already answered", async () => {
+    firm("a")
+    await routeLead(deps, lead())
+    await decideBrief(deps, tokens()[0]!, "decline")
+    clock = hours(ROUTING.replyHours / 2 + 1)
+    expect(await chaseBriefs(deps)).toBe(0)
+  })
+})
+
+describe("tick", () => {
+  it("chases at halfway and lapses at the end", async () => {
+    firm("a")
+    await routeLead(deps, lead())
+    clock = hours(ROUTING.replyHours / 2 + 1)
+    expect(await tick(deps)).toEqual({ chased: 1, lapsed: 0 })
+    clock = hours(ROUTING.replyHours + 1)
+    expect(await tick(deps)).toEqual({ chased: 0, lapsed: 1 })
+  })
+})
+
+describe("recordOutcome", () => {
+  it("follows the Brief lifecycle in the map: unlocked, quoted, then won or lost", async () => {
+    firm("a")
+    const id = lead()
+    await routeLead(deps, id)
+    const t = tokens()[0]!
+    expect(() => recordOutcome(deps, t, "quoted")).toThrow("offered")
+    await decideBrief(deps, t, "unlock")
+    expect(() => recordOutcome(deps, t, "won")).toThrow("unlocked")
+    expect(recordOutcome(deps, t, "quoted").state).toBe("quoted")
+    expect(recordOutcome(deps, t, "won").state).toBe("won")
+    expect(() => recordOutcome(deps, t, "lost")).toThrow("won")
+    expect(briefByToken(deps.db, t)?.contact?.email).toBe("sam@example.com")
+    expect(leadRouting(deps.db, id)).toBe("closed")
+  })
+  it("reads its moves from the map", () => {
+    expect(canMove("unlocked", "quoted")).toBe(true)
+    expect(canMove("quoted", "lost")).toBe(true)
+    expect(canMove("offered", "won")).toBe(false)
   })
 })

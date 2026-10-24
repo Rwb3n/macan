@@ -77,6 +77,9 @@ export const briefs = sqliteTable("briefs", {
   offeredAt: integer("offered_at", { mode: "timestamp" }).notNull(),
   expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
   decidedAt: integer("decided_at", { mode: "timestamp" }),
+  // One reminder, halfway through the firm's time; it carries a second link to the same brief.
+  chasedAt: integer("chased_at", { mode: "timestamp" }),
+  chaseTokenHash: text("chase_token_hash").unique(),
   // Owed on unlock (M1); how it is settled is open (Q16).
   feePence: integer("fee_pence"),
 }, (t) => [index("briefs_lead").on(t.leadId), index("briefs_state").on(t.state, t.expiresAt)])

@@ -1,15 +1,15 @@
-// Builds: PR2, O-brief, ST-U4.2, ST-U4.3, O-listing, PN3
+// Builds: PR2, O-brief, ST-U4.2, ST-U4.3, ST-U4.5, O-listing, PN3
 // Route an approved lead to firms as briefs, contact hidden; firms unlock or pass; briefs lapse; the buyer is told (map: PR2, O-brief; D2).
 // The terms (how many firms, how long, the fee) are guesses in the map (ROUTING: Q15, Q16, Q3).
 import { createHash, randomBytes } from "node:crypto"
-import { and, eq, inArray, lt } from "drizzle-orm"
+import { and, eq, inArray, isNull, lt, lte, or } from "drizzle-orm"
 import type { Db } from "./db"
 import { briefs, firms, leads } from "./db/schema"
 import { findFirms } from "./directory"
 import { regionBySlug, surveyBySlug } from "./catalog"
 import { PLANNING_STAGES, PROJECT_TYPES } from "./qualify"
 import type { Mailer } from "./mailer"
-import { BRIEF_STATES, ROUTING } from "@model/how"
+import { BRIEF_STATES, ROUTING, objects } from "@model/how"
 
 export type Deps = { db: Db; mailer: Mailer; now: () => Date; baseUrl: string }
 export type BriefState = (typeof BRIEF_STATES)[number]
@@ -68,14 +68,14 @@ export async function routeLead(deps: Deps, leadId: number): Promise<{ routing: 
 }
 
 export function briefByToken(db: Db, token: string): BriefView | undefined {
-  const b = db.select().from(briefs).where(eq(briefs.tokenHash, hash(token))).get()
+  const b = findBrief(db, token)
   if (!b) return undefined
   return viewOf(db, b)
 }
 
 // The firm behind a brief link pauses or resumes new briefs (booked up in season, Q2).
 export function setPausedByToken(deps: Pick<Deps, "db" | "now">, token: string, paused: boolean): boolean {
-  const b = deps.db.select({ firmId: briefs.firmId }).from(briefs).where(eq(briefs.tokenHash, hash(token))).get()
+  const b = findBrief(deps.db, token)
   if (!b) return false
   setPaused(deps, b.firmId, paused)
   return true
@@ -92,7 +92,7 @@ export function briefsByLead(db: Db): Map<number, { firm: string; state: BriefSt
 
 // The firm unlocks (the fee is recorded as owed, Q16) or passes. Only an offered brief that has not lapsed can be decided.
 export async function decideBrief(deps: Deps, token: string, decision: "unlock" | "decline"): Promise<BriefView> {
-  const b = deps.db.select().from(briefs).where(eq(briefs.tokenHash, hash(token))).get()
+  const b = findBrief(deps.db, token)
   if (!b) throw new Error("Brief not found")
   if (b.state !== "offered") throw new Error(`Brief is ${b.state}`)
   if (b.expiresAt <= deps.now()) {
@@ -116,7 +116,53 @@ export async function decideBrief(deps: Deps, token: string, decision: "unlock" 
   return viewOf(deps.db, deps.db.select().from(briefs).where(eq(briefs.id, b.id)).get()!)
 }
 
-// Lapses every offered brief past its time; tells buyers whose leads end with no firm. Run on a schedule.
+// The firm records how it went: unlocked → quoted → won or lost. Moves are checked against the Brief lifecycle in the map.
+export type Outcome = "quoted" | "won" | "lost"
+const BRIEF = objects.find((o) => o.id === "O-brief")!
+export function canMove(from: string, to: string): boolean {
+  return BRIEF.transitions.some((t) => t.from === from && t.to === to)
+}
+export function recordOutcome(deps: Pick<Deps, "db" | "now">, token: string, outcome: Outcome): BriefView {
+  const b = findBrief(deps.db, token)
+  if (!b) throw new Error("Brief not found")
+  if (!canMove(b.state, outcome)) throw new Error(`A ${b.state} brief can't become ${outcome}`)
+  deps.db.update(briefs).set({ state: outcome, decidedAt: deps.now() }).where(eq(briefs.id, b.id)).run()
+  return viewOf(deps.db, deps.db.select().from(briefs).where(eq(briefs.id, b.id)).get()!)
+}
+
+// One reminder to each firm still deciding halfway through its time, with a fresh link to the same brief.
+export async function chaseBriefs(deps: Deps): Promise<number> {
+  const now = deps.now()
+  const half = new Date(now.getTime() - (ROUTING.replyHours / 2) * 3600_000)
+  const due = deps.db.select().from(briefs)
+    .where(and(eq(briefs.state, "offered"), isNull(briefs.chasedAt), lte(briefs.offeredAt, half), lt(briefs.offeredAt, now))).all()
+    .filter((b) => b.expiresAt > now)
+  for (const b of due) {
+    const token = randomBytes(24).toString("base64url")
+    deps.db.update(briefs).set({ chasedAt: now, chaseTokenHash: hash(token) }).where(eq(briefs.id, b.id)).run()
+    const lead = deps.db.select().from(leads).where(eq(leads.id, b.leadId)).get()!
+    const firm = deps.db.select().from(firms).where(eq(firms.id, b.firmId)).get()!
+    const v = leadView(lead)
+    await deps.mailer.send({
+      to: firm.email!,
+      subject: `Reminder: ${v.survey.toLowerCase()} brief near ${v.area}`,
+      text: `The ${v.survey.toLowerCase()} brief near ${v.area} is still open until ${b.expiresAt.toUTCString()}. After that it goes to the buyer as unanswered.
+
+Unlock the buyer's contact or pass:
+${deps.baseUrl}/briefs/${token}`,
+    })
+  }
+  return due.length
+}
+
+// Everything time does to briefs: chase, then lapse. Pages run it on load; scripts/tick.ts runs it on a schedule.
+export async function tick(deps: Deps): Promise<{ chased: number; lapsed: number }> {
+  const chased = await chaseBriefs(deps)
+  const lapsed = await lapseBriefs(deps)
+  return { chased, lapsed }
+}
+
+// Lapses every offered brief past its time; tells buyers whose leads end with no firm.
 export async function lapseBriefs(deps: Deps): Promise<number> {
   const due = deps.db.select({ id: briefs.id }).from(briefs).where(and(eq(briefs.state, "offered"), lt(briefs.expiresAt, deps.now()))).all()
   await lapse(deps, due.map((d) => d.id))
@@ -173,20 +219,36 @@ function leadView(lead: Lead) {
   }
 }
 
+// Unlocked, and every state the map lets a brief reach after it.
+const PAID = (() => {
+  const out = new Set<string>(["unlocked"])
+  for (let grew = true; grew; ) {
+    grew = false
+    for (const t of BRIEF.transitions) if (out.has(t.from) && !out.has(t.to)) { out.add(t.to); grew = true }
+  }
+  return out
+})()
+
 function viewOf(db: Db, b: typeof briefs.$inferSelect): BriefView {
   const lead = db.select().from(leads).where(eq(leads.id, b.leadId)).get()!
   const firm = db.select({ name: firms.name, pausedAt: firms.pausedAt }).from(firms).where(eq(firms.id, b.firmId)).get()!
   const state = b.state as BriefState
   return {
     ...leadView(lead), state, expiresAt: b.expiresAt, feePence: b.feePence, firm: { name: firm.name, paused: Boolean(firm.pausedAt) },
-    // Once unlocked, the firm has paid to see everything the buyer wrote.
-    ...(state === "unlocked" ? { details: lead.details, answer: lead.answer, contact: { name: lead.name, email: lead.email, phone: lead.phone } } : {}),
+    // Once unlocked, the firm has paid to see everything the buyer wrote, for the rest of the brief's life.
+    ...(PAID.has(state) ? { details: lead.details, answer: lead.answer, contact: { name: lead.name, email: lead.email, phone: lead.phone } } : {}),
   }
 }
 
 // Buyers sometimes type their own email or phone into the free text; hide it until unlock.
 function mask(s: string): string {
   return s.replace(/[\w.+-]+@[\w-]+\.[\w.-]+/g, "[email hidden]").replace(/(?:\+44\s?|0)(?:\d[\s-]?){9,10}/g, "[phone hidden]")
+}
+
+// A brief answers to its first link and, once chased, to the reminder's link.
+function findBrief(db: Db, token: string) {
+  const h = hash(token)
+  return db.select().from(briefs).where(or(eq(briefs.tokenHash, h), eq(briefs.chaseTokenHash, h))).get()
 }
 
 function hash(token: string): string {

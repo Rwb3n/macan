@@ -20,5 +20,5 @@ export const stages: Stage[] = [
   { id: "ST-U4.2", useCase: "U4", name: "Get a brief", outcome: "Sees survey, area, deadline, site; contact hidden", status: "built", refs: ["D2"] },
   { id: "ST-U4.3", useCase: "U4", name: "Decide", outcome: "Unlocked (pays) or passed; paused when booked up", status: "part", refs: ["D2", "Q2"] },
   { id: "ST-U4.4", useCase: "U4", name: "Quote", outcome: "Buyer has the firm's quote", status: "outside", refs: ["R2"] },
-  { id: "ST-U4.5", useCase: "U4", name: "Win or lose", outcome: "We know the outcome", status: "missing", refs: ["D2"] },
+  { id: "ST-U4.5", useCase: "U4", name: "Win or lose", outcome: "We know the outcome", status: "part", refs: ["D2"], note: "From the firm; the buyer is not asked yet" },
 ]

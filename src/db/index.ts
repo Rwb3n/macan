@@ -56,6 +56,7 @@ CREATE TABLE IF NOT EXISTS briefs (
   state TEXT NOT NULL DEFAULT 'offered',
   token_hash TEXT NOT NULL UNIQUE,
   offered_at INTEGER NOT NULL, expires_at INTEGER NOT NULL, decided_at INTEGER,
+  chased_at INTEGER, chase_token_hash TEXT UNIQUE,
   fee_pence INTEGER
 );
 CREATE INDEX IF NOT EXISTS briefs_lead ON briefs(lead_id);
@@ -83,6 +84,10 @@ export function openDb(path: string, { create = false } = {}): Db {
   if (!has("firms", "paused_at")) sqlite.exec("ALTER TABLE firms ADD COLUMN paused_at INTEGER")
   if (!has("leads", "routed_at")) sqlite.exec("ALTER TABLE leads ADD COLUMN routed_at INTEGER")
   if (!has("leads", "council")) sqlite.exec("ALTER TABLE leads ADD COLUMN council TEXT")
+  if (!has("briefs", "chased_at")) {
+    sqlite.exec("ALTER TABLE briefs ADD COLUMN chased_at INTEGER; ALTER TABLE briefs ADD COLUMN chase_token_hash TEXT")
+    sqlite.exec("CREATE UNIQUE INDEX IF NOT EXISTS briefs_chase_token ON briefs(chase_token_hash)")
+  }
   if (!has("claim_requests", "token_hash")) {
     sqlite.exec("ALTER TABLE claim_requests ADD COLUMN token_hash TEXT; ALTER TABLE claim_requests ADD COLUMN confirmed_at INTEGER")
     sqlite.exec("CREATE UNIQUE INDEX IF NOT EXISTS claim_requests_token ON claim_requests(token_hash)")

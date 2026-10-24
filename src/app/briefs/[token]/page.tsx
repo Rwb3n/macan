@@ -1,9 +1,9 @@
-// Builds: PR2, O-brief, ST-U4.2, ST-U4.3, O-listing
+// Builds: PR2, O-brief, ST-U4.2, ST-U4.3, ST-U4.5, O-listing
 import type { Metadata } from "next"
 import { db } from "@/db"
 import { mailer } from "@/mailer"
-import { briefByToken, lapseBriefs } from "@/routing"
-import { briefAction, pauseAction } from "../../actions"
+import { briefByToken, tick } from "@/routing"
+import { briefAction, outcomeAction, pauseAction } from "../../actions"
 import { baseUrl } from "../../base-url"
 
 export const metadata: Metadata = { title: "Brief", robots: { index: false } }
@@ -14,7 +14,7 @@ const pounds = (p: number) => `£${(p / 100).toFixed(p % 100 ? 2 : 0)}`
 // Opening the link changes nothing: mail scanners open links. The firm presses a button.
 export default async function BriefPage({ params }: { params: Promise<{ token: string }> }) {
   const token = (await params).token
-  await lapseBriefs({ db: db(), mailer: mailer(), now: () => new Date(), baseUrl: await baseUrl() })
+  await tick({ db: db(), mailer: mailer(), now: () => new Date(), baseUrl: await baseUrl() })
   const b = briefByToken(db(), token)
   if (!b) return <Shell title="That link doesn't work">It may have been copied wrongly. Reply to the email that brought you here and we&apos;ll sort it out.</Shell>
   const by = b.expiresAt.toLocaleString("en-GB", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Europe/London" })
@@ -40,7 +40,7 @@ export default async function BriefPage({ params }: { params: Promise<{ token: s
             <button name="decision" value="decline" className="rounded-md border border-line bg-white px-5 py-2">Pass</button>
           </form>
         </div>
-      ) : b.state === "unlocked" && b.contact ? (
+      ) : (b.state === "unlocked" || b.state === "quoted" || b.state === "won" || b.state === "lost") && b.contact ? (
         <div className="mt-6 rounded-lg border border-line bg-leaf p-5">
           <h2 className="font-semibold">The buyer</h2>
           <dl className="mt-2 text-sm space-y-1">
@@ -49,6 +49,21 @@ export default async function BriefPage({ params }: { params: Promise<{ token: s
             {b.contact.phone ? <div><a href={`tel:${b.contact.phone.replace(/\s/g, "")}`} className="text-moss underline">{b.contact.phone}</a></div> : null}
           </dl>
           <p className="mt-3 text-sm text-muted">We&apos;ve told them you&apos;ll be in touch. {b.feePence ? `Fee owed: ${pounds(b.feePence)}.` : ""}</p>
+          <form action={outcomeAction} className="mt-5 border-t border-line pt-4">
+            <input type="hidden" name="token" value={token} />
+            {b.state === "unlocked" ? (
+              <><p className="text-sm">Let us know how it goes. It helps us send you the right jobs.</p>
+                <button name="outcome" value="quoted" className="mt-2 rounded-md border border-line bg-white px-4 py-2 text-sm">I&apos;ve sent them a quote</button></>
+            ) : b.state === "quoted" ? (
+              <><p className="text-sm">You&apos;ve sent a quote. Did you get the job?</p>
+                <div className="mt-2 flex gap-2">
+                  <button name="outcome" value="won" className="rounded-md bg-moss px-4 py-2 text-sm text-white">Yes, we got it</button>
+                  <button name="outcome" value="lost" className="rounded-md border border-line bg-white px-4 py-2 text-sm">No, we didn&apos;t</button>
+                </div></>
+            ) : (
+              <p className="text-sm">{b.state === "won" ? "You got the job. Thanks for letting us know." : "You didn't get this one. Thanks for letting us know."}</p>
+            )}
+          </form>
         </div>
       ) : (
         <p className="mt-6 text-muted">{b.state === "declined" ? "You passed on this brief." : b.state === "lapsed" ? "This brief closed before anyone answered it." : `This brief is ${b.state}.`}</p>

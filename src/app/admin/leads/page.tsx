@@ -5,7 +5,7 @@ import { db } from "@/db"
 import { listLeads } from "@/leads"
 import { PLANNING_STAGES, PROJECT_TYPES } from "@/qualify"
 import { mailer } from "@/mailer"
-import { briefsByLead, lapseBriefs, leadRouting } from "@/routing"
+import { briefsByLead, tick, leadRouting } from "@/routing"
 import { reviewAction, routeAction } from "../../actions"
 import { baseUrl } from "../../base-url"
 import { LEAD_CHECKS } from "@model/how"
@@ -22,7 +22,7 @@ const GRADE_STYLE: Record<string, string> = {
 const label = (pairs: readonly (readonly [string, string])[], v: string) => pairs.find(([k]) => k === v)?.[1] ?? v
 
 export default async function LeadsPage() {
-  await lapseBriefs({ db: db(), mailer: mailer(), now: () => new Date(), baseUrl: await baseUrl() })
+  await tick({ db: db(), mailer: mailer(), now: () => new Date(), baseUrl: await baseUrl() })
   const rows = listLeads(db())
   const briefs = briefsByLead(db())
   return (

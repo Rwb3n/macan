@@ -39,7 +39,7 @@ export const objects: BusinessObject[] = [
     ],
   },
   {
-    id: "O-brief", name: "Brief (one lead offered to one firm)", status: "part", table: "briefs", refs: ["D2", "Q3"], note: "The unit M1 sells. Built to unlocked, declined and lapsed; quote and outcome missing",
+    id: "O-brief", name: "Brief (one lead offered to one firm)", status: "part", table: "briefs", refs: ["D2", "Q3"], note: "The unit M1 sells. The firm records quoted, won and lost; the buyer's side of the outcome is missing",
     initial: "offered", states: ["offered", "unlocked", "declined", "lapsed", "quoted", "won", "lost"],
     transitions: [
       { from: "offered", to: "unlocked", by: "firm pays (M1)" }, { from: "offered", to: "declined", by: "firm" },
@@ -84,14 +84,16 @@ export const processes: Process[] = [
     { actor: "P-directory", step: "Grade on real, serious, timely, complete", status: "built" },
     { actor: "P-buyer", step: "Confirm by email (button press); no mail provider in production yet (Q21)", status: "built" },
     { actor: "P-directory", step: "Operator approves or rejects", status: "built" },
-    { actor: "P-directory", step: "Tell buyers, in a privacy notice, what we keep, who sees it, the postcode lookup and how long we keep it", status: "missing" },
+    { actor: "P-directory", step: "Tell buyers, in a privacy notice, what we keep, who sees it, the postcode lookup and how long we keep it (parked, D16)", status: "missing" },
   ] },
   { id: "PR2", name: "Route a lead", realises: "U4", status: "part", refs: ["D2", "D12", "Q3", "Q15", "Q16"],
     note: "Terms are guesses (ROUTING: Q15, Q16). Briefs go to claimed firms' business inboxes; claims are confirmed by link (PR3). Built on the placeholder terms (D12); the calls (R6) may change them", steps: [
     { actor: "P-directory", step: "Match firms by survey, region, availability", status: "built" },
     { actor: "P-directory", step: "Offer briefs, contact hidden", status: "built" },
     { actor: "P-firm", step: "Unlock (fee owed) or pass; pause when booked up", status: "built" },
-    { actor: "P-directory", step: "Lapse and tell the buyer (built); chase firms before lapse (missing)", status: "part" },
+    { actor: "P-directory", step: "Chase firms once, halfway through their time; lapse and tell the buyer", status: "built" },
+    { actor: "P-firm", step: "Record that they quoted, then whether they won or lost", status: "built" },
+    { actor: "P-directory", step: "Ask the buyer whether they booked a survey", status: "missing" },
   ] },
   { id: "PR3", name: "Claim a listing", realises: "U5", status: "part", refs: ["D1"], steps: [
     { actor: "P-firm", step: "Claim with an email on the firm's domain", status: "built" },
@@ -104,9 +106,9 @@ export const processes: Process[] = [
     { actor: "P-directory", step: "Take candidates from CIEEM's Registered Practice Directory (145 ecology practices), once CIEEM gives written permission", status: "missing" },
     { actor: "P-directory", step: "Check the site sells planning surveys", status: "part" },
     { actor: "P-directory", step: "Map surveys and regions", status: "part" },
-    { actor: "P-directory", step: "Send the listing notice", status: "missing" },
+    { actor: "P-directory", step: "Send the listing notice (parked, D16)", status: "missing" },
   ] },
-  { id: "PR5", name: "Correct or remove a listing", realises: "U5", status: "missing", refs: ["D1"], steps: [
+  { id: "PR5", name: "Correct or remove a listing", realises: "U5", status: "missing", refs: ["D1", "D16"], note: "Parked until the loop is solid (D16)", steps: [
     { actor: "P-firm", step: "Ask", status: "missing" }, { actor: "P-directory", step: "Apply and tombstone", status: "missing" },
   ] },
 ]

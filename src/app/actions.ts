@@ -10,7 +10,7 @@ import { mailer } from "@/mailer"
 import { confirmClaim, submitClaim, type Result } from "@/requests"
 import { confirmLead, reviewLead, submitLead, type Submitted } from "@/leads"
 import { redirect } from "next/navigation"
-import { decideBrief, routeLead, setPausedByToken } from "@/routing"
+import { decideBrief, recordOutcome, routeLead, setPausedByToken } from "@/routing"
 import { baseUrl } from "./base-url"
 import { lookupPostcode, type Place } from "@/postcode"
 
@@ -79,4 +79,17 @@ export async function pauseAction(form: FormData): Promise<void> {
 // The buyer's area and council from the site postcode (PR1). Runs on our server, so the buyer's browser talks only to us.
 export async function postcodeAction(postcode: string): Promise<Place | null> {
   return (await lookupPostcode(String(postcode).slice(0, 10))) ?? null
+}
+
+// The firm records how it went (ST-U4.5): quoted, then won or lost.
+export async function outcomeAction(form: FormData): Promise<void> {
+  const token = String(form.get("token") ?? "")
+  const outcome = form.get("outcome")
+  if (outcome !== "quoted" && outcome !== "won" && outcome !== "lost") throw new Error("Bad outcome")
+  try {
+    recordOutcome({ db: db(), now: () => new Date() }, token, outcome)
+  } catch {
+    // Not a move the brief can make: the page shows its state.
+  }
+  redirect(`/briefs/${encodeURIComponent(token)}`)
 }
