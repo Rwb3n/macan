@@ -23,7 +23,7 @@ export type SurveyGroup = (typeof SURVEY_GROUPS)[number]
 export const SURVEYS: readonly Survey[] = [
   {
     slug: "preliminary-ecological-appraisal", name: "Preliminary ecological appraisal", group: "Ecology",
-    typicalPrice: { pounds: 725, covers: "the appraisal" },
+    typicalPrice: { pounds: 725, covers: "the first visit and report" },
     what: "A first ecology visit and desk study that says which habitats and protected species could be affected, and which further surveys you need.",
     when: "Usually the first ecology step for a planning application on land with any wildlife value.",
     season: "Possible all year; best April to September.",
@@ -31,7 +31,7 @@ export const SURVEYS: readonly Survey[] = [
   },
   {
     slug: "bat-survey", name: "Bat survey", group: "Ecology",
-    typicalPrice: { pounds: 362, covers: "the first roost assessment" },
+    typicalPrice: { pounds: 362, covers: "the first visit to look for signs of bats" },
     what: "Checks a building or tree for signs of roosting bats, then, if needed, watches at dusk or dawn to confirm.",
     when: "Often asked for when you alter a roof or loft, convert a barn or demolish an older building.",
     season: "The first inspection can happen all year. Follow-up dusk and dawn surveys only run from May to September.",

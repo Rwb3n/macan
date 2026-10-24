@@ -11,11 +11,11 @@ export const useCases: UseCase[] = [
 ]
 
 export const stages: Stage[] = [
-  { id: "ST-U2.1", useCase: "U2", name: "Say the problem", outcome: "The problem in my own words, and where the site is", status: "built", refs: ["D14"] },
-  { id: "ST-U2.2", useCase: "U2", name: "See what's needed and when", outcome: "Knows the survey, its season, a typical price and how many firms cover the area", status: "built", refs: ["D1", "D14", "R3"] },
-  { id: "ST-U2.3", useCase: "U2", name: "Choose to send it to firms", outcome: "Contact given knowing why; confirmed, checked and sent to up to 3 firms", status: "built", refs: ["D2", "D14"], note: "The operator approves and sends (PR1, PR2)" },
-  { id: "ST-U2.4", useCase: "U2", name: "Choose and book", outcome: "A firm is booked", status: "outside", refs: ["R2"] },
-  { id: "ST-U2.5", useCase: "U2", name: "Survey and report", outcome: "Has the report for the council", status: "outside", refs: ["R2"] },
+  { id: "ST-U2.1", useCase: "U2", name: "Tell us what's going on", outcome: "The problem in my own words, and where the site is", status: "built", refs: ["D14"] },
+  { id: "ST-U2.2", useCase: "U2", name: "Find out what you need and when", outcome: "Knows the survey, its season, a typical price and how many firms cover the area", status: "built", refs: ["D1", "D14", "R3"] },
+  { id: "ST-U2.3", useCase: "U2", name: "Choose whether to get quotes", outcome: "Contact given knowing why; confirmed, checked and sent to up to 3 firms", status: "built", refs: ["D2", "D14"], note: "The operator approves and sends (PR1, PR2)" },
+  { id: "ST-U2.4", useCase: "U2", name: "Pick a firm and book", outcome: "A firm is booked", status: "outside", refs: ["R2"] },
+  { id: "ST-U2.5", useCase: "U2", name: "The survey and the report", outcome: "Has the report for the council", status: "outside", refs: ["R2"] },
   { id: "ST-U4.1", useCase: "U4", name: "Be found", outcome: "Listed, claimed or not", status: "built", refs: ["D1"] },
   { id: "ST-U4.2", useCase: "U4", name: "Get a brief", outcome: "Sees survey, area, deadline, site; contact hidden", status: "built", refs: ["D2"] },
   { id: "ST-U4.3", useCase: "U4", name: "Decide", outcome: "Unlocked (pays) or passed; paused when booked up", status: "part", refs: ["D2", "Q2"] },

@@ -15,11 +15,11 @@ export const PROJECT_TYPES = [
 export type ProjectType = (typeof PROJECT_TYPES)[number][0]
 
 export const PLANNING_STAGES = [
-  ["council-asked", "The council has asked for this survey"],
-  ["preparing", "I'm preparing a planning application"],
-  ["pre-app", "Pre-application advice said I need it"],
+  ["council-asked", "I've applied, and the council has asked for this survey"],
+  ["preparing", "I'm getting ready to apply for planning permission"],
+  ["pre-app", "I asked the council for early advice, and they said I'll need it"],
   ["not-sure", "I'm not sure yet"],
-  ["no-application", "It's not for a planning application"],
+  ["no-application", "It's not for planning permission"],
 ] as const
 export type PlanningStage = (typeof PLANNING_STAGES)[number][0]
 

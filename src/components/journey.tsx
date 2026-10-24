@@ -10,20 +10,21 @@ export type JourneyStage = { id: string; name: string; outcome: string; status: 
 
 // What the buyer gives and who sees it, per stage. A stage the map adds without copy shows its outcome.
 const SAYS: Record<string, string> = {
-  "ST-U2.1": "You tell us what's going on and the postcode. Nobody else sees it.",
-  "ST-U2.2": "We tell you the survey, its season, a typical price and how many firms cover your area. Free; no details asked.",
-  "ST-U2.3": "Only if you choose: your name and email. Up to 3 local firms see the job and the area, not you.",
-  "ST-U2.4": "A firm that takes it gets your contact and gets in touch. You choose who to book.",
-  "ST-U2.5": "The firm does the survey and writes the report for the council.",
+  "ST-U2.1": "Explain what you're planning and what the council has asked for, in your own words, and give us the postcode of the site. Only we see this.",
+  "ST-U2.2": "We'll tell you straight away which survey you're likely to need, what time of year it can be done, roughly what it costs and how many firms work near you. It's free, and we don't ask for your name or contact details.",
+  "ST-U2.3": "If you'd like quotes, give us your name and email address. We'll show your job to up to three local firms, but not who you are or exactly where the site is.",
+  "ST-U2.4": "A firm that wants the job will be given your contact details and will get in touch. You decide which firm, if any, to book.",
+  "ST-U2.5": "The firm carries out the survey and writes the report that you send to the council.",
 }
 
 type Colours = { fill: string; paper: string; line: string; ink: string; muted: string }
 
-function chart(stages: JourneyStage[], vertical: boolean, c: Colours): string {
+// Top to bottom on every screen: side by side, five boxes shrink the text until it can't be read.
+function chart(stages: JourneyStage[], c: Colours): string {
   const esc = (s: string) => s.replace(/"/g, "'")
   const node = (s: JourneyStage, i: number) => `  s${i}["<b>${i + 1}. ${esc(s.name)}</b><br/><span>${esc(SAYS[s.id] ?? s.outcome)}</span>"]`
   return [
-    `flowchart ${vertical ? "TD" : "LR"}`,
+    "flowchart TD",
     ...stages.map(node),
     ...stages.slice(1).map((s, i) => `  s${i} ${s.status === "outside" ? "-.->" : "-->"} s${i + 1}`),
     `  classDef ours fill:${c.fill},stroke:${c.line},color:${c.ink}`,
@@ -45,12 +46,11 @@ export function Journey({ stages }: { stages: JourneyStage[] }) {
         const mermaid = (await import("mermaid")).default
         mermaid.initialize({
           startOnLoad: false, securityLevel: "strict", theme: "base",
-          themeVariables: { fontFamily: token("--font-sans"), lineColor: token("--color-moss"), primaryTextColor: token("--color-ink") },
-          flowchart: { htmlLabels: true, wrappingWidth: 220 },
+          themeVariables: { fontFamily: token("--font-sans"), fontSize: "15px", lineColor: token("--color-moss"), primaryTextColor: token("--color-ink") },
+          flowchart: { htmlLabels: true, wrappingWidth: 300, useMaxWidth: true },
         })
-        const vertical = window.matchMedia("(max-width: 640px)").matches
         const colours = { fill: token("--color-leaf"), paper: token("--color-paper"), line: token("--color-moss"), ink: token("--color-ink"), muted: token("--color-muted") }
-        const { svg } = await mermaid.render(`journey${id}`, chart(stages, vertical, colours))
+        const { svg } = await mermaid.render(`journey${id}`, chart(stages, colours))
         if (live && ref.current) ref.current.innerHTML = svg
       } catch {
         if (live) setFailed(true)
@@ -59,7 +59,7 @@ export function Journey({ stages }: { stages: JourneyStage[] }) {
     return () => { live = false }
   }, [stages, id])
   return (
-    <figure className="journey" aria-label="How it works">
+    <figure className="journey mx-auto max-w-sm" aria-label="How it works">
       <div ref={ref} />
       {/* Always present for screen readers, and shown if the diagram can't draw. */}
       <ol className={failed ? "mt-2 space-y-2 text-sm" : "sr-only"}>

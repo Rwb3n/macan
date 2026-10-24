@@ -101,11 +101,11 @@ flowchart LR
 
 | id | stage | outcome | status |
 |---|---|---|---|
-| ST-U2.1 | Say the problem | The problem in my own words, and where the site is | built |
-| ST-U2.2 | See what's needed and when | Knows the survey, its season, a typical price and how many firms cover the area | built |
-| ST-U2.3 | Choose to send it to firms | Contact given knowing why; confirmed, checked and sent to up to 3 firms | built |
-| ST-U2.4 | Choose and book | A firm is booked | outside |
-| ST-U2.5 | Survey and report | Has the report for the council | outside |
+| ST-U2.1 | Tell us what's going on | The problem in my own words, and where the site is | built |
+| ST-U2.2 | Find out what you need and when | Knows the survey, its season, a typical price and how many firms cover the area | built |
+| ST-U2.3 | Choose whether to get quotes | Contact given knowing why; confirmed, checked and sent to up to 3 firms | built |
+| ST-U2.4 | Pick a firm and book | A firm is booked | outside |
+| ST-U2.5 | The survey and the report | Has the report for the council | outside |
 
 **U4** Get the enquiries I want, and not the ones I don't
 

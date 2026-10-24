@@ -24,11 +24,14 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-5xl px-4 pt-12">
-        <h2 className="text-xl font-semibold">How it works</h2>
-        <p className="mt-1 text-muted">You tell us the problem first and see the answer straight away. We only ask about you if you choose to send it to firms.</p>
-        <div className="mt-6"><Journey stages={buyerJourney()} /></div>
-        <Link href={routes.quote()} className="mt-6 inline-block rounded-md bg-moss px-5 py-2 text-white hover:bg-moss-dark">Start with your problem</Link>
+      <section className="mx-auto max-w-5xl px-4 pt-12 grid gap-8 md:grid-cols-[1fr_24rem] md:items-start">
+        <div>
+          <h2 className="text-xl font-semibold">How it works</h2>
+          <p className="mt-2 text-muted">Tell us what&apos;s going on first, and we&apos;ll tell you straight away which survey you need, when it can be done and roughly what it costs.</p>
+          <p className="mt-2 text-muted">We only ask for your name and email address if you decide you&apos;d like quotes from firms. Even then, firms don&apos;t see who you are until one of them takes the job on.</p>
+          <Link href={routes.quote()} className="mt-6 inline-block rounded-md bg-moss px-5 py-2 text-white hover:bg-moss-dark">Start here</Link>
+        </div>
+        <Journey stages={buyerJourney()} />
       </section>
 
       <section className="mx-auto max-w-5xl px-4 py-12">
