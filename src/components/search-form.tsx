@@ -1,26 +1,24 @@
 // Builds: U2, ST-U2.2
-import { REGIONS, SURVEYS } from "@/catalog"
+// Search the way people think: which survey, and where the site is (a postcode, not a region).
+import { SURVEYS } from "@/catalog"
 
-const field = "w-full rounded-md border border-line bg-white px-3 py-2"
+const field = "w-full rounded-md border-2 border-ink/30 bg-white px-3 py-2 text-lg"
 
-export function SearchForm({ survey, region }: { survey?: string; region?: string }) {
+export function SearchForm({ survey, postcode }: { survey?: string; postcode?: string }) {
   return (
-    <form action="/search" className="grid gap-3 sm:grid-cols-[1fr_1fr_auto] items-end">
-      <label className="text-sm">
-        <span className="block mb-1 text-muted">Survey</span>
+    <form action="/search" className="grid gap-3 sm:grid-cols-[1fr_12rem_auto] sm:items-end">
+      <label className="block">
+        <span className="mb-1 block font-medium">Which survey?</span>
         <select name="survey" defaultValue={survey ?? ""} className={field}>
           <option value="">Any survey</option>
           {SURVEYS.map((s) => <option key={s.slug} value={s.slug}>{s.name}</option>)}
         </select>
       </label>
-      <label className="text-sm">
-        <span className="block mb-1 text-muted">Where is the site?</span>
-        <select name="region" defaultValue={region ?? ""} className={field}>
-          <option value="">Anywhere in the UK</option>
-          {REGIONS.map((r) => <option key={r.slug} value={r.slug}>{r.name}</option>)}
-        </select>
+      <label className="block">
+        <span className="mb-1 block font-medium">Postcode of the site</span>
+        <input name="postcode" defaultValue={postcode ?? ""} autoComplete="postal-code" className={field} />
       </label>
-      <button className="rounded-md bg-moss px-5 py-2 text-white hover:bg-moss-dark">Find firms</button>
+      <button className="rounded-md bg-moss px-6 py-2.5 text-lg text-white hover:bg-moss-dark">Find firms</button>
     </form>
   )
 }

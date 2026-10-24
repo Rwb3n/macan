@@ -24,11 +24,12 @@ export default async function FirmPage({ params }: { params: Params }) {
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 grid gap-8 md:grid-cols-[1fr_280px]">
       <div>
-        <h1 className="text-3xl font-semibold tracking-tight">{firm.name}</h1>
-        <p className="mt-1 text-muted">{[firm.town, firm.county].filter(Boolean).join(", ")} · {coverage(firm.regions)}</p>
-        {firm.summary ? <p className="mt-4">{firm.summary}</p> : null}
+        <h1 className="text-4xl font-semibold tracking-tight">{firm.name}</h1>
+        <p className="mt-2 text-lg text-muted">{[firm.town, firm.county].filter(Boolean).length ? `Based in ${[firm.town, firm.county].filter(Boolean).join(", ")}. ` : ""}{coverage(firm.regions)}.</p>
+        {firm.claimedAt ? <p className="mt-1 text-moss">✓ The firm has confirmed these details</p> : null}
+        {firm.summary ? <p className="mt-4 text-lg">{firm.summary}</p> : null}
 
-        <h2 className="mt-8 text-sm font-semibold uppercase tracking-wide text-muted">Surveys offered</h2>
+        <h2 className="mt-8 text-xl font-semibold">Surveys they do</h2>
         <ul className="mt-2 divide-y divide-line border-y border-line">
           {surveys.map((s) => (
             <li key={s.slug} className="py-2 flex justify-between gap-4">
@@ -38,9 +39,12 @@ export default async function FirmPage({ params }: { params: Params }) {
           ))}
         </ul>
 
+        <h2 className="mt-8 text-xl font-semibold">About this listing</h2>
+        <p className="mt-2">{firm.name} is a registered company (number {firm.companyNumber}, which you can <a href={`https://find-and-update.company-information.service.gov.uk/company/${firm.companyNumber}`} rel="nofollow noopener" target="_blank" className="text-moss underline">check on Companies House</a>). The details here come from the firm&apos;s own website{firm.claimedAt ? " and have been confirmed by the firm" : ""}.</p>
+
         {firm.accreditations.length ? (
           <>
-            <h2 className="mt-8 text-sm font-semibold uppercase tracking-wide text-muted">Memberships and licences</h2>
+            <h2 className="mt-8 text-xl font-semibold">Memberships and licences</h2>
             <ul className="mt-2 list-disc pl-5 text-sm">{firm.accreditations.map((a) => <li key={a}>{a}</li>)}</ul>
           </>
         ) : null}
@@ -48,7 +52,8 @@ export default async function FirmPage({ params }: { params: Params }) {
 
       <aside className="space-y-4">
         <div className="rounded-lg border border-line bg-white p-5 space-y-3">
-          <Link href={routes.quote({ firm: firm.slug })} className="block text-center rounded-md bg-moss px-4 py-2 text-white hover:bg-moss-dark">Ask {firm.name} for a quote</Link>
+          <Link href={routes.quote({ firm: firm.slug })} className="block text-center rounded-md bg-moss px-4 py-3 text-lg text-white hover:bg-moss-dark">Ask for a quote</Link>
+          <p className="text-sm text-muted">Free. We tell you what you need first, and the firm only sees your details once it takes the job on. Or contact them directly:</p>
           <dl className="text-sm space-y-2">
             {firm.website ? <Row label="Website"><a href={firm.website} rel="nofollow noopener" target="_blank" className="text-moss underline break-all">{firm.website.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}</a></Row> : null}
             {firm.phone ? <Row label="Phone"><a href={`tel:${firm.phone.replace(/\s/g, "")}`} className="text-moss underline">{firm.phone}</a></Row> : null}
