@@ -38,3 +38,43 @@ That is the principal's "Claude API + decision models" pairing. This finding is 
 3. **Missing policies:** no data policy found for Liquid, and no EU-routing sentence for Perplexity and Upstage.
 4. **Weaker sources:** two pages were read from Firecrawl's cache, and one figure (Mercury, "14 decisions per second") is from a search excerpt.
 5. **Partial screen for the cheap chat model:** three smaller Workers AI models weren't checked for OpenRouter availability.
+
+# R10: result, Part 2 (run 2026-10-24, inputs committed in ee684d2 before any model ran)
+
+`run.ts` ran the 20 fixed inputs through three line-ups. Results are in `evidence/part2-results.json`. Opus 5.5 judged invented facts against `evidence/judge-checklist.md`. Spend for the whole run (models and judge) was $0.24.
+
+| Line-up | Valid shape | No invented facts | Median time to full result | Cost per request |
+|---|---|---|---|---|
+| A: Claude Haiku 5.5, effort low | 20/20 | 17/20 | 2.42 s | $0.00033 |
+| C: Gemma 4 26B via OpenRouter (Darkbloom) | 20/20 | 18/20 | 3.99 s | $0.00008 |
+| B: Jev 1.14 decision model, after A | n/a | n/a | 0.22 s (decision call only) | $0.00008 |
+
+**Decision rule: no candidate passes.** Both chat models miss "invents nothing in 19 of 20" and "1.5 s or less at the median". As the method says, Claude Haiku 5.5 stays as the baseline to tune.
+
+## What was invented (judge's exact phrases)
+- **A:**
+  - #3: "starting with a preliminary ecological appraisal", "such as bats or great crested newts";
+  - #8: "as part of the planning process";
+  - #20: "A buyer needs a noise impact assessment".
+- **C:**
+  - #17: "The council has requested this assessment";
+  - #20: "A buyer needs a noise impact assessment".
+
+**Pattern:** the models assume which survey is needed, or that the council asked, when the text doesn't say so. That is a prompt problem, not a capability one.
+
+## The decision model
+- **Survey pick:** it agreed with Haiku in 18 of 20.
+  - #6, "council just said 'ecology'": Haiku picked preliminary ecological appraisal; Jev said not_sure.
+  - #9, takeaway extraction plus noise: Haiku picked ventilation; Jev picked noise. Both are defensible; the buyer needs both.
+- **As a checker for invented facts:** no use as asked. Its "supported" probability on drafts with inventions (0.70, 0.59, 0.55) sat inside the range for clean drafts (0.36 to 0.92, median 0.79), so no threshold separates them.
+
+## Design consequence
+Pills don't have to wait for the draft:
+- a decision model (about 0.2 s) or plain code fills the pills while the chat model writes the draft;
+- the draft streams in, so speed is felt through the pills.
+
+## Defects
+1. **Latency** was measured from this machine; a UK server will differ.
+2. **The judge is a model.** The principal's spot-check of 5 judgements (method) is not done yet.
+3. **Gemma's route** ran on Darkbloom, whose data policy wasn't read in part 1.
+4. **The inputs are synthetic and tidy.** Real buyers write differently (principal, 2026-10-24), which R11 tests.

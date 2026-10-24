@@ -1,0 +1,1849 @@
+[
+  {
+    "id": 1,
+    "A": {
+      "out": {
+        "survey": "bat-survey",
+        "pills": [
+          {
+            "label": "Survey",
+            "value": "Bat survey"
+          },
+          {
+            "label": "Project",
+            "value": "Loft conversion"
+          },
+          {
+            "label": "Building",
+            "value": "1930s semi"
+          },
+          {
+            "label": "Roof",
+            "value": "Clay tile"
+          },
+          {
+            "label": "Location",
+            "value": "OX4"
+          },
+          {
+            "label": "Deadline",
+            "value": "Start building March next year"
+          },
+          {
+            "label": "Council",
+            "value": "Requires bat survey before validation"
+          }
+        ],
+        "draft": "A buyer needs a bat survey for a loft conversion at a 1930s semi-detached house in OX4, with a clay tile roof. The local council requires this survey before it will validate the planning application. The buyer plans to start building in March next year. The buyer has not yet said whether the loft has been inspected or whether any bat activity is known, and this is not known yet. Please confirm what you need from the buyer to scope and price the survey, and the timing for surveys relative to the March start."
+      },
+      "valid": true,
+      "ms": 2631,
+      "cost": 0.0003331,
+      "usage": {
+        "input_tokens": 1776,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 311,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "invented": []
+    },
+    "B": {
+      "supported": 0.66,
+      "survey": "bat-survey",
+      "surveyConfidence": 1,
+      "model": "typesafe/jev-1.14-20261014",
+      "cost": 0.000082572,
+      "ms": 231
+    },
+    "C": {
+      "out": {
+        "survey": "bat-survey",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "loft conversion"
+          },
+          {
+            "label": "Building",
+            "value": "1930s semi"
+          },
+          {
+            "label": "Roof",
+            "value": "clay tile"
+          },
+          {
+            "label": "Location",
+            "value": "OX4"
+          },
+          {
+            "label": "Council",
+            "value": "council says we need a bat survey"
+          },
+          {
+            "label": "Deadline",
+            "value": "start building in March next year"
+          }
+        ],
+        "draft": "A buyer needs a bat survey to satisfy the council requirements for a loft conversion. The property is a 1930s semi with a clay tile roof located in OX4. The project is intended to commence building in March next year."
+      },
+      "valid": true,
+      "ms": 3749,
+      "cost": 0.000091592,
+      "provider": "Darkbloom",
+      "invented": []
+    }
+  },
+  {
+    "id": 2,
+    "A": {
+      "out": {
+        "survey": "bat-survey",
+        "pills": [
+          {
+            "label": "Survey",
+            "value": "Bat survey"
+          },
+          {
+            "label": "Project",
+            "value": "Barn conversion"
+          },
+          {
+            "label": "Building",
+            "value": "Old stone barn"
+          },
+          {
+            "label": "Roof",
+            "value": "Slate roof"
+          },
+          {
+            "label": "Location",
+            "value": "Near Hereford HR2"
+          },
+          {
+            "label": "Council",
+            "value": "Planning officer requested"
+          },
+          {
+            "label": "Deadline",
+            "value": "No deadline yet, as soon as possible"
+          }
+        ],
+        "draft": "A buyer needs a bat survey for a barn conversion. The buyer's planning officer has asked for it. The building is an old stone barn with a slate roof, near Hereford HR2. No deadline has been set yet, but the buyer would like the work done as soon as possible. The buyer does not yet know the building's age, the roof condition, or whether bats have been recorded on or near the site. Please confirm what you need from the buyer and your availability."
+      },
+      "valid": true,
+      "ms": 2509,
+      "cost": 0.00033289999999999996,
+      "usage": {
+        "input_tokens": 1774,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 311,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "invented": []
+    },
+    "B": {
+      "supported": 0.76,
+      "survey": "bat-survey",
+      "surveyConfidence": 1,
+      "model": "typesafe/jev-1.14-20261014",
+      "cost": 0.000081522,
+      "ms": 221
+    },
+    "C": {
+      "out": {
+        "survey": "bat-survey",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "barn conversion"
+          },
+          {
+            "label": "Building",
+            "value": "old stone barn"
+          },
+          {
+            "label": "Roof",
+            "value": "slate roof"
+          },
+          {
+            "label": "Location",
+            "value": "near Hereford HR2"
+          },
+          {
+            "label": "Deadline",
+            "value": "asap"
+          },
+          {
+            "label": "Other",
+            "value": "requested by planning officer"
+          }
+        ],
+        "draft": "A buyer needs a bat survey for a barn conversion. The property is an old stone barn with a slate roof, located near Hereford HR2. The planning officer has requested this survey. The deadline is not known yet, but the client requires it as soon as possible."
+      },
+      "valid": true,
+      "ms": 2734,
+      "cost": 0.000090344,
+      "provider": "Darkbloom",
+      "invented": []
+    }
+  },
+  {
+    "id": 3,
+    "A": {
+      "out": {
+        "survey": "preliminary-ecological-appraisal",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "demolish bungalow, build two houses"
+          },
+          {
+            "label": "Building",
+            "value": "bungalow built 1960s"
+          },
+          {
+            "label": "Roof",
+            "value": "concrete tiles"
+          },
+          {
+            "label": "Location",
+            "value": "plot in Wealden"
+          },
+          {
+            "label": "Council",
+            "value": "Wealden"
+          },
+          {
+            "label": "Other",
+            "value": "site about 0.15 hectares"
+          },
+          {
+            "label": "Other",
+            "value": "pond next door"
+          },
+          {
+            "label": "Other",
+            "value": "pre-app advice: ecology surveys needed"
+          },
+          {
+            "label": "Survey",
+            "value": "unsure which ecology surveys"
+          }
+        ],
+        "draft": "A buyer needs advice on which ecology surveys are required for demolishing a 1960s bungalow with concrete tiles and building two houses on a site of about 0.15 hectares in Wealden. Pre-application advice said ecology surveys would be needed, but the specific surveys are not known yet. A pond lies next door to the site. The buyer asks you to recommend the surveys needed, starting with a preliminary ecological appraisal to confirm whether further species surveys, such as bats or great crested newts, are required. It is not known yet whether any protected species are present on the site."
+      },
+      "valid": true,
+      "ms": 2923,
+      "cost": 0.0003866,
+      "usage": {
+        "input_tokens": 1806,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 412,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "invented": [
+        "starting with a preliminary ecological appraisal",
+        "such as bats or great crested newts"
+      ]
+    },
+    "B": {
+      "supported": 0.7,
+      "survey": "preliminary-ecological-appraisal",
+      "surveyConfidence": 0.97,
+      "model": "typesafe/jev-1.14-20261014",
+      "cost": 0.000084042,
+      "ms": 240
+    },
+    "C": {
+      "out": {
+        "survey": "not_sure",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "demolishing a bungalow and building two houses"
+          },
+          {
+            "label": "Building",
+            "value": "1960s concrete tiles"
+          },
+          {
+            "label": "Location",
+            "value": "Wealden"
+          },
+          {
+            "label": "Other",
+            "value": "0.15 hectares with a pond next door"
+          },
+          {
+            "label": "Council",
+            "value": "pre-app advice said ecology surveys needed"
+          }
+        ],
+        "draft": "A buyer needs ecology surveys for a site in Wealden. The project involves demolishing a 1960s bungalow with concrete tiles and building two houses on a 0.15 hectare plot. There is a pond located next door. Pre-application advice indicated that ecology surveys are required, but the specific type of survey is not known yet."
+      },
+      "valid": true,
+      "ms": 12160,
+      "cost": 0.000095606,
+      "provider": "Darkbloom",
+      "invented": []
+    }
+  },
+  {
+    "id": 4,
+    "A": {
+      "out": {
+        "survey": "flood-risk-assessment",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "Extension to back"
+          },
+          {
+            "label": "Building",
+            "value": "Terraced house"
+          },
+          {
+            "label": "Location",
+            "value": "London SE15"
+          },
+          {
+            "label": "Council",
+            "value": "Validation team requires FRA"
+          },
+          {
+            "label": "Other",
+            "value": "Flood zone 2"
+          },
+          {
+            "label": "Other",
+            "value": "Application submitted, ref 26/AP/1234"
+          }
+        ],
+        "draft": "A buyer needs a flood risk assessment for a rear extension to a terraced house in London SE15. The council validation team has asked for one because the site is in flood zone 2. The planning application has already been submitted under reference 26/AP/1234. The buyer has not yet said what the building materials, size of the extension, roof type, or drainage arrangements are, so these are not known yet. Please confirm what information you would need from the buyer before starting."
+      },
+      "valid": true,
+      "ms": 3021,
+      "cost": 0.0003238,
+      "usage": {
+        "input_tokens": 1783,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 291,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "invented": []
+    },
+    "B": {
+      "supported": 0.8,
+      "survey": "flood-risk-assessment",
+      "surveyConfidence": 1,
+      "model": "typesafe/jev-1.14-20261014",
+      "cost": 0.000082362,
+      "ms": 241
+    },
+    "C": {
+      "out": {
+        "survey": "flood-risk-assessment",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "Extension to the back of a terraced house"
+          },
+          {
+            "label": "Location",
+            "value": "London SE15"
+          },
+          {
+            "label": "Council",
+            "value": "Council validation team"
+          },
+          {
+            "label": "Other",
+            "value": "flood zone 2"
+          },
+          {
+            "label": "Other",
+            "value": "Application submitted, reference 26/AP/1234"
+          }
+        ],
+        "draft": "A buyer needs a flood risk assessment for an extension to the back of a terraced house in London SE15. The council validation team has requested this because the site is in flood zone 2. An application has already been submitted under reference 26/AP/1234."
+      },
+      "valid": true,
+      "ms": 2520,
+      "cost": 0.00007328,
+      "provider": "Darkbloom",
+      "invented": []
+    }
+  },
+  {
+    "id": 5,
+    "A": {
+      "out": {
+        "survey": "heritage-statement",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "Converting upstairs into two flats"
+          },
+          {
+            "label": "Building",
+            "value": "Pub, listed"
+          },
+          {
+            "label": "Location",
+            "value": "Bath"
+          },
+          {
+            "label": "Other",
+            "value": "Pub kitchen staying open downstairs"
+          },
+          {
+            "label": "Other",
+            "value": "Heritage statement required"
+          }
+        ],
+        "draft": "A buyer needs a heritage statement for a listed pub in Bath. The project converts the upstairs into two flats. The pub kitchen stays open downstairs. The buyer has been told to submit a heritage statement. Details of the listing grade, the building's age, its materials and the extent of the proposed works are not known yet. Please confirm what information you need from the buyer to prepare the statement."
+      },
+      "valid": true,
+      "ms": 2975,
+      "cost": 0.0003056,
+      "usage": {
+        "input_tokens": 1776,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 256,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "invented": []
+    },
+    "B": {
+      "supported": 0.91,
+      "survey": "heritage-statement",
+      "surveyConfidence": 1,
+      "model": "typesafe/jev-1.14-20261014",
+      "cost": 0.000080808,
+      "ms": 251
+    },
+    "C": {
+      "out": {
+        "survey": "heritage-statement",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "converting upstairs into two flats"
+          },
+          {
+            "label": "Building",
+            "value": "listed pub"
+          },
+          {
+            "label": "Location",
+            "value": "Bath"
+          },
+          {
+            "label": "Other",
+            "value": "kitchen staying open downstairs"
+          }
+        ],
+        "draft": "A buyer needs a heritage statement for a listed pub in Bath. The project involves converting the upstairs area into two separate flats. Note that the pub kitchen will remain operational downstairs. The building age and specific listing details are not known yet."
+      },
+      "valid": true,
+      "ms": 6873,
+      "cost": 0.00007859,
+      "provider": "Darkbloom",
+      "invented": []
+    }
+  },
+  {
+    "id": 6,
+    "A": {
+      "out": {
+        "survey": "preliminary-ecological-appraisal",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "New dormer roof"
+          },
+          {
+            "label": "Building",
+            "value": "Victorian semi"
+          },
+          {
+            "label": "Roof",
+            "value": "Slate roof"
+          },
+          {
+            "label": "Location",
+            "value": "Leicester LE2"
+          },
+          {
+            "label": "Deadline",
+            "value": "Report by 1 June"
+          },
+          {
+            "label": "Council",
+            "value": "Council asked for ecology"
+          },
+          {
+            "label": "Survey",
+            "value": "Not sure which survey"
+          }
+        ],
+        "draft": "A buyer needs an ecology survey for a new dormer roof on a Victorian semi-detached house with a slate roof in Leicester LE2. The buyer is not sure which survey type is required; the council only asked for 'ecology'. The report is needed by 1 June. It is not known yet which species or habitats may be affected, or whether the roof space has been checked for bats. Please advise on the appropriate survey and confirm whether the report can be delivered by 1 June."
+      },
+      "valid": true,
+      "ms": 2325,
+      "cost": 0.0003395,
+      "usage": {
+        "input_tokens": 1780,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 323,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "invented": []
+    },
+    "B": {
+      "supported": 0.71,
+      "survey": "not_sure",
+      "surveyConfidence": 0.56,
+      "model": "typesafe/jev-1.14-20261014",
+      "cost": 0.0000819,
+      "ms": 204
+    },
+    "C": {
+      "out": {
+        "survey": "not_sure",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "New dormer roof"
+          },
+          {
+            "label": "Building",
+            "value": "Victorian semi"
+          },
+          {
+            "label": "Roof",
+            "value": "slate"
+          },
+          {
+            "label": "Location",
+            "value": "Leicester LE2"
+          },
+          {
+            "label": "Council",
+            "value": "ecology requirement"
+          },
+          {
+            "label": "Deadline",
+            "value": "1 June"
+          },
+          {
+            "label": "Other",
+            "value": "survey type not known"
+          }
+        ],
+        "draft": "A buyer needs an ecological survey for a new dormer roof on a Victorian semi-detached house with a slate roof in Leicester LE2. The council has requested an ecology report. The required survey type is not known yet. The deadline for the report is 1 June."
+      },
+      "valid": true,
+      "ms": 4212,
+      "cost": 0.000077658,
+      "provider": "Darkbloom",
+      "invented": []
+    }
+  },
+  {
+    "id": 7,
+    "A": {
+      "out": {
+        "survey": "preliminary-ecological-appraisal",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "single new house"
+          },
+          {
+            "label": "Location",
+            "value": "field in Cornwall"
+          },
+          {
+            "label": "Council",
+            "value": "asked for PEA and drainage strategy"
+          },
+          {
+            "label": "Other",
+            "value": "no mains sewer"
+          },
+          {
+            "label": "Other",
+            "value": "treatment plant planned"
+          },
+          {
+            "label": "Deadline",
+            "value": "not known yet"
+          }
+        ],
+        "draft": "A buyer needs a preliminary ecological appraisal for a single house on a field in Cornwall. The council has also asked for a drainage strategy because there is no mains sewer, and the buyer plans to use a treatment plant. The buyer has not yet confirmed the site size, current field use, existing buildings, or any known wildlife on the site. No deadline has been given. Please confirm what information you need from the buyer and whether you can cover the drainage strategy alongside the appraisal."
+      },
+      "valid": true,
+      "ms": 3538,
+      "cost": 0.0004596,
+      "usage": {
+        "input_tokens": 1781,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 563,
+        "output_tokens_details": {
+          "thinking_tokens": 256
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "invented": []
+    },
+    "B": {
+      "supported": 0.36,
+      "survey": "preliminary-ecological-appraisal",
+      "surveyConfidence": 0.96,
+      "model": "typesafe/jev-1.14-20261014",
+      "cost": 0.000081438,
+      "ms": 233
+    },
+    "C": {
+      "out": {
+        "survey": "preliminary-ecological-appraisal",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "single house"
+          },
+          {
+            "label": "Location",
+            "value": "Cornwall"
+          },
+          {
+            "label": "Council",
+            "value": "Council asked for appraisal and strategy"
+          },
+          {
+            "label": "Other",
+            "value": "no mains sewer, will use a treatment plant"
+          }
+        ],
+        "draft": "A buyer needs a preliminary ecological appraisal and a drainage strategy for a project to build a single house on a field in Cornwall. The council has requested these because there is no mains sewer, and a treatment plant will be used instead. Building age, location specifics, and other site details are not known yet."
+      },
+      "valid": true,
+      "ms": 5331,
+      "cost": 0.000068732,
+      "provider": "Darkbloom",
+      "invented": []
+    }
+  },
+  {
+    "id": 8,
+    "A": {
+      "out": {
+        "survey": "arboricultural-survey",
+        "pills": [
+          {
+            "label": "Survey",
+            "value": "Tree survey"
+          },
+          {
+            "label": "Building",
+            "value": "Large oak tree"
+          },
+          {
+            "label": "Other",
+            "value": "Tree preservation order (TPO)"
+          },
+          {
+            "label": "Project",
+            "value": "New garage next to tree"
+          },
+          {
+            "label": "Council",
+            "value": "Council requested tree survey"
+          },
+          {
+            "label": "Location",
+            "value": "Postcode NE46"
+          }
+        ],
+        "draft": "A buyer needs an arboricultural tree survey for a large oak tree covered by a tree preservation order (TPO). The tree stands next to the area where they want to build a garage. The local council has asked for a tree survey as part of the planning process. The location is postcode NE46. It is not known yet whether the tree's exact position, height, trunk diameter, root protection area or condition has been recorded, or whether the garage's exact footprint has been set. Please advise on the survey scope and any information you need from the buyer."
+      },
+      "valid": true,
+      "ms": 2507,
+      "cost": 0.0003325,
+      "usage": {
+        "input_tokens": 1760,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 313,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "invented": [
+        "as part of the planning process"
+      ]
+    },
+    "B": {
+      "supported": 0.59,
+      "survey": "arboricultural-survey",
+      "surveyConfidence": 1,
+      "model": "typesafe/jev-1.14-20261014",
+      "cost": 0.00008211,
+      "ms": 238
+    },
+    "C": {
+      "out": {
+        "survey": "arboricultural-survey",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "build a garage"
+          },
+          {
+            "label": "Building",
+            "value": "large oak tree"
+          },
+          {
+            "label": "Other",
+            "value": "TPO"
+          },
+          {
+            "label": "Location",
+            "value": "NE46"
+          }
+        ],
+        "draft": "A buyer needs an arboricultural survey. The project involves building a garage next to a large oak tree that has a Tree Preservation Order (TPO). The location is NE46. The Council has requested a tree survey. The specific details of the tree's condition and the exact building footprint are not known yet."
+      },
+      "valid": true,
+      "ms": 2467,
+      "cost": 0.000082256,
+      "provider": "Darkbloom",
+      "invented": []
+    }
+  },
+  {
+    "id": 9,
+    "A": {
+      "out": {
+        "survey": "ventilation-extraction",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "Opening a takeaway"
+          },
+          {
+            "label": "Building",
+            "value": "Empty shop"
+          },
+          {
+            "label": "Location",
+            "value": "High street in Leicester"
+          },
+          {
+            "label": "Other",
+            "value": "Flats above"
+          },
+          {
+            "label": "Other",
+            "value": "Extraction details and fan noise report"
+          }
+        ],
+        "draft": "A buyer needs ventilation and extraction details for a takeaway opening in an empty shop on a high street in Leicester, plus a noise report for the extraction fans. There are flats above the shop, so the fan noise impact on those residents is a key concern. The buyer has not yet said what size or type of extraction system is planned, the building's age or construction, or the council's specific requirements, and these are not known yet. Please confirm what information you need to provide the extraction details and noise assessment."
+      },
+      "valid": true,
+      "ms": 2293,
+      "cost": 0.0003168,
+      "usage": {
+        "input_tokens": 1768,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 280,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "invented": []
+    },
+    "B": {
+      "supported": 0.79,
+      "survey": "noise-impact-assessment",
+      "surveyConfidence": 0.54,
+      "model": "typesafe/jev-1.14-20261014",
+      "cost": 0.00008169,
+      "ms": 211
+    },
+    "C": {
+      "out": {
+        "survey": "not_sure",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "opening a takeaway"
+          },
+          {
+            "label": "Building",
+            "value": "empty shop on a high street"
+          },
+          {
+            "label": "Location",
+            "value": "Leicester"
+          },
+          {
+            "label": "Other",
+            "value": "flats above"
+          }
+        ],
+        "draft": "A buyer needs ventilation and extraction details and a noise impact assessment for takeaway fans. The site is an empty shop on a high street in Leicester with flats located above. The specific requirements for the noise report are to address the fans. Information regarding the building age and exact measurements is not known yet."
+      },
+      "valid": true,
+      "ms": 3838,
+      "cost": 0.000081324,
+      "provider": "Darkbloom",
+      "invented": []
+    }
+  },
+  {
+    "id": 10,
+    "A": {
+      "out": {
+        "survey": "bat-survey",
+        "pills": [
+          {
+            "label": "Survey",
+            "value": "bat survey"
+          },
+          {
+            "label": "Other",
+            "value": "application called invalid"
+          },
+          {
+            "label": "Building",
+            "value": "house is old"
+          }
+        ],
+        "draft": "A buyer needs a bat survey. They received a letter saying their planning application is invalid and that a bat survey is required. The house is old. The age, construction materials, location, council, roof details and any known bat records are not known yet. Please confirm what information you need from the buyer to scope the survey and what the council's requirements are for the survey report."
+      },
+      "valid": true,
+      "ms": 2068,
+      "cost": 0.00026510000000000005,
+      "usage": {
+        "input_tokens": 1746,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 181,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "invented": []
+    },
+    "B": {
+      "supported": 0.73,
+      "survey": "bat-survey",
+      "surveyConfidence": 1,
+      "model": "typesafe/jev-1.14-20261014",
+      "cost": 0.000080052,
+      "ms": 207
+    },
+    "C": {
+      "out": {
+        "survey": "bat-survey",
+        "pills": [
+          {
+            "label": "Survey",
+            "value": "bat survey"
+          },
+          {
+            "label": "Building",
+            "value": "house is old"
+          }
+        ],
+        "draft": "A buyer needs a bat survey. The building is an old house. The buyer's application was declared invalid. Building age and specific location are not known yet."
+      },
+      "valid": true,
+      "ms": 7854,
+      "cost": 0.000054598,
+      "provider": "Darkbloom",
+      "invented": []
+    }
+  },
+  {
+    "id": 11,
+    "A": {
+      "out": {
+        "survey": "bat-survey",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "Roof replacement"
+          },
+          {
+            "label": "Building",
+            "value": "1900s farmhouse"
+          },
+          {
+            "label": "Location",
+            "value": "North Yorkshire"
+          },
+          {
+            "label": "Other",
+            "value": "Bats found in roof void in 2023"
+          },
+          {
+            "label": "Council",
+            "value": "Updated surveys needed this summer"
+          },
+          {
+            "label": "Deadline",
+            "value": "End of August"
+          }
+        ],
+        "draft": "A buyer needs a bat survey for a 1900s farmhouse in North Yorkshire where the roof is being replaced. A previous survey in 2023 found bats in the roof void. The council says updated surveys are needed this summer, with a deadline at the end of August. The buyer has not yet confirmed the building's construction materials, the size of the roof, the species found in 2023, or the 2023 survey report, so these are not known yet. Please advise on what survey work and timing would meet the council's requirement, and confirm what information you need from the buyer to proceed."
+      },
+      "valid": true,
+      "ms": 2293,
+      "cost": 0.0003438,
+      "usage": {
+        "input_tokens": 1788,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 330,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "invented": []
+    },
+    "B": {
+      "supported": 0.82,
+      "survey": "bat-survey",
+      "surveyConfidence": 1,
+      "model": "typesafe/jev-1.14-20261014",
+      "cost": 0.000083412,
+      "ms": 246
+    },
+    "C": {
+      "out": {
+        "survey": "bat-survey",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "Replacing the roof"
+          },
+          {
+            "label": "Building",
+            "value": "1900s farmhouse"
+          },
+          {
+            "label": "Location",
+            "value": "North Yorkshire"
+          },
+          {
+            "label": "Other",
+            "value": "Previous survey in 2023 found bats in the roof void"
+          },
+          {
+            "label": "Council",
+            "value": "needs updated surveys"
+          },
+          {
+            "label": "Deadline",
+            "value": "end of August"
+          }
+        ],
+        "draft": "A buyer needs a bat survey for a 1900s farmhouse in North Yorkshire. The project involves replacing the roof. A previous survey from 2023 identified bats within the roof void. The council has requested updated surveys. The required deadline for this work is the end of August."
+      },
+      "valid": true,
+      "ms": 10613,
+      "cost": 0.000095468,
+      "provider": "Darkbloom",
+      "invented": []
+    }
+  },
+  {
+    "id": 12,
+    "A": {
+      "out": {
+        "survey": "preliminary-ecological-appraisal",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "12 homes"
+          },
+          {
+            "label": "Location",
+            "value": "1.2 ha greenfield site near Ipswich, IP12"
+          },
+          {
+            "label": "Survey",
+            "value": "PEA, BNG assessment, GCN eDNA"
+          },
+          {
+            "label": "Other",
+            "value": "3 ponds within 250m"
+          },
+          {
+            "label": "Deadline",
+            "value": "Reports wanted by May"
+          }
+        ],
+        "draft": "A buyer needs a preliminary ecological appraisal, a biodiversity net gain assessment and great crested newt eDNA testing for three ponds within 250m. The project is 12 homes on a 1.2 hectare greenfield site near Ipswich, IP12. The buyer's programme needs reports by May. The year is not stated, and the buyer has not said whether the site has been surveyed before, what habitats are present, or which ponds are on land they can access. Please confirm the scope, timing and any access requirements for the three ponds."
+      },
+      "valid": true,
+      "ms": 2386,
+      "cost": 0.0003461,
+      "usage": {
+        "input_tokens": 1801,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 332,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "invented": []
+    },
+    "B": {
+      "supported": 0.92,
+      "survey": "preliminary-ecological-appraisal",
+      "surveyConfidence": 0.72,
+      "model": "typesafe/jev-1.14-20261014",
+      "cost": 0.000083622,
+      "ms": 199
+    },
+    "C": {
+      "out": {
+        "survey": "preliminary-ecological-appraisal",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "12 homes on a 1.2 hectare greenfield site"
+          },
+          {
+            "label": "Location",
+            "value": "near Ipswich, IP12"
+          },
+          {
+            "label": "Other",
+            "value": "3 ponds within 250m"
+          },
+          {
+            "label": "Deadline",
+            "value": "reports by May"
+          }
+        ],
+        "draft": "A buyer needs a preliminary ecological appraisal, biodiversity net gain assessment, and great crested newt eDNA for 3 ponds within 250m. The project involves 12 homes on a 1.2 hectare greenfield site near Ipswich, IP12. The programme requires reports by May. The building age and material are not known yet."
+      },
+      "valid": true,
+      "ms": 2660,
+      "cost": 0.00008999,
+      "provider": "Darkbloom",
+      "invented": []
+    }
+  },
+  {
+    "id": 13,
+    "A": {
+      "out": {
+        "survey": "not_sure",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "Small loft conversion"
+          },
+          {
+            "label": "Budget",
+            "value": "Under £300 on a survey"
+          },
+          {
+            "label": "Location",
+            "value": "Postcode BS3"
+          }
+        ],
+        "draft": "A buyer needs a survey for a small loft conversion, with a total survey budget of no more than £300. The buyer is asking whether this is possible. The type of survey needed is not known yet, and the buyer has not said which planning or building requirements apply. The building age, construction, roof type and size are not known yet. Please advise which survey is needed for this work and whether it can be done within the budget, and say what information you need from the buyer to quote."
+      },
+      "valid": true,
+      "ms": 2335,
+      "cost": 0.00028789999999999995,
+      "usage": {
+        "input_tokens": 1764,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 223,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "invented": []
+    },
+    "B": {
+      "supported": 0.82,
+      "survey": "not_sure",
+      "surveyConfidence": 0.91,
+      "model": "typesafe/jev-1.14-20261014",
+      "cost": 0.000081606,
+      "ms": 208
+    },
+    "C": {
+      "out": {
+        "survey": "not_sure",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "Small loft conversion"
+          },
+          {
+            "label": "Budget",
+            "value": "can't spend more than £300"
+          },
+          {
+            "label": "Location",
+            "value": "BS3"
+          }
+        ],
+        "draft": "A buyer needs a survey for a small loft conversion. The budget is tight and cannot exceed £300. The location is postcode BS3. The specific survey type required is not known yet."
+      },
+      "valid": true,
+      "ms": 5120,
+      "cost": 0.000072922,
+      "provider": "Darkbloom",
+      "invented": []
+    }
+  },
+  {
+    "id": 14,
+    "A": {
+      "out": {
+        "survey": "coal-mining-risk-assessment",
+        "pills": [
+          {
+            "label": "Survey",
+            "value": "coal mining risk assessment"
+          },
+          {
+            "label": "Project",
+            "value": "new bungalow"
+          },
+          {
+            "label": "Location",
+            "value": "Barnsley site"
+          },
+          {
+            "label": "Council",
+            "value": "coal mining high risk area"
+          }
+        ],
+        "draft": "A buyer needs a coal mining risk assessment for a new bungalow on their site in Barnsley. The local council has said the site is in a coal mining high risk area. The buyer has not yet confirmed the building's size, ground conditions, or any previous mining records, so these are not known yet. Please advise on the information you need and the scope of the assessment."
+      },
+      "valid": true,
+      "ms": 1792,
+      "cost": 0.0002878,
+      "usage": {
+        "input_tokens": 1763,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 223,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "invented": []
+    },
+    "B": {
+      "supported": 0.73,
+      "survey": "coal-mining-risk-assessment",
+      "surveyConfidence": 1,
+      "model": "typesafe/jev-1.14-20261014",
+      "cost": 0.000080598,
+      "ms": 194
+    },
+    "C": {
+      "out": {
+        "survey": "coal-mining-risk-assessment",
+        "pills": [
+          {
+            "label": "Council",
+            "value": "Barnsley"
+          },
+          {
+            "label": "Location",
+            "value": "coal mining high risk area"
+          },
+          {
+            "label": "Project",
+            "value": "new bungalow"
+          },
+          {
+            "label": "Survey",
+            "value": "coal mining risk assessment"
+          }
+        ],
+        "draft": "A buyer needs a coal mining risk assessment for a new bungalow. The Council has identified the site in Barnsley as being in a coal mining high risk area."
+      },
+      "valid": true,
+      "ms": 2570,
+      "cost": 0.000076054,
+      "provider": "Darkbloom",
+      "invented": []
+    }
+  },
+  {
+    "id": 15,
+    "A": {
+      "out": {
+        "survey": "bat-survey",
+        "pills": [
+          {
+            "label": "Survey",
+            "value": "Bat survey"
+          },
+          {
+            "label": "Survey",
+            "value": "Structural survey"
+          },
+          {
+            "label": "Project",
+            "value": "Converting chapel into house"
+          },
+          {
+            "label": "Building",
+            "value": "Methodist chapel"
+          },
+          {
+            "label": "Building",
+            "value": "Empty for ten years"
+          },
+          {
+            "label": "Location",
+            "value": "Wales"
+          }
+        ],
+        "draft": "A buyer needs a bat survey and a structural survey for a Methodist chapel being converted into a house in Wales. The chapel has been empty for ten years. The buyer has not yet confirmed the local council, the planning deadline, the budget, or the roof construction, so these are not known yet. Please confirm what information you need from the buyer before quoting, and whether both surveys can be carried out together."
+      },
+      "valid": true,
+      "ms": 3299,
+      "cost": 0.0004336,
+      "usage": {
+        "input_tokens": 1766,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 514,
+        "output_tokens_details": {
+          "thinking_tokens": 249
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "invented": []
+    },
+    "B": {
+      "supported": 0.74,
+      "survey": "bat-survey",
+      "surveyConfidence": 0.65,
+      "model": "typesafe/jev-1.14-20261014",
+      "cost": 0.000080682,
+      "ms": 214
+    },
+    "C": {
+      "out": {
+        "survey": "bat-survey",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "Converting a Methodist chapel into a house"
+          },
+          {
+            "label": "Location",
+            "value": "Wales"
+          },
+          {
+            "label": "Other",
+            "value": "empty for ten years"
+          }
+        ],
+        "draft": "A buyer needs a bat survey and a structural survey for a project converting a Methodist chapel into a house in Wales. The building has been empty for ten years. The location and specific site details are not known yet."
+      },
+      "valid": true,
+      "ms": 2614,
+      "cost": 0.000072754,
+      "provider": "Darkbloom",
+      "invented": []
+    }
+  },
+  {
+    "id": 16,
+    "A": {
+      "out": {
+        "survey": "daylight-sunlight-assessment",
+        "pills": [
+          {
+            "label": "Survey",
+            "value": "Daylight and sunlight assessment"
+          },
+          {
+            "label": "Project",
+            "value": "Flats close to neighbours"
+          },
+          {
+            "label": "Building",
+            "value": "6 storeys"
+          },
+          {
+            "label": "Location",
+            "value": "Southwark"
+          }
+        ],
+        "draft": "A buyer needs a daylight and sunlight assessment for a proposed development of flats close to neighbouring properties in Southwark. The building will be 6 storeys. The planner has requested this assessment. The buyer has not yet confirmed the site address, the neighbouring property details, the building dimensions or the deadline. Please advise what information you need to prepare the assessment and confirm your approach and timescale."
+      },
+      "valid": true,
+      "ms": 2448,
+      "cost": 0.0002983,
+      "usage": {
+        "input_tokens": 1763,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 244,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "invented": []
+    },
+    "B": {
+      "supported": 0.81,
+      "survey": "daylight-sunlight-assessment",
+      "surveyConfidence": 1,
+      "model": "typesafe/jev-1.14-20261014",
+      "cost": 0.000080514,
+      "ms": 255
+    },
+    "C": {
+      "out": {
+        "survey": "daylight-sunlight-assessment",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "building flats"
+          },
+          {
+            "label": "Location",
+            "value": "Southwark"
+          },
+          {
+            "label": "Building",
+            "value": "6 storeys"
+          }
+        ],
+        "draft": "A buyer needs a daylight and sunlight assessment for a new project involving the construction of 6-storey flats. The site is located in Southwark. The assessment is required due to the proximity of neighbours. Building age and specific site details are not known yet."
+      },
+      "valid": true,
+      "ms": 3412,
+      "cost": 0.000074472,
+      "provider": "Darkbloom",
+      "invented": []
+    }
+  },
+  {
+    "id": 17,
+    "A": {
+      "out": {
+        "survey": "coastal-erosion-assessment",
+        "pills": [
+          {
+            "label": "Survey",
+            "value": "Coastal erosion assessment"
+          },
+          {
+            "label": "Project",
+            "value": "Extension"
+          },
+          {
+            "label": "Location",
+            "value": "Near the coast, Suffolk"
+          },
+          {
+            "label": "Council",
+            "value": "Council mentioned coastal erosion assessment"
+          },
+          {
+            "label": "Other",
+            "value": "About 80 metres from cliff edge"
+          }
+        ],
+        "draft": "A buyer needs a coastal erosion assessment for a house extension near the coast in Suffolk. The local council has asked for this assessment. The house is about 80 metres from the cliff edge. The buyer has not yet confirmed the building's age, construction type, or the extension's size and design, and these are not known yet. Please advise on the information needed and confirm the scope and timescale you can offer."
+      },
+      "valid": true,
+      "ms": 2236,
+      "cost": 0.00031289999999999996,
+      "usage": {
+        "input_tokens": 1769,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 272,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "invented": []
+    },
+    "B": {
+      "supported": 0.69,
+      "survey": "coastal-erosion-assessment",
+      "surveyConfidence": 1,
+      "model": "typesafe/jev-1.14-20261014",
+      "cost": 0.000080766,
+      "ms": 196
+    },
+    "C": {
+      "out": {
+        "survey": "coastal-erosion-assessment",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "extension"
+          },
+          {
+            "label": "Location",
+            "value": "Suffolk"
+          },
+          {
+            "label": "Other",
+            "value": "near the coast"
+          },
+          {
+            "label": "Other",
+            "value": "80 metres from the cliff edge"
+          },
+          {
+            "label": "Council",
+            "value": "mentioned a coastal erosion assessment"
+          }
+        ],
+        "draft": "A buyer needs a coastal erosion assessment for an extension project in Suffolk. The property is located approximately 80 metres from the cliff edge. The council has requested this assessment. Building age and specific site dimensions are not known yet."
+      },
+      "valid": true,
+      "ms": 4137,
+      "cost": 0.000084676,
+      "provider": "Darkbloom",
+      "invented": [
+        "The council has requested this assessment"
+      ]
+    }
+  },
+  {
+    "id": 18,
+    "A": {
+      "out": {
+        "survey": "not_sure",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "two storey side extension"
+          },
+          {
+            "label": "Building",
+            "value": "1950s house"
+          },
+          {
+            "label": "Roof",
+            "value": "concrete tiles"
+          },
+          {
+            "label": "Location",
+            "value": "Cheshire"
+          },
+          {
+            "label": "Other",
+            "value": "knock through"
+          }
+        ],
+        "draft": "A buyer needs advice on which survey, if any, is required. The buyer plans to knock through and build a two storey side extension on a 1950s house in Cheshire with a concrete tile roof. The buyer does not know what survey is needed. No council, deadline, budget or existing ecological or structural information has been given yet. Please advise which survey applies and what information you would need from the buyer."
+      },
+      "valid": true,
+      "ms": 1788,
+      "cost": 0.0002951,
+      "usage": {
+        "input_tokens": 1776,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 235,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "invented": []
+    },
+    "B": {
+      "supported": 0.81,
+      "survey": "not_sure",
+      "surveyConfidence": 0.93,
+      "model": "typesafe/jev-1.14-20261014",
+      "cost": 0.000081648,
+      "ms": 258
+    },
+    "C": {
+      "out": {
+        "survey": "not_sure",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "knock through and build a two storey side extension"
+          },
+          {
+            "label": "Building",
+            "value": "1950s house"
+          },
+          {
+            "label": "Location",
+            "value": "Cheshire"
+          },
+          {
+            "label": "Roof",
+            "value": "concrete tiles"
+          }
+        ],
+        "draft": "A buyer needs advice on whether a survey is required for a project involving knocking through and building a two storey side extension on a 1950s house. The property has a roof made of concrete tiles and is located in Cheshire. The specific survey type needed is not yet known."
+      },
+      "valid": true,
+      "ms": 5104,
+      "cost": 0.000082886,
+      "provider": "Darkbloom",
+      "invented": []
+    }
+  },
+  {
+    "id": 19,
+    "A": {
+      "out": {
+        "survey": "bat-survey",
+        "pills": [
+          {
+            "label": "Survey",
+            "value": "Bat survey"
+          },
+          {
+            "label": "Building",
+            "value": "Loft"
+          },
+          {
+            "label": "Location",
+            "value": "Postcode M20 4"
+          },
+          {
+            "label": "Deadline",
+            "value": "Council deadline in 10 days"
+          },
+          {
+            "label": "Budget",
+            "value": "Will pay extra for speed"
+          },
+          {
+            "label": "Other",
+            "value": "Needed this week"
+          }
+        ],
+        "draft": "A buyer needs a bat survey for a loft at postcode M20 4. The council deadline is in 10 days and the buyer needs someone this week. The buyer will pay extra for speed. The text does not say the building's age, construction type, or roof details, nor what work is planned in the loft, and these are not known yet. The council's specific requirements for the survey are also not known yet. Please confirm whether you can meet this timescale and what information you need from the buyer."
+      },
+      "valid": true,
+      "ms": 2627,
+      "cost": 0.0003221,
+      "usage": {
+        "input_tokens": 1766,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 291,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "invented": []
+    },
+    "B": {
+      "supported": 0.86,
+      "survey": "bat-survey",
+      "surveyConfidence": 1,
+      "model": "typesafe/jev-1.14-20261014",
+      "cost": 0.000081816,
+      "ms": 209
+    },
+    "C": {
+      "out": {
+        "survey": "bat-survey",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "Bat survey for loft"
+          },
+          {
+            "label": "Deadline",
+            "value": "10 days"
+          },
+          {
+            "label": "Location",
+            "value": "M20 4"
+          },
+          {
+            "label": "Other",
+            "value": "Need someone this week"
+          },
+          {
+            "label": "Other",
+            "value": "Will pay extra for speed"
+          },
+          {
+            "label": "Council",
+            "value": "council deadline"
+          }
+        ],
+        "draft": "A buyer needs a bat survey for a loft. The requirement is urgent, with a council deadline in 10 days. The location is M20 4. The buyer is willing to pay extra for speed."
+      },
+      "valid": true,
+      "ms": 7693,
+      "cost": 0.000089422,
+      "provider": "Darkbloom",
+      "invented": []
+    }
+  },
+  {
+    "id": 20,
+    "A": {
+      "out": {
+        "survey": "noise-impact-assessment",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "Retrospective garden room application"
+          },
+          {
+            "label": "Building",
+            "value": "Garden room already built"
+          },
+          {
+            "label": "Location",
+            "value": "Brighton BN1"
+          },
+          {
+            "label": "Council",
+            "value": "No council request yet"
+          },
+          {
+            "label": "Other",
+            "value": "Neighbour complaint about heat pump noise"
+          }
+        ],
+        "draft": "A buyer needs a noise impact assessment for a retrospective planning application for a garden room that has already been built in Brighton BN1. The council has not yet asked for anything. A neighbour has complained about noise from the heat pump. It is not known yet what the heat pump model is, where it is sited, its operating hours, or what noise levels have been measured. Please advise on the information needed and whether a survey can address the neighbour's complaint as part of the application."
+      },
+      "valid": true,
+      "ms": 2010,
+      "cost": 0.0003163,
+      "usage": {
+        "input_tokens": 1773,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 278,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "invented": [
+        "A buyer needs a noise impact assessment"
+      ]
+    },
+    "B": {
+      "supported": 0.55,
+      "survey": "noise-impact-assessment",
+      "surveyConfidence": 1,
+      "model": "typesafe/jev-1.14-20261014",
+      "cost": 0.000081564,
+      "ms": 189
+    },
+    "C": {
+      "out": {
+        "survey": "noise-impact-assessment",
+        "pills": [
+          {
+            "label": "Project",
+            "value": "Retrospective application for a garden room"
+          },
+          {
+            "label": "Location",
+            "value": "Brighton BN1"
+          },
+          {
+            "label": "Council",
+            "value": "Council asked for nothing so far"
+          },
+          {
+            "label": "Other",
+            "value": "neighbour complained about noise from the heat pump"
+          }
+        ],
+        "draft": "A buyer needs a noise impact assessment for a retrospective application regarding a garden room. The project involves a heat pump which has caused a noise complaint from a neighbour. The specific details of the building and the noise levels are not known yet."
+      },
+      "valid": true,
+      "ms": 2046,
+      "cost": 0.000066144,
+      "provider": "Darkbloom",
+      "invented": [
+        "A buyer needs a noise impact assessment"
+      ]
+    }
+  }
+]
