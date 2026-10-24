@@ -77,22 +77,26 @@ export const objects: BusinessObject[] = [
 ]
 
 export const processes: Process[] = [
-  { id: "PR1", name: "Qualify a lead", realises: "U2", status: "part", refs: ["D2", "D14"],
+  { id: "PR1", name: "Qualify a lead", realises: "U2", status: "part", refs: ["D2", "D14", "D23"],
     note: "The postcode is looked up with an outside service (postcodes.io, ONS and Ordnance Survey data); the privacy notice must say so (A3). If the lookup fails, the buyer picks the area", steps: [
     { actor: "P-buyer", step: "Say the problem; see the answer; choose to send, giving contact last", status: "built" },
+    { actor: "P-directory", step: "Draft the request live from the buyer's words: key facts as editable pills, and the message the firm will get (D23, Q26)", status: "missing" },
     { actor: "P-directory", step: "Work out the area and the council from the postcode, so the buyer isn't asked twice", status: "built" },
     { actor: "P-directory", step: "Grade on real, serious, timely, complete", status: "built" },
     { actor: "P-buyer", step: "Confirm by email (button press); no mail provider in production yet (Q21)", status: "built" },
     { actor: "P-directory", step: "Operator approves or rejects", status: "built" },
     { actor: "P-directory", step: "Tell buyers, in a privacy notice, what we keep, who sees it, the postcode lookup and how long we keep it (parked, D16)", status: "missing" },
   ] },
-  { id: "PR2", name: "Route a lead", realises: "U4", status: "part", refs: ["D2", "D12", "Q3", "Q15", "Q16"],
+  { id: "PR2", name: "Route a lead", realises: "U4", status: "part", refs: ["D2", "D12", "D22", "D24", "D25", "Q3", "Q15", "Q16"],
     note: "Terms are guesses (ROUTING: Q15, Q16). Briefs go to claimed firms' business inboxes; claims are confirmed by link (PR3). Built on the placeholder terms (D12); the calls (R6) may change them", steps: [
     { actor: "P-directory", step: "Match firms by survey, region, availability", status: "built" },
     { actor: "P-directory", step: "Offer briefs, contact hidden", status: "built" },
     { actor: "P-firm", step: "Unlock (fee owed) or pass; pause when booked up", status: "built" },
     { actor: "P-directory", step: "Chase firms once, halfway through their time; lapse and tell the buyer", status: "built" },
     { actor: "P-firm", step: "Record that they quoted, then whether they won or lost", status: "built" },
+    { actor: "P-buyer", step: "Keep a private status link, notified as things change; it ends when a firm takes the job, the buyer cancels, or it expires (D22)", status: "missing" },
+    { actor: "P-buyer", step: "Choose a bigger pool than three firms if they want (D24)", status: "missing" },
+    { actor: "P-directory", step: "Free for firms at first; the fee is set to nothing until firms are happy (D25)", status: "missing" },
     { actor: "P-directory", step: "Ask the buyer whether they booked a survey", status: "missing" },
   ] },
   { id: "PR3", name: "Claim a listing", realises: "U5", status: "part", refs: ["D1"], steps: [

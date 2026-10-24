@@ -53,6 +53,8 @@ export const questions: Question[] = [
     test: "Once there are outcomes: ask buyers and firms in the Q22 sessions and on the calls; compare with complaints about untrusted reviews on other platforms (R9: 5 sources)" },
   { id: "Q25", state: "open", name: "A credit for firms when a buyer never responds after unlock answers the providers' biggest complaint and keeps firms paying", refs: ["R9", "D2"],
     test: "Principal decides (M1 terms, with Q16); ask on the R6 calls what would make paying per brief feel fair. R9: 15 provider sources hate paying for leads that never answer" },
+  { id: "Q26", state: "open", name: "Which model drafts the request: Claude (e.g. the cheap Haiku tier) or a 'decision model' via OpenRouter or Cloudflare; judged on quality of the drafted brief, speed while typing, cost and where the buyer's words go", refs: ["D23"],
+    test: "Find out what the new decision models are (receipts, not memory), then run the same 20 sample buyer descriptions through each candidate and compare drafts, latency and cost" },
   { id: "Q15", state: "open", name: "Routing terms: 3 firms per lead, 48 hours to reply, claimed firms only", refs: ["R1", "R2", "R6", "D12"],
     test: "R6 calls: how many competitors per lead is acceptable, and how fast can they reply in season? Principal sets the terms" },
   { id: "Q16", state: "open", name: "How a firm settles an unlocked brief: card at unlock, monthly invoice, prepaid credit, or spare capacity (D6)", refs: ["D2", "D6", "R6"],

@@ -25,6 +25,10 @@ Each decision, down to the use cases, processes and objects that rest on it, and
 | D19 Say how we're paid and what we check; show three plain steps on the site, Mermaid stays for the map | - | - | - | - |
 | D20 The quote journey shows a progress bar and, from the start, a checklist of everything we'll ask the buyer | - | - | - | - |
 | D21 Home page order: the familiar headline, then 'Has the council asked you for a survey?', then how it works, then why to trust us | - | - | - | - |
+| D22 The buyer gets a private status link to keep and revisit; it ends when a firm takes the job, the buyer cancels, or it expires; we notify them as things change | - | PR2 | - | scripts/tick.ts, src/app/actions.ts, src/app/admin/leads/page.tsx, src/app/briefs/[token]/page.tsx, src/routing.ts |
+| D23 A request drafter: a cheap language model reads what the buyer writes, shows the key facts as editable pills, and drafts the request the firm receives, live | - | PR1 | - | src/admin.ts, src/app/actions.ts, src/app/admin/leads/page.tsx, src/app/leads/confirm/[token]/page.tsx, src/app/quote/page.tsx, src/app/quote/quote-form.tsx, src/app/search/page.tsx, src/leads.ts, src/postcode.ts, src/proxy.ts, src/qualify.ts |
+| D24 At most three firms per job, unless the buyer chooses a bigger pool | - | PR2 | - | scripts/tick.ts, src/app/actions.ts, src/app/admin/leads/page.tsx, src/app/briefs/[token]/page.tsx, src/routing.ts |
+| D25 Free for firms at first, to get the first firms on board; charge once they're happy and we have standing | - | PR2 | - | scripts/tick.ts, src/app/actions.ts, src/app/admin/leads/page.tsx, src/app/briefs/[token]/page.tsx, src/routing.ts |
 
 ## Code → map
 
