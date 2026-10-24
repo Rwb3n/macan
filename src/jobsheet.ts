@@ -141,6 +141,12 @@ export function answerLabel(f: SheetField, value: string): string {
 // A first reading of the buyer's words with a few plain rules, used when no model is available (D23, Q26).
 // Each fact carries the words it came from. Deliberately cautious: a missed fact is asked; a wrong one misleads a firm.
 const RULES: readonly [string, RegExp, string][] = [
+  // Not on the sheet: these pre-fill the work and planning questions, which the buyer confirms.
+  ["projectType", /\bloft conversion\b/i, "loft"],
+  ["projectType", /\bbarn conversion\b/i, "barn-conversion"],
+  ["projectType", /\b(?:extension|extending)\b/i, "extension"],
+  ["projectType", /\bnew[- ]build\b/i, "new-build"],
+  ["projectType", /\bchange of use\b/i, "change-of-use"],
   ["works", /\b(?:demolish\w*|demolition|knock(?:ing)? down)\b/i, "demolish"],
   ["works", /\b(?:loft|roof|dormers?)\b/i, "roof"],
   ["listed", /\blocally listed\b/i, "local"],

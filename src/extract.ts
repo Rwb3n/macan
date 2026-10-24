@@ -6,13 +6,20 @@ import Anthropic from "@anthropic-ai/sdk"
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod"
 import { z } from "zod"
 import { FIELDS, inText, spotFacts, stripContact, type Facts } from "./jobsheet"
+import { PLANNING_STAGES, PROJECT_TYPES } from "./qualify"
 
 const MODEL = "claude-haiku-5-5"
 const TIMEOUT_MS = 10_000
 
 // Access, earlier surveys and drawings are always asked: in testing, the model filled them from unrelated words.
 const ALWAYS_ASKED = new Set(["access", "previous", "drawings"])
-const READ = FIELDS.filter((f) => !ALWAYS_ASKED.has(f.id))
+// The work and the planning stage are read too, to pre-fill their questions; the buyer still confirms them.
+const READ = [
+  { id: "projectType", ask: "What kind of work is planned?", options: PROJECT_TYPES.filter(([k]) => k !== "other") },
+  { id: "planningStage", ask: "How far has the buyer got with planning permission? Only if they say: 'council-asked' needs an application already made or the council asking during validation.",
+    options: PLANNING_STAGES.filter(([k]) => k !== "not-sure") },
+  ...FIELDS.filter((f) => !ALWAYS_ASKED.has(f.id)),
+]
 
 const Out = z.object({
   facts: z.array(z.object({
