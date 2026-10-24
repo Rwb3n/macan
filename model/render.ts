@@ -1,7 +1,7 @@
 // Renders the views of the map. Views are generated, never edited by hand.
 import { readFileSync } from "node:fs"
 import {
-  aims, alternatives, builds, channels, decisions, flows, objects, parties, processes, questions, stages, system, trace, useCases,
+  aims, alternatives, builds, channels, decisions, flows, objects, pains, parties, processes, questions, stages, system, trace, useCases,
 } from "./index"
 import { LEAD_CHECKS } from "./how"
 import type { BusinessObject, Status } from "./types"
@@ -32,8 +32,10 @@ function lifecycleMermaid(o: BusinessObject): string {
 export function markdown(): string {
   return [
     "# The map (generated from `model/` by `npm run model:views`; do not edit)",
-    "Read top-down: **why** (D) → **who** (P, CH, ALT) → **what** (U, ST) → **how** (PR, O) → code. Every line cites its D, R or Q.",
+    "Read top-down: **why** (D, PN) → **who** (P, CH, ALT) → **what** (U, ST) → **how** (PR, O) → code. Every line cites its D, R or Q.",
     "## Why: decisions", table(["id", "decision", "said", "rests on"], decisions.map((d) => [d.id, d.name, `"${d.said}" (${d.date})`, refs(d.refs)])),
+    "## Why: buyer pains (D10)", "What buyers suffer today, synthesised from the sources; every design answers one of these.",
+    table(["id", "pain", "sources", "receipt", "answered by"], pains.map((p) => [p.id, p.name, String(p.sources) + (p.note ? ` (${p.note})` : ""), p.receipt ?? "", p.answeredBy.join(", ")])),
     "Aims on the boundary: " + aims.map((a) => `${a.id} ${a.name}`).join("; ") + ".",
     "## Who: context", `System of interest: **${system.name}** (${system.inside.join(", ")}). ${system.reason}`, fence(contextMermaid()),
     "### Channels", table(["id", "party", "channel", "status", "receipt", "rests on"], channels.map((c) => [c.id, name(c.party), c.name + g(c), c.status, c.receipt ?? "none yet", refs(c.refs)])),
@@ -59,7 +61,8 @@ export function traceMarkdown(): string {
 }
 
 export function openMarkdown(): string {
-  const leaning = (id: string) => [...useCases, ...channels, ...flows, ...parties, ...objects, ...processes].filter((e) => e.refs.includes(id)).map((e) => e.id)
+  const leaning = (id: string) => [...pains.filter((p) => p.answeredBy.includes(id)).map((p) => p.id),
+    ...[...useCases, ...channels, ...flows, ...parties, ...objects, ...processes].filter((e) => e.refs.includes(id)).map((e) => e.id)]
   return [
     "# Open questions (generated; do not edit)",
     "Every guess the map rests on, and the test that would settle it.",
@@ -93,6 +96,8 @@ export function html(): string {
 </header>
 ${section("why", "Why", "Decisions", "What the principal decided, word for word.",
     tbl(["Id", "Decision", "Said", "Rests on"], decisions.map((d) => [id(d.id), esc(d.name), `<span class="muted">"${esc(d.said)}" · ${d.date}</span>`, r(d.refs)])) +
+    `<h3>Buyer pains, front and centre (D10)</h3>` +
+    tbl(["Id", "Pain", "Sources", "Answered by"], pains.map((p) => [id(p.id), esc(p.name) + `<br><span class="muted">${esc(p.receipt ?? "")}</span>`, String(p.sources) + (p.note ? `<br><span class="muted">${esc(p.note)}</span>` : ""), id(p.answeredBy.join(", "))])) +
     `<p class="lede">Aims on the boundary: ${aims.map((a) => `${id(a.id)} ${esc(a.name)}`).join(" · ")}</p>` +
     `<h3>Qualification checks on every lead</h3><div class="checks">${LEAD_CHECKS.map((c) => `<div class="check"><span class="k">${c}</span></div>`).join("")}</div>`)}
 ${section("who", "Who", "Context, channels, alternatives", "Who does the business deal with, how do they reach us, and what do they use instead?",

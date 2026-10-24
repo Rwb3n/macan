@@ -13,6 +13,8 @@ Each decision, down to the use cases, processes and objects that rest on it, and
 | D7 Delegation demands evidence up front | - | - | - | - |
 | D8 A clear, traceable, business-driven information architecture; no bloat | - | - | - | - |
 | D9 Threshold for M1, provisional: £100k a year at 5% capture | - | - | - | - |
+| D10 Buyer pain points front and centre, synthesised, in design and in the model | - | - | - | - |
+| D11 Business model first, then design around it for humans | - | - | - | - |
 
 ## Code → map
 

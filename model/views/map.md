@@ -1,6 +1,6 @@
 # The map (generated from `model/` by `npm run model:views`; do not edit)
 
-Read top-down: **why** (D) → **who** (P, CH, ALT) → **what** (U, ST) → **how** (PR, O) → code. Every line cites its D, R or Q.
+Read top-down: **why** (D, PN) → **who** (P, CH, ALT) → **what** (U, ST) → **how** (PR, O) → code. Every line cites its D, R or Q.
 
 ## Why: decisions
 
@@ -15,6 +15,20 @@ Read top-down: **why** (D) → **who** (P, CH, ALT) → **what** (U, ST) → **h
 | D7 | Delegation demands evidence up front | "who the FUCK sends out their asisstants to do something and NOT ASK FOR EVIDENCE?" (2026-10-23) | R3 |
 | D8 | A clear, traceable, business-driven information architecture; no bloat | "we need a clear hiearchal information architecture. traceable. clean, not stupid. business driven. i dont want it to bloat like the old callsheet." (2026-10-23) | principal |
 | D9 | Threshold for M1, provisional: £100k a year at 5% capture | "threshold, yeah i guess. i dont know I DONT HAVE A FUCKING POINT OF REFERENCE YET DO I?" (2026-10-23) | R3, Q10 |
+| D10 | Buyer pain points front and centre, synthesised, in design and in the model | "1. and on that note we need to hold those buyer pain points front and centre. but synthesized. add that to our design plans and model ideas." (2026-10-24) | R2, R4 |
+| D11 | Business model first, then design around it for humans | "q12 yep - first we think about our business model then we design around it for humans." (2026-10-24) | R4 |
+
+## Why: buyer pains (D10)
+
+What buyers suffer today, synthesised from the sources; every design answers one of these.
+
+| id | pain | sources | receipt | answered by |
+|---|---|---|---|---|
+| PN1 | A cheap first survey led to a large or doubtful follow-on bill | 14 (About 10 of the 14 are one national firm's reviews) | £1,306.80 first survey, then a £28,726.80 follow-on quote; an independent did it for £3,924 (R2) | Q4 |
+| PN2 | The season cost me months, or a year | 8 | 'wait a year'; the 12-month wait used as a sales lever (R2) | U1, ST-U2.1, Q5 |
+| PN3 | I couldn't find, book or hear back from a surveyor | 8 | 'the planning officer doesn't recommend anyone, so I'm at the mercy of Google' (R2); the professional body's directory leaves the buyer to contact practices one by one (R4) | ST-U2.3, PR2, Q7, Q11 |
+| PN4 | I found out at validation that I needed a survey | 7 | 'Only to be told I needed a bat survey' (R2) | U1, CH-validation, Q6 |
+| PN5 | I didn't know whose report the council would accept | 4 | 'ask the council who they accept surveys from' (R2) | Q14 |
 
 Aims on the boundary: A1 Earn money from firms (M1, plus intelligence and in-kind); A2 Grow and keep a correct list of firms; A3 Stay lawful: listing notices, removal, retention.
 

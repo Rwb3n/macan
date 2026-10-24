@@ -1,18 +1,18 @@
 // The whole map in one place, plus the id registry and the trace (D → U → PR/O → code).
 import { readdirSync, readFileSync, statSync } from "node:fs"
 import { join, relative } from "node:path"
-import { aims, decisions } from "./why"
+import { aims, decisions, pains } from "./why"
 import { alternatives, channels, flows, parties, system } from "./who"
 import { stages, useCases } from "./what"
 import { objects, processes } from "./how"
 import { questions } from "./open"
 
-export { aims, decisions, alternatives, channels, flows, parties, system, stages, useCases, objects, processes, questions }
+export { aims, decisions, pains, alternatives, channels, flows, parties, system, stages, useCases, objects, processes, questions }
 
 const ROOT = join(import.meta.dirname, "..")
 
 // Every model element that can be cited, by id.
-export const elements = [system, ...parties, ...flows, ...channels, ...alternatives, ...aims, ...useCases, ...stages, ...objects, ...processes]
+export const elements = [...pains, system, ...parties, ...flows, ...channels, ...alternatives, ...aims, ...useCases, ...stages, ...objects, ...processes]
 export const ids = new Set<string>([...decisions.map((d) => d.id), ...questions.map((q) => q.id), ...elements.map((e) => e.id)])
 
 // Research ids: R<n> → research/R<n>-*/ ; R0/<S> → research/R0-imported/<S>/

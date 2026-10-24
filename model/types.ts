@@ -1,5 +1,5 @@
 // The shape of the map. Ids, one scheme across the project:
-//   D decision · A aim · P party · F flow · CH channel · ALT alternative · U use case · ST stage
+//   D decision · PN pain · A aim · P party · F flow · CH channel · ALT alternative · U use case · ST stage
 //   PR process · O object · Q open question · R research study (a folder in research/; R0/S7 = research/R0-imported/S7)
 // No imports.
 
@@ -12,6 +12,8 @@ export type Element = { id: string; name: string; refs: string[]; guess?: boolea
 // why
 export type Decision = { id: string; name: string; said: string; date: string; refs: string[] }
 export type Aim = Element
+// A pain the buyer has today, synthesised from sources (D10). answeredBy: the U, ST, PR, CH or Q that answers it.
+export type Pain = Element & { party: string; sources: number; answeredBy: string[] }
 
 // who
 export type SystemOfInterest = Element & { reason: string; inside: string[] }

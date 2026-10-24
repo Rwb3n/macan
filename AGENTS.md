@@ -6,7 +6,7 @@ The only rules file. What the business is lives in `model/`; what we know lives 
 
 ```
 model/      THE MAP: the spine; typed data, every element cites what it rests on
-  why.ts      D decisions (principal's words) · A aims
+  why.ts      D decisions (principal's words) · PN buyer pains · A aims
   who.ts      P parties · F flows · CH channels · ALT alternatives
   what.ts     U use cases · ST stages
   how.ts      O objects and lifecycles · PR processes
@@ -42,6 +42,7 @@ scripts/    the same rule as src/
 ## Rules
 
 - **Business first.** No technology appears above processes (modelkit, `D:/PROJECTS/modelkit/docs/proposals/modelkit.md`).
+- **Pains front and centre (D10); model before design (D11).** The buyer's pains (`pains` in `model/why.ts`) open the map. Every buyer-facing design names the pain it answers. Settle the business model first, then design around it for humans.
 - **Three to five things per view.** More means: group, then drill down.
 - **Name people by role.** No client or personal data in `model/` or `research/`. Company-level data stays in `D:/data/`.
 - **Receipts, not maps (D4).** A claim about the world carries a receipt: a URL, a filing, a measured number. Otherwise it is a guess with a Q. An inference is never stated as fact, in the model or in a reply.

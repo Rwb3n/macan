@@ -7,7 +7,7 @@ import { getTableConfig } from "drizzle-orm/sqlite-core"
 import * as schema from "@/db/schema"
 import { qualify } from "@/qualify"
 import {
-  alternatives, builds, channels, decisions, elements, flows, ids, objects, parties, processes, questions,
+  alternatives, builds, channels, decisions, elements, flows, ids, objects, pains, parties, processes, questions,
   researchFolder, researchIds, stages, system, useCases,
 } from "./index"
 import { LEAD_CHECKS, LEAD_GRADES, LEAD_REVIEWS } from "./how"
@@ -75,7 +75,12 @@ describe("2. nothing dangles", () => {
   it("a process is built only if all its steps are", () => {
     expect(processes.filter((p) => p.status === "built" && p.steps.some((s) => s.status !== "built")).map((p) => p.id)).toEqual([])
   })
+  it("every buyer pain is answered by something on the map, or by the open question that would test an answer (D10)", () => {
+    expect(pains.filter((p) => !partyIds.has(p.party) || !p.receipt || p.answeredBy.length === 0).map((p) => p.id)).toEqual([])
+    expect(pains.flatMap((p) => p.answeredBy.filter((a) => !ids.has(a)).map((a) => `${p.id}:${a}`))).toEqual([])
+  })
   it("three to five things per view (W1)", () => {
+    expect(pains.length).toBeLessThanOrEqual(5)
     expect(parties.length).toBeLessThanOrEqual(5)
     for (const u of useCases) expect([u.id, stages.filter((s) => s.useCase === u.id).length <= 5]).toEqual([u.id, true])
   })

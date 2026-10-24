@@ -1,5 +1,5 @@
 // Why: the principal's decisions (word for word) and the business's own aims.
-import type { Aim, Decision } from "./types"
+import type { Aim, Decision, Pain } from "./types"
 
 export const decisions: Decision[] = [
   { id: "D1", date: "2026-10-23", name: "Domain: a UK directory of planning-survey firms, built lean in its own repo",
@@ -21,6 +21,26 @@ export const decisions: Decision[] = [
     said: "we need a clear hiearchal information architecture. traceable. clean, not stupid. business driven. i dont want it to bloat like the old callsheet.", refs: [] },
   { id: "D9", date: "2026-10-23", name: "Threshold for M1, provisional: £100k a year at 5% capture",
     said: "threshold, yeah i guess. i dont know I DONT HAVE A FUCKING POINT OF REFERENCE YET DO I?", refs: ["R3", "Q10"] },
+  { id: "D10", date: "2026-10-24", name: "Buyer pain points front and centre, synthesised, in design and in the model",
+    said: "1. and on that note we need to hold those buyer pain points front and centre. but synthesized. add that to our design plans and model ideas.", refs: ["R2", "R4"] },
+  { id: "D11", date: "2026-10-24", name: "Business model first, then design around it for humans",
+    said: "q12 yep - first we think about our business model then we design around it for humans.", refs: ["R4"] },
+]
+
+// The buyer's pains today, synthesised from R2's sources (counted independently). Front and centre (D10).
+export const pains: Pain[] = [
+  { id: "PN1", party: "P-buyer", sources: 14, name: "A cheap first survey led to a large or doubtful follow-on bill", refs: ["D10", "R2"],
+    receipt: "£1,306.80 first survey, then a £28,726.80 follow-on quote; an independent did it for £3,924 (R2)",
+    note: "About 10 of the 14 are one national firm's reviews", answeredBy: ["Q4"] },
+  { id: "PN2", party: "P-buyer", sources: 8, name: "The season cost me months, or a year", refs: ["D10", "R2"],
+    receipt: "'wait a year'; the 12-month wait used as a sales lever (R2)", answeredBy: ["U1", "ST-U2.1", "Q5"] },
+  { id: "PN3", party: "P-buyer", sources: 8, name: "I couldn't find, book or hear back from a surveyor", refs: ["D10", "R2", "R4"],
+    receipt: "'the planning officer doesn't recommend anyone, so I'm at the mercy of Google' (R2); the professional body's directory leaves the buyer to contact practices one by one (R4)",
+    answeredBy: ["ST-U2.3", "PR2", "Q7", "Q11"] },
+  { id: "PN4", party: "P-buyer", sources: 7, name: "I found out at validation that I needed a survey", refs: ["D10", "R2"],
+    receipt: "'Only to be told I needed a bat survey' (R2)", answeredBy: ["U1", "CH-validation", "Q6"] },
+  { id: "PN5", party: "P-buyer", sources: 4, name: "I didn't know whose report the council would accept", refs: ["D10", "R2"],
+    receipt: "'ask the council who they accept surveys from' (R2)", answeredBy: ["Q14"] },
 ]
 
 export const aims: Aim[] = [
