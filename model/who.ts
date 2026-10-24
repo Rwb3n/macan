@@ -40,8 +40,8 @@ export const channels: Channel[] = [
   { id: "CH-agent", party: "P-agent", kind: "referral", name: "Architects and planning consultants pick or recommend the firm", status: "missing", refs: ["Q1"], guess: true },
   { id: "CH-outbound", party: "P-firm", kind: "outbound", name: "We find and contact firms from Companies House and their sites", status: "part", refs: ["R0/S9", "R3"],
     receipt: "2,238 companies in the trade universe, 1,799 with filed headcount (R3)" },
-  { id: "CH-body", party: "P-firm", kind: "body", name: "Professional bodies' directories (CIEEM, ANC)", status: "outside", refs: ["R1"],
-    receipt: "CIEEM Registered Practices Directory, firms pay £147-£368+VAT a year (R1)" },
+  { id: "CH-body", party: "P-firm", kind: "body", name: "Professional bodies' directories (CIEEM, ANC)", status: "outside", refs: ["R1", "R4"],
+    receipt: "CIEEM Registered Practice Directory: 169 UK practices, 145 offering a catalogue ecology survey, 134 bat surveys; firms pay £147-£3,140+VAT a year by headcount (R4)" },
   { id: "CH-peers", party: "P-firm", kind: "community", name: "Firms pass overflow work to each other", status: "missing", refs: ["Q8"], guess: true },
 ]
 
@@ -53,8 +53,9 @@ export const alternatives: Alternative[] = [
     offer: "'Which reports do I need?' checker (no postcode or council step), directory, quotes from up to 3; free and paid listings" },
   { id: "ALT-planning-review", name: "The Planning Review", kind: "directory", serves: ["U2"], refs: ["R2"],
     offer: "Firms found on planning applications, with quotes; no checker" },
-  { id: "ALT-cieem", name: "CIEEM Registered Practices Directory", kind: "directory", serves: ["U2", "U5"], refs: ["R1"],
-    offer: "Search by service and postcode; firms pay through membership" },
+  { id: "ALT-cieem", name: "CIEEM Registered Practices Directory", kind: "directory", serves: ["U2", "U5"], refs: ["R1", "R4"],
+    offer: "Search by postcode and distance, then filter by service, species and licence; contact each practice yourself (no enquiry form, no prices, no season); ecology only; firms pay £147-£3,140+VAT a year",
+    receipt: "169 UK practices; within 25 miles: Bristol 22, London 18, Glasgow 12, Edinburgh 7, Belfast 1 (R4)" },
   { id: "ALT-worklanded", name: "Worklanded", kind: "marketplace", serves: ["U4"], refs: ["R1"],
     offer: "Bat and ecology leads sold to firms at £26 each, one firm at a time; 11 enquiries in 90 days" },
   { id: "ALT-brokers", name: "Small brokers (batsurveycost.co.uk, RenKap, Yell)", kind: "broker", serves: ["U2"], refs: ["R1"],

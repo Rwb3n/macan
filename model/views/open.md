@@ -12,5 +12,5 @@ Every guess the map rests on, and the test that would settle it.
 | Q6 | open | A postcode-to-council trigger checker beats Signed Off's generic one | Code triggers from 20 local validation lists; compare answers for a loft conversion | R2 | - |
 | Q7 | open | A 48-hour reply promise wins against firms that ignore small jobs | Mystery-shop 20 firms in April-June | R2 | - |
 | Q8 | open | Booked-out firms would pass overflow to a vetted local firm for a referral fee | Ask on the calls | R2 | CH-peers |
-| Q9 | open | Independent noise/air firms and NI/Scotland firms are reachable where Arbtech refers out or is absent | Call 5 acoustic firms; count firms per NI council area | R2 | - |
+| Q9 | some | Independent noise/air firms and NI/Scotland firms are reachable where Arbtech refers out or is absent | Call 5 acoustic firms; count firms per NI council area | R2, R4: some: 1 CIEEM practice within 25 miles of Belfast, a national firm's office; Glasgow 12, Edinburgh 7 (R4) | - |
 | Q10 | open | M1 alone clears the business's threshold | R3: M1 at 5% capture = £99,417 against £100k provisional (D9); principal to set the threshold now reference points exist | R3, D9: At the line | - |

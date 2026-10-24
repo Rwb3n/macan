@@ -53,7 +53,7 @@ flowchart LR
 | CH-validation | Buyers (homeowners, small developers) | Told by the council at validation that a survey is missing | missing | 'Only to be told I needed a bat survey'; 'the planning officer doesn't recommend anyone, so I'm at the mercy of Google' (R2 gap-buyer.md) | R2 |
 | CH-agent | Agents (architects, planning consultants) | Architects and planning consultants pick or recommend the firm *(guess)* | missing | none yet | Q1 |
 | CH-outbound | Survey firms | We find and contact firms from Companies House and their sites | part | 2,238 companies in the trade universe, 1,799 with filed headcount (R3) | R0/S9, R3 |
-| CH-body | Survey firms | Professional bodies' directories (CIEEM, ANC) | outside | CIEEM Registered Practices Directory, firms pay £147-£368+VAT a year (R1) | R1 |
+| CH-body | Survey firms | Professional bodies' directories (CIEEM, ANC) | outside | CIEEM Registered Practice Directory: 169 UK practices, 145 offering a catalogue ecology survey, 134 bat surveys; firms pay £147-£3,140+VAT a year by headcount (R4) | R1, R4 |
 | CH-peers | Survey firms | Firms pass overflow work to each other *(guess)* | missing | none yet | Q8 |
 
 ### Alternatives
@@ -63,7 +63,7 @@ flowchart LR
 | ALT-arbtech | Arbtech (national firm) | U1, U2 | Fixed published prices (bat roost £399+VAT), UK coverage, money-back guarantee; in 14 of 23 searches; also runs batsurveys.co.uk, ecologysurveys.uk, biodiversitynetgainplan.co.uk Receipt: Arbtech Consulting Ltd (05678552) accounts to 23 Sep 2024: turnover £10,841,715, profit before tax £4,483,055, 113 staff, 'over 13,800' assessments; 60% acquired by Celnor Group | R1, R2 |
 | ALT-signed-off | Signed Off (signed-off.co.uk) | U1, U2, U5 | 'Which reports do I need?' checker (no postcode or council step), directory, quotes from up to 3; free and paid listings | R2 |
 | ALT-planning-review | The Planning Review | U2 | Firms found on planning applications, with quotes; no checker | R2 |
-| ALT-cieem | CIEEM Registered Practices Directory | U2, U5 | Search by service and postcode; firms pay through membership | R1 |
+| ALT-cieem | CIEEM Registered Practices Directory | U2, U5 | Search by postcode and distance, then filter by service, species and licence; contact each practice yourself (no enquiry form, no prices, no season); ecology only; firms pay £147-£3,140+VAT a year Receipt: 169 UK practices; within 25 miles: Bristol 22, London 18, Glasgow 12, Edinburgh 7, Belfast 1 (R4) | R1, R4 |
 | ALT-worklanded | Worklanded | U4 | Bat and ecology leads sold to firms at £26 each, one firm at a time; 11 enquiries in 90 days | R1 |
 | ALT-brokers | Small brokers (batsurveycost.co.uk, RenKap, Yell) | U2 | Pass one request to up to 3 firms; firm-side terms not published | R1 |
 
@@ -192,5 +192,5 @@ stateDiagram-v2
 | PR1 | Qualify a lead | U2 | Buyers (homeowners, small developers): Describe the site and the need (built); The directory: Grade on real, serious, timely, complete (built); Buyers (homeowners, small developers): Confirm by email (button press) (built); The directory: Operator approves or rejects (built) | built | D2 |
 | PR2 | Route a lead | U4 | The directory: Match firms by survey, region, availability (missing); The directory: Offer briefs, contact hidden (missing); Survey firms: Unlock (pay) or pass (missing); The directory: Chase or lapse; tell the buyer (missing) | missing | D2, Q3 |
 | PR3 | Claim a listing | U5 | Survey firms: Claim with an email on the firm's domain (built); The directory: Email a confirmation link (missing); Survey firms: Edit the listing (missing) | part | D1 |
-| PR4 | Add firms | U5 | The directory: Take candidates from vein (missing); The directory: Check the site sells planning surveys (part); The directory: Map surveys and regions (part); The directory: Send the listing notice (missing) | part | R0/S9, R3 |
+| PR4 | Add firms | U5 | The directory: Take candidates from vein (missing); The directory: Take candidates from CIEEM's Registered Practice Directory (145 ecology practices) (missing); The directory: Check the site sells planning surveys (part); The directory: Map surveys and regions (part); The directory: Send the listing notice (missing) | part | R0/S9, R3, R4 |
 | PR5 | Correct or remove a listing | U5 | Survey firms: Ask (missing); The directory: Apply and tombstone (missing) | missing | D1 |
