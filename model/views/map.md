@@ -25,6 +25,7 @@ Read top-down: **why** (D, PN) → **who** (P, CH, ALT) → **what** (U, ST) →
 | D17 | A piece is done when a layman can use it without help; only the brand skin comes later. The buyer side is not there yet | "okay. FYI the buyer side is sorely lacking. it looks like coding genius that has no idea what another living person thinks about when going on online didit" (2026-10-24) | D10, D14 |
 | D18 | Open the way people already know (trust headline, one plain question, proof, free, three steps), then open into what we've learned (normal? cost? time? season, follow-ons, one thing per screen) | "almost. start witht he conventional, then open into what we'e learned." (2026-10-24) | R7, D17, Q22 |
 | D19 | Say how we're paid and what we check; show three plain steps on the site, Mermaid stays for the map | "(chose: Say how we're paid; Three plain steps)" (2026-10-24) | D2, D14, R7 |
+| D20 | The quote journey shows a progress bar and, from the start, a checklist of everything we'll ask the buyer | "on UX. when i land here: http://localhost:3000/quote can we have a progress bar please, and a checklist of all we need from the burger" (2026-10-24) | D14, D17 |
 
 ## Why: buyer pains (D10)
 

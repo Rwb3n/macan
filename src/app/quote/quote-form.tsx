@@ -3,6 +3,7 @@
 // Builds: U2, ST-U2.1, ST-U2.2, ST-U2.3, PR1, O-lead, PN1, PN2, PN3, PN4
 // One thing per screen, a back link on each, one short reason per question, "not sure" where it's a fair answer,
 // the answer before anything personal, contact last and only by choice, then check your answers (D14, D17, D18; R7).
+// A progress bar, and from the start a checklist of everything we'll ask, ticked off as the buyer goes (D20).
 
 import Link from "next/link"
 import { useActionState, useEffect, useMemo, useState } from "react"
@@ -19,6 +20,8 @@ const SCREEN_OF: Record<string, Screen> = {
   councilRef: "deadline", survey: "answer", answer: "ask", name: "details", email: "details", phone: "details",
 }
 const WORDS = ["", "one", "two", "three", "four", "five"]
+const PHASES = ["The job", "About the work", "What you need", "Your details", "Check and send"] as const
+const PHASE_OF: Record<Screen, number> = { problem: 0, postcode: 0, area: 0, project: 1, stage: 1, deadline: 1, answer: 2, ask: 3, details: 3, check: 4 }
 const input = "w-full rounded-md border-2 border-ink/30 bg-white px-3 py-2 text-lg focus:border-moss focus:outline-none"
 const label = (pairs: readonly (readonly [string, string])[], v: string) => pairs.find(([k]) => k === v)?.[1] ?? v
 
@@ -62,8 +65,37 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
   }
   const deadlineChoice = hasDeadline || (v.deadline ? "yes" : "")
 
+  const visited = new Set(trail)
+  const needed: Item[] = [
+    { label: "What the council has asked for, or what you're planning", done: visited.has("postcode") },
+    { label: "The postcode of the site", done: visited.has("project") },
+    { label: "What kind of work it is", done: Boolean(v.projectType) && visited.has("stage") },
+    { label: "How far you've got with planning permission", done: Boolean(v.planningStage) && visited.has("deadline") },
+    { label: "When you need the report by, if there's a date", done: visited.has("answer") },
+  ]
+  const ifQuotes: Item[] = [
+    { label: "A detail or two about the building, for some surveys", done: Boolean(v.answer) || (visited.has("details") && !s?.ask) },
+    { label: "Your name and email address", done: visited.has("check") },
+    { label: "A phone number, only if you'd like calls", done: Boolean(v.phone) || visited.has("check"), optional: true },
+  ]
+  const phase = PHASE_OF[screen]
+  const doneCount = [...needed, ...ifQuotes].filter((i) => i.done).length
+
   return (
-    <form action={action} className="max-w-2xl">
+    <div className="grid gap-8 lg:grid-cols-[1fr_20rem] lg:items-start">
+    <div className="lg:order-2 lg:sticky lg:top-6">
+      <details open={screen === "problem" || undefined} className="rounded-lg border border-line bg-white p-4 lg:hidden">
+        <summary className="cursor-pointer font-semibold">What we&apos;ll ask you <span className="font-normal text-muted">({doneCount} of {needed.length + ifQuotes.length} done)</span></summary>
+        <Checklist needed={needed} ifQuotes={ifQuotes} />
+      </details>
+      <div className="hidden rounded-lg border border-line bg-white p-5 lg:block">
+        <p className="font-semibold">What we&apos;ll ask you</p>
+        <p className="mt-1 text-sm text-muted">About two minutes. Nothing about you until you choose to get quotes.</p>
+        <Checklist needed={needed} ifQuotes={ifQuotes} />
+      </div>
+    </div>
+    <form action={action} className="max-w-2xl lg:order-1">
+      <Progress phase={phase} />
       {firm ? <input type="hidden" name="firm" value={firm} /> : null}
       {Object.entries(v).map(([k, val]) => <input key={k} type="hidden" name={k} value={val} />)}
       {trail.length > 1 ? <button type="button" onClick={back} className="mb-6 text-moss underline">Back</button> : null}
@@ -167,6 +199,36 @@ export function QuoteForm({ survey, region, firm, firmName, q, coverage }: Props
         </div>
       ) : null}
     </form>
+    </div>
+  )
+}
+
+type Item = { label: string; done: boolean; optional?: boolean }
+
+function Progress({ phase }: { phase: number }) {
+  return (
+    <div className="mb-8" aria-label={`Step ${phase + 1} of ${PHASES.length}: ${PHASES[phase]}`}>
+      <p className="text-sm font-medium text-muted">Step {phase + 1} of {PHASES.length}: <span className="text-ink">{PHASES[phase]}</span></p>
+      <div className="mt-2 flex gap-1" aria-hidden="true">
+        {PHASES.map((p, i) => <span key={p} className={`h-2 flex-1 rounded-full ${i <= phase ? "bg-moss" : "bg-line"}`} />)}
+      </div>
+    </div>
+  )
+}
+
+function Checklist({ needed, ifQuotes }: { needed: Item[]; ifQuotes: Item[] }) {
+  const row = (i: Item) => (
+    <li key={i.label} className="flex gap-2">
+      <span aria-hidden="true" className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs ${i.done ? "border-moss bg-moss text-white" : "border-ink/30"}`}>{i.done ? "✓" : ""}</span>
+      <span className={i.done ? "text-muted" : ""}>{i.label}{i.done ? <span className="sr-only"> (done)</span> : null}</span>
+    </li>
+  )
+  return (
+    <div className="mt-4 text-sm">
+      <ul className="space-y-2">{needed.map(row)}</ul>
+      <p className="mt-4 font-semibold">Only if you&apos;d like quotes</p>
+      <ul className="mt-2 space-y-2">{ifQuotes.map(row)}</ul>
+    </div>
   )
 }
 

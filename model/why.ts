@@ -42,6 +42,8 @@ export const decisions: Decision[] = [
     said: "almost. start witht he conventional, then open into what we'e learned.", refs: ["R7", "D17", "Q22"] },
   { id: "D19", date: "2026-10-24", name: "Say how we're paid and what we check; show three plain steps on the site, Mermaid stays for the map",
     said: "(chose: Say how we're paid; Three plain steps)", refs: ["D2", "D14", "R7"] },
+  { id: "D20", date: "2026-10-24", name: "The quote journey shows a progress bar and, from the start, a checklist of everything we'll ask the buyer",
+    said: "on UX. when i land here: http://localhost:3000/quote can we have a progress bar please, and a checklist of all we need from the burger", refs: ["D14", "D17"] },
 ]
 
 // The buyer's pains today, synthesised from R2's sources (counted independently). Front and centre (D10).
