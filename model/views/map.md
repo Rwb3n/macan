@@ -102,7 +102,7 @@ flowchart LR
 |---|---|---|---|
 | ST-U2.1 | Learn what's needed | Knows the survey and its season | built |
 | ST-U2.2 | Find who covers it | Has firms for the survey and region | built |
-| ST-U2.3 | Ask once | Request described, confirmed and qualified | part |
+| ST-U2.3 | Ask once | Request described, confirmed, qualified and sent to firms | built |
 | ST-U2.4 | Choose and book | A firm is booked | outside |
 | ST-U2.5 | Survey and report | Has the report for the council | outside |
 
